@@ -1,7 +1,10 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import "primeicons/primeicons.css"
+import { Inter,Poppins } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
+const poppinsLight = Poppins({weight:"300",variable:"--poppinsLight",subsets: ['latin']})
+const poppinsMedium = Poppins({weight:"400",variable:"--poppinsMedium",subsets: ['latin']})
 
 export const metadata = {
   title: 'Create Next App',
@@ -15,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={poppinsLight.className}>{children}</body>
     </html>
   )
 }

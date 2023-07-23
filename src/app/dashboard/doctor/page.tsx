@@ -2,13 +2,13 @@
 import React from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 
-export default function Dashboard(){
+export default function DoctorDashboard(){
     return(
         <main className="flex min-h-screen">    
             <Sidebar style={{opacity:1}} className='h-screen bg-primary w-40'>
             <Menu style={{opacity:1}} className='h-screen bg-primary'>
                 <MenuItem className="text-white hover:text-gray-700">
-                     <i className='pi pi-chart-bar'></i><span className='mx-2'>Dashboard</span>
+                     <i className='pi pi-chart-bar'></i><span className='mx-2'>Doctor Dashboard</span>
                 </MenuItem>
                 <MenuItem className="text-white hover:text-gray-700"> <i className='pi pi-users'></i><span className='mx-2'>Doctors</span> </MenuItem>
                 <MenuItem className="text-white hover:text-gray-700"> <i className='pi pi-users'></i><span className='mx-2'>Patients</span></MenuItem>
@@ -23,7 +23,7 @@ export default function Dashboard(){
             </Menu>
             </Sidebar>;
            <div>
-            <h3>Dashboard</h3>
+            <h3>Doctor Dashboard</h3>
            </div>
         </main>)
 }

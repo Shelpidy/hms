@@ -30,6 +30,7 @@ interface FormData {
   middleName: string;
   age: string;
   phoneNumber: string;
+  address: string,
   gender: string;
 }
 
@@ -44,6 +45,7 @@ const SignUpPage: React.FC = () => {
     middleName: '',
     age: '',
     phoneNumber: '',
+    address: '',
     gender: '',
   });
 
@@ -134,17 +136,6 @@ const SignUpPage: React.FC = () => {
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Date of Birth"
-                name="dob"
-                type="date"
-                value={formData.dob}
-                onChange={handleInputChange}
-              />
-            </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 required
@@ -193,6 +184,16 @@ const SignUpPage: React.FC = () => {
                 label="Phone Number"
                 name="phoneNumber"
                 value={formData.phoneNumber}
+                onChange={handleInputChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                label = "Address"
+                name='address'
+                value={formData.address}
                 onChange={handleInputChange}
               />
             </Grid>

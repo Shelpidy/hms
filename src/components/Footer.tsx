@@ -11,7 +11,7 @@ function Footer() {
     <Box sx={{backgroundColor:"primary.main",width:"100vw"}} className="p-6 shadow-lg w-100 bottom-0 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
       <Box className="my-3 flex flex-col mx-5 items-start justify-start">
         <Typography sx={{ fontFamily: "Inter", fontWeight: "bold", color: "white" }} variant="h5">
-          School Name
+          Hospital Name
         </Typography>
         {/* <Typography variant='h4' className='text-gray-400 font-semibold font-poppinsMedium'>SchoolAll</Typography> */}
         <p className="text-gray-500">

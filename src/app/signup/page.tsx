@@ -5,7 +5,6 @@ import {
   Container,
   TextField,
   FormControlLabel,
-  Checkbox,
   Box,
   Grid,
   Typography,
@@ -20,18 +19,7 @@ export const metadata = {
   description: "Digital Learning Platform",
 };
 
-// userId: number;
-// firstName: string;
-// middleName?: string;
-// lastName: string;
-// profileImage?: string;
-// contactNumber: string;
-// gender: 'male' | 'female' | 'other';
-// dateOfBirth?: Date;
-// address?: string;
-// password: string;
-// email: string;
-// role: 'patient' | 'doctor' | 'admin';
+
 interface FormData {
 firstName: string;
 middleName?: string;
@@ -63,7 +51,6 @@ const SignUpPage: React.FC = () => {
 
   });
 
-  
   const [passwordStrength, setPasswordStrength] = useState<string>('');
   const [validatePhoneNum, setValidPhoneNum] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -129,13 +116,15 @@ const SignUpPage: React.FC = () => {
 }
 
   const confirmPasswordChecker = (password: string) => {
-    if (password !== formData.confirmPassword) {
-      setConfirmPassword('Passwords do not match');
+
+    if(password !== formData.password) {
+      setConfirmPassword("Password do no match");
     }
     else {
-        setConfirmPassword("");
+      setConfirmPassword("");
+    }
   }
-  }
+  
   const checkPasswordStrength = (password: string) => {
     const validationMsg = validatePassword(password);
     setPasswordStrength(validationMsg);

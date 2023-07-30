@@ -20,17 +20,31 @@ export const metadata = {
   description: "Digital Learning Platform",
 };
 
+// userId: number;
+// firstName: string;
+// middleName?: string;
+// lastName: string;
+// profileImage?: string;
+// contactNumber: string;
+// gender: 'male' | 'female' | 'other';
+// dateOfBirth?: Date;
+// address?: string;
+// password: string;
+// email: string;
+// role: 'patient' | 'doctor' | 'admin';
 interface FormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  dob: string;
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  age: string;
-  phoneNumber: string;
-  gender: string;
+firstName: string;
+middleName?: string;
+lastName: string;
+profileImage?: string;
+contactNumber: string;
+gender: 'male' | 'female' | 'other' | null;
+dateOfBirth?: Date | null;
+address?: string;
+password: string;
+confirmPassword: string;
+email: string;
+role: 'patient' | 'doctor' | 'admin' | null;
 }
 
 const SignUpPage: React.FC = () => {
@@ -38,16 +52,25 @@ const SignUpPage: React.FC = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    dob: '',
+    dateOfBirth: null,
     firstName: '',
     lastName: '',
     middleName: '',
-    age: '',
-    phoneNumber: '',
-    gender: '',
+    profileImage: '',
+    gender: null,
+    role: null,
+    contactNumber: '',
+
   });
 
+  
   const [passwordStrength, setPasswordStrength] = useState<string>('');
+  const [validatePhoneNum, setValidPhoneNum] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [emailVerification, setEmailVerification] = useState<string>('');
+
+  const { role, ...dataWithoutRole } = formData;
+  const isSubmitButtonDisabled = Object.values(dataWithoutRole).some((value) => value === "" || value === null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -62,6 +85,18 @@ const SignUpPage: React.FC = () => {
     // Perform form submission or validation here
     console.log(formData);
   };
+
+  const validateEmail = (email: string) => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    let emailVerification = emailPattern.test(email);
+    if(!emailVerification) {
+      setEmailVerification('Invalid email address');
+    }
+    else {
+          setEmailVerification("");
+  }
+}
 
   const validatePassword = (password: string) => {
     const hasLetters = /[a-zA-Z]/.test(password);
@@ -79,6 +114,28 @@ const SignUpPage: React.FC = () => {
     return '';
   };
 
+  const validatePhoneNumber = (number: string) => {
+    const phoneNumberPattern = /^\+?\d+$/;
+
+    const cleanNumber = number.replace(/\D/g, "");
+
+    let validPhoneNum = phoneNumberPattern.test(cleanNumber);
+    if(!validPhoneNum) {
+      setValidPhoneNum('Invalid phone number');
+    }
+    else {
+          setValidPhoneNum("");
+  }
+}
+
+  const confirmPasswordChecker = (password: string) => {
+    if (password !== formData.confirmPassword) {
+      setConfirmPassword('Passwords do not match');
+    }
+    else {
+        setConfirmPassword("");
+  }
+  }
   const checkPasswordStrength = (password: string) => {
     const validationMsg = validatePassword(password);
     setPasswordStrength(validationMsg);
@@ -99,8 +156,18 @@ const SignUpPage: React.FC = () => {
                 label="Email"
                 name="email"
                 value={formData.email}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  handleInputChange(e);
+                  validateEmail(e.target.value);
+                }}
               />
+              <Box sx={{ marginTop: 1}} color={emailVerification ? (emailVerification ? 'red' : 'green') : ''}>
+                {emailVerification ? (
+                  <ul>
+                    <li>{emailVerification}</li>
+                  </ul>
+                ) : null}
+              </Box>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -115,7 +182,7 @@ const SignUpPage: React.FC = () => {
                   checkPasswordStrength(e.target.value);
                 }}
               />
-              <Box color={passwordStrength ? (passwordStrength ? 'red' : 'green') : ''}>
+              <Box sx={{marginTop:1}} color={passwordStrength ? (passwordStrength ? 'red' : 'green') : ''}>
                 {passwordStrength ? (
                   <ul>
                     <li>{passwordStrength}</li>
@@ -123,7 +190,7 @@ const SignUpPage: React.FC = () => {
                 ) : null}
               </Box>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ marginTop: 2}}>
               <TextField
                 required
                 fullWidth
@@ -131,21 +198,20 @@ const SignUpPage: React.FC = () => {
                 name="confirmPassword"
                 type="password"
                 value={formData.confirmPassword}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  handleInputChange(e);
+                  confirmPasswordChecker(e.target.value);
+                }}
               />
+              <Box sx={{marginTop:1}} color={confirmPassword ? (confirmPassword ? 'red' : 'green') : ''}>
+                {confirmPassword ? (
+                  <ul>
+                    <li>{confirmPassword}</li>
+                  </ul>
+                ) : null}
+              </Box>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Date of Birth"
-                name="dob"
-                type="date"
-                value={formData.dob}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} sx={{ marginTop: 2}}>
               <TextField
                 required
                 fullWidth
@@ -155,7 +221,7 @@ const SignUpPage: React.FC = () => {
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6} sx={{ marginTop: 2}}>
               <TextField
                 required
                 fullWidth
@@ -165,7 +231,7 @@ const SignUpPage: React.FC = () => {
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ marginTop: 2}}>
               <TextField
                 required
                 fullWidth
@@ -175,28 +241,59 @@ const SignUpPage: React.FC = () => {
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ marginTop: 2}}>
               <TextField
                 required
                 fullWidth
-                label="Age"
-                name="age"
-                type="number"
-                value={formData.age}
+                type='file'
+                label="User-Image"
+                name="profileImage"
+                value={formData.profileImage}
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ marginTop: 2}}>
               <TextField
                 required
                 fullWidth
                 label="Phone Number"
-                name="phoneNumber"
-                value={formData.phoneNumber}
+                name="contactNumber"
+                value={formData.contactNumber}
+                onChange={(e) => {
+                  handleInputChange(e);
+                  validatePhoneNumber(e.target.value);
+                }}
+              />
+              <Box sx={{ marginTop: 1}} color={validatePhoneNum ? (validatePhoneNum ? "red" : "green"): ""}>
+                {validatePhoneNum? (
+                  <ul>
+                    <li>{validatePhoneNum}</li>
+                  </ul>
+                ) : null}
+              </Box>
+            </Grid>
+            <Grid item xs={12} sx={{ marginTop: 2}}>
+              <TextField
+                required
+                fullWidth
+                label="Date of Birth"
+                name="dateOfBirth"
+                type="date"
+                value={formData.dateOfBirth}
                 onChange={handleInputChange}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sx={{ marginTop: 2}}>
+              <TextField
+                required  
+                fullWidth
+                label="Address"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginTop: 2}}>
               <Typography variant="body1" component="div">
                 Gender
               </Typography>
@@ -211,14 +308,8 @@ const SignUpPage: React.FC = () => {
               </RadioGroup>
             </Grid>
             <Divider className='my-2' />
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox name="termsAndConditions" color="primary" />}
-                label="I accept the terms and conditions"
-              />
-            </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="outlined" sx={{ mt: 3, mb: 2 }}>
+          <Button disabled={isSubmitButtonDisabled} type="submit" fullWidth variant="outlined" sx={{ mt: 3, mb: 2 }}>
             Sign Up
           </Button>
         </form>

@@ -1,3 +1,23 @@
+
+
+declare type formDataType = {
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  profileImage?: string;
+  contactNumber: string;
+  gender: 'male' | 'female' | 'other' | null;
+  dateOfBirth?: Date | null;
+  address?: string;
+  password: string;
+  confirmPassword: string;
+  email: string;
+  role: 'patient' | 'doctor' | 'admin' | null;
+  };
+
+
+
+
 declare type UserProfile = {
   userId: string;
   profilePicture: string;

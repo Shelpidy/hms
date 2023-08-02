@@ -19,24 +19,11 @@ export const metadata = {
   description: "Digital Learning Platform",
 };
 
+import addUser from "../api/addUser/page";
 
-interface FormData {
-firstName: string;
-middleName?: string;
-lastName: string;
-profileImage?: string;
-contactNumber: string;
-gender: 'male' | 'female' | 'other' | null;
-dateOfBirth?: Date | null;
-address?: string;
-password: string;
-confirmPassword: string;
-email: string;
-role: 'patient' | 'doctor' | 'admin' | null;
-}
 
 const SignUpPage: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<formDataType>({
     email: '',
     password: '',
     confirmPassword: '',
@@ -67,9 +54,19 @@ const SignUpPage: React.FC = () => {
     }));
   };
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const  handleFormSubmit = async(e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    // Perform form submission or validation here
+    // Perform form submission 
+    const response  = await fetch ("/api/addUser", {
+      method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            body: JSON.stringify(formData),
+    })
+
+    const data = await response.json();
+    console.log(data);
     console.log(formData);
   };
 

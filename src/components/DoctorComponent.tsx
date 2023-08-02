@@ -11,12 +11,11 @@ const OurService = () => {
         justifyContent: "center", // Center horizontally
         alignItems: "center", // Center vertically
         flexDirection: "column", // Ensure content is stacked vertically
-        marginBottom: 4
       }}
     >
       <Box sx={{marginTop: 4, marginBottom: 1}}>  
          <Typography variant="h4" component="h1" gutterBottom>
-           Meet our Frequents Donors
+           Meet our Trusted Doctors
          </Typography>
        </Box>
        <Divider sx={{ width: "80%"}}/>

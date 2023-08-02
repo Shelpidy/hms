@@ -3,11 +3,23 @@ import React from "react"
 import { Typography,Box } from "@mui/material"
 import { CustomMapComponent } from "./GoogleMapComponent"
 import ContactForm from "./ContactForm"
-
+import {Divider} from "@mui/material"
 
 function ContactUs() {
   return (
-    <Box sx={{width:"95vw"}}>
+    <Box sx={{
+      display: "flex",
+      justifyContent: "center", // Center horizontally
+      alignItems: "center", // Center vertically
+      flexDirection: "column", // Ensure content is stacked vertically
+      width:"95vw"
+  }} >
+      <Box sx={{ marginBottom: 1}}>  
+         <Typography variant="h4" component="h1" gutterBottom>
+           Contact Us
+         </Typography>
+       </Box>
+       <Divider sx={{ width: "80%"}}/>
       <CustomMapComponent center={{lng: -13.22992,lat: 8.483802,}} />
       <Box>
         <ContactForm />

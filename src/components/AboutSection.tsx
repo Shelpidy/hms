@@ -47,7 +47,7 @@ function AboutSection({
       <Box className="grid w-full gird-cols-1 gap-5 md:grid-cols-2" sx={{marginTop: 3}}>
         <Box
           className="relative overflow-hidden rounded-sm pt-1"
-          sx={{ height: "65vh" }}
+          sx={{ height: "65vh", }}
         >
           <Image fill priority alt="About Image" src={imageUrl} />
         </Box>

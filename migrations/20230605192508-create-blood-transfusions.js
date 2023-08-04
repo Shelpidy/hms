@@ -5,12 +5,12 @@ module.exports = {
     await queryInterface.createTable('BloodTransfusions', {
       transfusionId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       donorId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Donors',
           key: 'donorId'
@@ -19,7 +19,7 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       recipientId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'requirers',
           key: 'requirerId'
@@ -32,7 +32,7 @@ module.exports = {
         type: Sequelize.DATE
       },
       bloodGroupId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'BloodGroups',
           key: 'bloodGroupId'

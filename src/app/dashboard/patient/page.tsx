@@ -1,4 +1,6 @@
 "use client"
+import DoctorForm from '@/components/AddDoctorForm';
+import PatientForm from '@/components/AddPatientsForm';
 import React from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 
@@ -24,6 +26,9 @@ export default function PatientDashboard(){
             </Sidebar>;
            <div>
             <h3>Patient Dashboard</h3>
+           </div>
+           <div style={{marginTop: 100}}>
+            <DoctorForm/>
            </div>
         </main>)
 }

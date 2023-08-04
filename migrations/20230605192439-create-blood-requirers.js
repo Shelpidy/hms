@@ -5,13 +5,13 @@ module.exports = {
     await queryInterface.createTable('Requirers', {
       requirerId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Users',
           key: 'userId'

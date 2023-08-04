@@ -1,8 +1,8 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+import { Model, DataTypes, Optional,Sequelize } from 'sequelize';
 import sequelize from '../database/connection';
 
 interface UserAttributes {
-  userId: number;
+  userId: string;
   firstName: string;
   middleName?: string;
   lastName: string;
@@ -21,7 +21,7 @@ interface UserAttributes {
 interface UserCreationAttributes extends Optional<UserAttributes, 'userId' | 'createdAt' | 'updatedAt'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public userId!: number;
+  public userId!: string;
   public firstName!: string;
   public middleName?: string;
   public lastName!: string;
@@ -41,9 +41,9 @@ User.init(
   {
     userId: {
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUID
     },
     firstName: {
       allowNull: false,
@@ -87,8 +87,8 @@ User.init(
       type: DataTypes.ENUM('patient', 'doctor', 'admin'),
     },
     createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+      allowNull: true,
+      type: DataTypes.DATE,
     },
     updatedAt: {
       type: DataTypes.DATE,

@@ -19,7 +19,7 @@ export const metadata = {
   description: "Digital Learning Platform",
 };
 
-import addUser from "../api/addUser/page";
+
 
 
 const SignUpPage: React.FC = () => {
@@ -33,7 +33,7 @@ const SignUpPage: React.FC = () => {
     middleName: '',
     profileImage: '',
     gender: null,
-    role: null,
+    role: "patient",
     contactNumber: '',
 
   });
@@ -57,17 +57,23 @@ const SignUpPage: React.FC = () => {
   const  handleFormSubmit = async(e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     // Perform form submission 
-    const response  = await fetch ("/api/addUser", {
-      method: "POST",
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            body: JSON.stringify(formData),
-    })
-
-    const data = await response.json();
-    console.log(data);
-    console.log(formData);
+    
+     try {
+     
+      const response  = await fetch ("/api/addUser", {
+        method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+      })
+  
+      const data = await response.json();
+      console.log(data);
+      console.log(formData);
+     } catch (error) {
+      console.log(error);
+     }
   };
 
   const validateEmail = (email: string) => {

@@ -1,10 +1,10 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, } from 'sequelize';
 import sequelize from '../database/connection';
 
 class Admin extends Model {
   public adminId!: number;
   public username!: string;
-  public userId!: number;
+  public userId!: String;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -12,17 +12,17 @@ class Admin extends Model {
 Admin.init(
   {
     adminId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUID
     },
     username: {
       type: DataTypes.STRING(50),
       allowNull: false,
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'Users',

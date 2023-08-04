@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('Donors', {
       donorId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       firstName: {
         allowNull: false,
@@ -40,7 +40,7 @@ module.exports = {
         type: Sequelize.STRING(50)
       },
       bloodGroupId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'BloodGroups',
           key: 'bloodGroupId'

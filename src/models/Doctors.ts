@@ -12,13 +12,13 @@ class Doctor extends Model {
 Doctor.init(
   {
     doctorId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     specializationId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'Specializations',
@@ -28,7 +28,7 @@ Doctor.init(
       onDelete: 'CASCADE',
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'Users',

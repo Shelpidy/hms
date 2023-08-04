@@ -24,6 +24,8 @@ export default function DoctorDashboard(){
             </Sidebar>;
            <div>
             <h3>Doctor Dashboard</h3>
+
+            
            </div>
         </main>)
 }

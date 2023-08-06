@@ -5,16 +5,16 @@ module.exports = {
     await queryInterface.createTable('Appointments', {
       appointmentId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       appointmentStatus: {
         allowNull: false,
         type: Sequelize.ENUM('completed', 'pending', 'cancel')
       },
       doctorId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Doctors',
           key: 'doctorId'
@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.STRING(8000)
       },
       patientId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Patients',
           key: 'patientId'

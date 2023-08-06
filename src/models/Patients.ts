@@ -13,13 +13,13 @@ class Patient extends Model {
 Patient.init(
   {
     patientId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'Users',
@@ -32,7 +32,7 @@ Patient.init(
       type: DataTypes.STRING(800),
     },
     bloodGroupId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'BloodGroups',
         key: 'bloodGroupId',
@@ -43,12 +43,10 @@ Patient.init(
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
     },
   },
   {

@@ -15,13 +15,13 @@ class Notification extends Model {
 Notification.init(
   {
     notificationId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     senderId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'Users',
         key: 'userId',
@@ -30,7 +30,7 @@ Notification.init(
       onDelete: 'CASCADE',
     },
     receiverId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'Users',
         key: 'userId',

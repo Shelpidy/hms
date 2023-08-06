@@ -11,13 +11,13 @@ class Requirer extends Model {
 Requirer.init(
   {
     requirerId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'Users',

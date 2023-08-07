@@ -4,6 +4,7 @@ import Patient from "../models/Patients";
 import Specialization from "@/models/Specializations";
 import BloodGroup from "@/models/BloodGroups";
 import Doctor from "@/models/Doctors";
+import Appointment from "@/models/Appointments";
 
 export async function AddPatient(patient:any) : Promise<void> {
     try {
@@ -67,3 +68,45 @@ export async function AddDoctors({ email, specialization}: {
         console.log(error);
     }
 }
+
+export async function AddAppointments(appointment: any): Promise<void> {
+    try {
+        const doctorfromUser = await User.findOne({ where: { email: appointment?.doctoremail } });
+        const patientfromUser = await User.findOne({ where: { email: appointment?.patientemail } });
+
+        if (doctorfromUser && patientfromUser) {
+            const doctorUserId = doctorfromUser.userId;
+            const patientUserId = patientfromUser.userId;
+
+            const doctor = await Doctor.findOne({ where: { userId: doctorUserId } });
+            const patient = await Patient.findOne({ where: { userId: patientUserId } });
+
+            if (doctor && patient) {
+                const { doctorId } = doctor.dataValues;
+                const { patientId } = patient.dataValues;
+
+               const appointmentOne = await Appointment.create({
+                    appointmentStatus: "pending",
+                    doctorId,
+                    reason: appointment.reasons,
+                    note: appointment.note,
+                    patientId,
+                    appointmentDate: appointment.date
+                });
+
+                console.log("Appointment added successfully.", appointmentOne);
+            } else {
+                console.log("Doctor or patient not found.");
+            }
+        } else {
+            console.log("Doctor or patient user not found.");
+        }
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+}
+
+
+
+
+

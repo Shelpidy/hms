@@ -1,6 +1,7 @@
 "use client"
 import DoctorForm from '@/components/AddDoctorForm';
 import PatientForm from '@/components/AddPatientsForm';
+import AppointmentForm from '@/components/AppointmentForm';
 import React from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 
@@ -8,7 +9,7 @@ export default function PatientDashboard(){
     return(
         <main className="flex min-h-screen">    
             <Sidebar style={{opacity:1}} className='h-screen bg-primary w-40'>
-            <Menu style={{opacity:1}} className='h-screen bg-primary'>
+            <Menu style={{opacity:1}} className='h-screen bg-blue-900 mt-14'>
                 <MenuItem className="text-white hover:text-gray-700">
                      <i className='pi pi-chart-bar'></i><span className='mx-2'>Patient Dashboard</span>
                 </MenuItem>
@@ -28,7 +29,7 @@ export default function PatientDashboard(){
             <h3>Patient Dashboard</h3>
            </div>
            <div style={{marginTop: 100}}>
-            <DoctorForm/>
+            <AppointmentForm/>
            </div>
         </main>)
 }

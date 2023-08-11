@@ -64,7 +64,7 @@ const SignUpPage: React.FC = () => {
   };
 
   const validatePassword = (password: string) => {
-    const hasLetters = /[a-zA-Z]/.test(password);
+    const hasLetters = /[a-zA-Z]/.test(password);  
     const hasNumbers = /[0-9]/.test(password);
     const isValidLength = password.length >= 8;
 

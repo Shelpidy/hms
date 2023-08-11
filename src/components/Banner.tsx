@@ -29,9 +29,7 @@ export default function Banner({ items }: CarouselProps) {
       setIndex(items.length - 1)
     }else{
       setIndex(index - 1);
-    }
-
-    
+    } 
   };
 
   return (

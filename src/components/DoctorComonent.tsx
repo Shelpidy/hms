@@ -5,7 +5,6 @@ import CardMedia from "@mui/material/CardMedia"
 import Typography from "@mui/material/Typography"
 import { IconButton, useMediaQuery, useTheme, Link, Box } from "@mui/material"
 import { FacebookOutlined, Twitter, Instagram, LinkedIn, GitHub } from "@mui/icons-material"
-
 import AOS from "aos"
 import "aos/dist/aos.css"
 

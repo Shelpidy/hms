@@ -463,3 +463,22 @@ export const blogPosts = {
     events: dummyEventData
   };
   
+  export const encodeFormData = (data: any): string =>{
+    return Object.keys(data).map(key=> `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');
+  }
+
+  export async function handleFormSubmitGeneral(formData: any, url: string): Promise<void>{
+    try {
+      const newformData = encodeFormData(formData);
+      const request = await fetch(url, {
+      method: "POST",
+      body: newformData,
+      headers: { "Content-Type": "application/x-www-form-urlencoded",},
+      
+      })
+       const data = await request.json();
+        console.log(JSON.stringify(data));
+        } catch (error) {
+       console.log(error);
+      }
+}

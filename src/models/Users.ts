@@ -6,10 +6,10 @@ interface UserAttributes {
   firstName: string;
   middleName?: string;
   lastName: string;
-  profileImage?: string;
+  profileImage?: string | null;
   contactNumber: string;
   gender: 'male' | 'female' | 'other';
-  dateOfBirth?: Date;
+  dateOfBirth?: string | null;
   address?: string;
   password: string;
   email: string;
@@ -28,7 +28,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public profileImage?: string;
   public contactNumber!: string;
   public gender!: 'male' | 'female' | 'other';
-  public dateOfBirth?: Date;
+  public dateOfBirth?: string;
   public address?: string;
   public password!: string;
   public email!: string;
@@ -68,7 +68,7 @@ User.init(
       type: DataTypes.ENUM('male', 'female', 'other'),
     },
     dateOfBirth: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING(20),
     },
     address: {
       type: DataTypes.STRING(100),
@@ -87,7 +87,6 @@ User.init(
       type: DataTypes.ENUM('patient', 'doctor', 'admin'),
     },
     createdAt: {
-      allowNull: true,
       type: DataTypes.DATE,
     },
     updatedAt: {

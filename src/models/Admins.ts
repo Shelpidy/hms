@@ -2,7 +2,7 @@ import { Model, DataTypes, } from 'sequelize';
 import sequelize from '../database/connection';
 
 class Admin extends Model {
-  public adminId!: number;
+  public adminId!: string;
   public username!: string;
   public userId!: String;
   public readonly createdAt!: Date;
@@ -15,7 +15,7 @@ Admin.init(
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUID
+      defaultValue: DataTypes.UUIDV4
     },
     username: {
       type: DataTypes.STRING(50),
@@ -34,12 +34,12 @@ Admin.init(
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      
     },
   },
   {
@@ -52,3 +52,4 @@ Admin.init(
 );
 
 export default Admin;
+ 

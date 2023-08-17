@@ -14,13 +14,14 @@ import {
 } from '@mui/material';
 
 import Link from "next/link"
+import CustomButton from '@/components/CustomButton';
+import Image from 'next/image';
+import { encode } from 'punycode';
 export const metadata = {
   title: "SLMS | Register",
   description: "Digital Learning Platform",
 };
-
-
-
+import {  handleFormSubmitGeneral } from '@/utils/data';
 
 const SignUpPage: React.FC = () => {
   const [formData, setFormData] = useState<formDataType>({
@@ -32,16 +33,18 @@ const SignUpPage: React.FC = () => {
     lastName: '',
     middleName: '',
     profileImage: '',
-    gender: null,
+    gender:null,
     role: "patient",
     contactNumber: '',
 
   });
 
+  
   const [passwordStrength, setPasswordStrength] = useState<string>('');
   const [validatePhoneNum, setValidPhoneNum] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [emailVerification, setEmailVerification] = useState<string>('');
+  
 
   const { role, ...dataWithoutRole } = formData;
   const isSubmitButtonDisabled = Object.values(dataWithoutRole).some((value) => value === "" || value === null);
@@ -51,30 +54,28 @@ const SignUpPage: React.FC = () => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }));
-  };
+  }));
+       
+};
 
-  const  handleFormSubmit = async(e: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    e.preventDefault();
-    // Perform form submission 
-    
-     try {
-     
-      const response  = await fetch ("/api/addUser", {
-        method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formData),
-      })
-  
-      const data = await response.json();
-      console.log(data);
-      console.log(formData);
-     } catch (error) {
-      console.log(error);
-     }
-  };
+
+  async function handleFormSubmit(): Promise<void> {
+
+    await handleFormSubmitGeneral(formData, "/api/users")
+    // try {
+    //       const newformData = encodeFormData(formData);
+    //     const request = await fetch("/api/users", {
+    //       method: "POST",
+    //       body: newformData,
+    //       headers: { "Content-Type": "application/x-www-form-urlencoded",},
+          
+    //     })
+    //     const data = await request.json();
+    //     console.log(JSON.stringify(data));
+    // } catch (error) {
+    //     console.log(error);
+    // }
+}
 
   const validateEmail = (email: string) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -139,7 +140,6 @@ const SignUpPage: React.FC = () => {
         <Typography variant="h5" align="center" gutterBottom>
           Sign Up
         </Typography>
-        <form onSubmit={handleFormSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -240,6 +240,7 @@ const SignUpPage: React.FC = () => {
                 type='file'
                 label="User-Image"
                 name="profileImage"
+                id="profileImage"
                 value={formData.profileImage}
                 onChange={handleInputChange}
               />
@@ -301,10 +302,13 @@ const SignUpPage: React.FC = () => {
             </Grid>
             <Divider className='my-2' />
           </Grid>
-          <Button disabled={isSubmitButtonDisabled} type="submit" fullWidth variant="outlined" sx={{ mt: 3, mb: 2 }}>
+          <CustomButton 
+           
+          onClick={handleFormSubmit}
+          >
             Sign Up
-          </Button>
-        </form>
+          </CustomButton>
+          
         <Box className='my-5'>
           <Typography className='text-center'>Already have an account ? <Link href='/signin' className='mx-2'>Signin</Link></Typography>
         </Box>
@@ -312,5 +316,6 @@ const SignUpPage: React.FC = () => {
     </Container>
   );
 };
+
 
 export default SignUpPage;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { AddAppointments, AddPatient } from '@/app/actions';
 import {
   FormControl,
   InputLabel,
@@ -13,7 +14,7 @@ import {
 } from '@mui/material';
 import { AddCircleOutline } from '@mui/icons-material';
 import CustomButton from './CustomButton';
-import { handleFormSubmitGeneral } from '@/utils/data';
+
 
 // Interface for Patient data
 interface AppointmentData {
@@ -22,10 +23,11 @@ interface AppointmentData {
     reasons: string;
     note: string;
     date:string;
-   
 }
 
-const AppointmentForm: React.FC = () => {
+
+
+const EditAppointmentForm: React.FC = () => {
 
     const [appointmentData, setAppointmentData] = useState<AppointmentData>({
         patientemail: '',
@@ -64,13 +66,14 @@ const AppointmentForm: React.FC = () => {
       };
 
       async function handleAddAppointment() : Promise<void> {
-        await handleFormSubmitGeneral(appointmentData, "/api/appointments")
+        await AddAppointments(appointmentData);
+       console.log('Patient Data:', appointmentData);
      };
     return(
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Box>
-            <Typography variant="h5">Add Appoinment</Typography>
+            <Typography variant="h5">Update Appoinment</Typography>
         </Box>
       </Grid>
       <Grid item xs={12}>
@@ -146,11 +149,19 @@ const AppointmentForm: React.FC = () => {
           name="note"
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={6}>
         <CustomButton 
         onClick={handleAddAppointment}
         >
-            submit
+            update appointment
+        </CustomButton>
+      </Grid>
+      <Grid item xs={6}>
+        <CustomButton 
+        color="red"
+        onClick={handleAddAppointment}
+        >
+            delete appointment
         </CustomButton>
       </Grid>
     </Grid>
@@ -158,4 +169,4 @@ const AppointmentForm: React.FC = () => {
     )
 }
 
-export default AppointmentForm;
+export default EditAppointmentForm;

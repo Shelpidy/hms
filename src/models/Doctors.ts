@@ -2,9 +2,9 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database/connection';
 
 class Doctor extends Model {
-  public doctorId!: number;
-  public specializationId!: number;
-  public userId!: number;
+  public doctorId!: string;
+  public specializationId!: string;
+  public userId!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }

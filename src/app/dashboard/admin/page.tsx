@@ -1,11 +1,31 @@
 "use client"
-import React from 'react';
+import UserCard from '@/components/UserCard';
+import SearchComponent from '@/components/SearchComponent';
+import UserDataTable from '@/components/UserTableComp';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import React, { useEffect,useState } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-
+import { Box,Typography } from '@mui/material';
+import TableTitle from '@/components/TableTitle';
+import { Just_Another_Hand } from 'next/font/google';
 export default function AdminDashboard(){
+    
+  const [users, setUser] = useState<{}[]>([])
+    
+    useEffect(() => {
+       async function fetchUsers() {
+        const response = await fetch("/api/users",)
+        const data = await response.json()
+        console.log(data)
+        setUser(data.users)
+       }
+
+       fetchUsers()
+    },[])
+    
     return(
         <main className="flex min-h-screen">    
-            <Sidebar style={{opacity:1}} className='h-screen bg-primary w-40'>
+            <Sidebar style={{opacity:1, marginTop: 63}} className='h-screen bg-primary w-40'>
             <Menu style={{opacity:1}} className='h-screen bg-primary'>
                 <MenuItem className="text-white hover:text-gray-700">
                      <i className='pi pi-chart-bar'></i><span className='mx-2'>Admin Dashboard</span>
@@ -22,8 +42,31 @@ export default function AdminDashboard(){
                 <MenuItem className="text-white hover:text-gray-700"><i className='pi pi-chart-bar'></i> <span className='mx-2'>Blood Transfusion</span> </MenuItem>
             </Menu>
             </Sidebar>;
-           <div>
-            <h3>Admin Dashboard</h3>
+           
+           <div style={{marginTop: 100, }}>
+            <Box>
+                
+            </Box>
+            <Box
+            sx={{
+                marginTop: 8,
+                marginBottom: 2,
+                textAlign: "end",
+                marginRight: 4
+            }}
+            >
+                <Box
+                sx={{
+                    textAlign: "start",
+                }}
+                >
+                  <TableTitle title='All Users'/>
+                </Box>
+                <SearchComponent/>
+            </Box>
+            <Box margin={6}>
+              <UserDataTable users={users}/>
+             </Box>
            </div>
         </main>)
 }

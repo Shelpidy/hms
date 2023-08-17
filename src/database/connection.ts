@@ -2,8 +2,9 @@ import { Sequelize } from "sequelize";
 
 console.log(Sequelize)
 const sequelize = new Sequelize("hmsdb","root","",{
-    host: "127.0.0.1",
+    host: "localhost",
     dialect: "mysql",
+    dialectModule: require('mysql2'),
 });
 
 const  testConnection = async() => {

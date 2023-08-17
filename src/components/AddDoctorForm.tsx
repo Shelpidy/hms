@@ -1,6 +1,5 @@
-
+"use client"
 import React, { useState, useEffect } from 'react';
-import { AddDoctors, AddPatient } from '@/app/actions';
 import {
   FormControl,
   InputLabel,
@@ -15,6 +14,7 @@ import {
 } from '@mui/material';
 import { AddCircleOutline } from '@mui/icons-material';
 import CustomButton from './CustomButton';
+import { handleFormSubmitGeneral } from '@/utils/data';
 
 interface DoctorData {
     email: string;
@@ -53,8 +53,7 @@ interface DoctorData {
     };
 
     async function handleAddDoctor() : Promise<void> {
-        await AddDoctors(DoctorData);
-       console.log('Patient Data:', DoctorData);
+        await handleFormSubmitGeneral(DoctorData, "/api/doctors")
      };
 
     return (

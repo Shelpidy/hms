@@ -1,7 +1,10 @@
 "use client"
 import React from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-
+import DoctorForm from '@/components/AddDoctorForm';
+import { Box } from "@mui/material"
+import AppointmentForm from '@/components/AppointmentForm';
+import UserModal from '@/components/UserModal';
 export default function DoctorDashboard(){
     return(
         <main className="flex min-h-screen">    
@@ -22,10 +25,17 @@ export default function DoctorDashboard(){
                 <MenuItem className="text-white hover:text-gray-700"><i className='pi pi-chart-bar'></i> <span className='mx-2'>Blood Transfusion</span> </MenuItem>
             </Menu>
             </Sidebar>;
-           <div>
+           <div style={{marginTop: 100,}}>
             <h3>Doctor Dashboard</h3>
-
-            
+            {/* <Box>
+                <DoctorForm/>
+            </Box> 
+            <Box>
+                <AppointmentForm/>
+            </Box>  */}
+            <Box sx={{}}>
+                <UserModal/>
+            </Box>
            </div>
         </main>)
 }

@@ -1,11 +1,21 @@
 "use client"
-import DoctorForm from '@/components/AddDoctorForm';
 import PatientForm from '@/components/AddPatientsForm';
 import AppointmentForm from '@/components/AppointmentForm';
-import React from 'react';
+import CustomButton from '@/components/CustomButton';
+import React, { useState } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-
+import { Box } from '@mui/material';
+import EditAppointmentForm from '@/components/EditAppointmentForm';
+import BasicModal from '@/components/UserModal';
 export default function PatientDashboard(){
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [toggle, setToggle] = useState(false)
+    const handleButtonClick = () => {
+       
+        setToggle(!toggle)
+    }
     return(
         <main className="flex min-h-screen">    
             <Sidebar style={{opacity:1}} className='h-screen bg-primary w-40'>
@@ -28,8 +38,19 @@ export default function PatientDashboard(){
            <div>
             <h3>Patient Dashboard</h3>
            </div>
-           <div style={{marginTop: 100}}>
-            <AppointmentForm/>
+           <div style={{marginTop: 100,}}>
+            <Box
+            sx={{
+                
+            }}
+            >
+                <PatientForm/>
+            </Box>
+           
            </div>
         </main>)
 }
+
+ {/* 
+               !toggle ? <AppointmentForm/> : <EditAppointmentForm/>
+*/}

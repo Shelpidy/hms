@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AddPatient } from '@/app/actions';
+
 import {
   FormControl,
   InputLabel,
@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { AddCircleOutline } from '@mui/icons-material';
 import CustomButton from './CustomButton';
+import { handleFormSubmitGeneral } from '@/utils/data';
 // Sample blood groups fetched from the database
 const sampleBloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -60,7 +61,7 @@ const PatientForm: React.FC = () => {
   };
 
    async function handleAddPatient() : Promise<void> {
-     await AddPatient(patientData);
+     await handleFormSubmitGeneral(patientData, "/api/patients");
     console.log('Patient Data:', patientData);
   };
 

@@ -1,3 +1,4 @@
+"use client"
 import AnimatableScroll from "@/components/AnimatableScroll";
 import CustomDropDown from "@/components/CustomDropDown";
 import Image from "next/image";
@@ -8,9 +9,10 @@ import AboutSection from "@/components/AboutSection";
 import ContactUs from "@/components/ContactUsSection";
 import Footer from "@/components/Footer";
 import Banner from "@/components/Banner";
-import OurService from "@/components/OurServices";
-import DoctorComponent from "@/components/DoctorComponent";
-import DonorComponent from "@/components/DonorComponent";
+import ServicesSection from "@/components/OurServices";
+import  DoctorsComponent  from "@/components/DoctorComponent";
+import DonorsComponent from "@/components/DonorComponent";
+import { ServerInsertedHTMLContext } from "next/navigation";
 // ECEEF4
 
 export default function Home() {
@@ -18,18 +20,18 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pb-5 px-5">
-      <Banner items={homeBannerItems} />
+      <Banner />
       <AnimatableScroll>
         <AboutSection imageUrl='https://picsum.photos/300/300'/>
       </AnimatableScroll>
       <AnimatableScroll>
-        <OurService/>
+        <ServicesSection/>
       </AnimatableScroll>
       <AnimatableScroll>
-        <DoctorComponent/>
+        <DoctorsComponent/>
       </AnimatableScroll>
       <AnimatableScroll>
-        <DonorComponent/>
+        <DonorsComponent/>
       </AnimatableScroll>
       <AnimatableScroll>
           <ContactUs/>

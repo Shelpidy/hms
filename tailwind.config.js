@@ -20,7 +20,12 @@ module.exports = {
         poppinsMedium:['var(--poppinsMedium)'],
         poppinsLight:['var(--poppinsLight)'],
 
-      }
+      },
+      gridTemplateColumns: {
+        fluid: "repeat(auto-fit,minmax(16rem,1fr))",
+        dashboard:"auto 1fr",
+        dashboardMain:"1fr auto"
+      },
     },
   },
   fontFamily:{

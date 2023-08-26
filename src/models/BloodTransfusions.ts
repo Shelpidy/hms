@@ -14,13 +14,13 @@ class BloodTransfusion extends Model {
 BloodTransfusion.init(
   {
     transfusionId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     donorId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'Donors',
         key: 'donorId',
@@ -29,7 +29,7 @@ BloodTransfusion.init(
       onDelete: 'CASCADE',
     },
     recipientId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'Requirers',
         key: 'requirerId',
@@ -42,7 +42,7 @@ BloodTransfusion.init(
       allowNull: false,
     },
     bloodGroupId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'BloodGroups',
         key: 'bloodGroupId',

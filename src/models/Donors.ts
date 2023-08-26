@@ -19,10 +19,10 @@ class Donor extends Model {
 Donor.init(
   {
     donorId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     firstName: {
       type: DataTypes.STRING(50),
@@ -55,7 +55,7 @@ Donor.init(
       allowNull: false,
     },
     bloodGroupId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       references: {
         model: 'BloodGroups',
         key: 'bloodGroupId',

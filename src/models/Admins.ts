@@ -1,10 +1,10 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, } from 'sequelize';
 import sequelize from '../database/connection';
 
 class Admin extends Model {
-  public adminId!: number;
+  public adminId!: string;
   public username!: string;
-  public userId!: number;
+  public userId!: String;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -12,17 +12,17 @@ class Admin extends Model {
 Admin.init(
   {
     adminId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     username: {
       type: DataTypes.STRING(50),
       allowNull: false,
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'Users',
@@ -34,12 +34,12 @@ Admin.init(
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+      
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+      
     },
   },
   {
@@ -52,3 +52,4 @@ Admin.init(
 );
 
 export default Admin;
+ 

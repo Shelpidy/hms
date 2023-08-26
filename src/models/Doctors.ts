@@ -2,9 +2,9 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database/connection';
 
 class Doctor extends Model {
-  public doctorId!: number;
-  public specializationId!: number;
-  public userId!: number;
+  public doctorId!: string;
+  public specializationId!: string;
+  public userId!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -12,13 +12,13 @@ class Doctor extends Model {
 Doctor.init(
   {
     doctorId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     specializationId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'Specializations',
@@ -28,7 +28,7 @@ Doctor.init(
       onDelete: 'CASCADE',
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       references: {
         model: 'Users',

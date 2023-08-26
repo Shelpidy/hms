@@ -1,15 +1,15 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+import { Model, DataTypes, Optional,Sequelize } from 'sequelize';
 import sequelize from '../database/connection';
 
 interface UserAttributes {
-  userId: number;
+  userId: string;
   firstName: string;
   middleName?: string;
   lastName: string;
-  profileImage?: string;
+  profileImage?: string | null;
   contactNumber: string;
   gender: 'male' | 'female' | 'other';
-  dateOfBirth?: Date;
+  dateOfBirth?: string | null;
   address?: string;
   password: string;
   email: string;
@@ -21,14 +21,14 @@ interface UserAttributes {
 interface UserCreationAttributes extends Optional<UserAttributes, 'userId' | 'createdAt' | 'updatedAt'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public userId!: number;
+  public userId!: string;
   public firstName!: string;
   public middleName?: string;
   public lastName!: string;
   public profileImage?: string;
   public contactNumber!: string;
   public gender!: 'male' | 'female' | 'other';
-  public dateOfBirth?: Date;
+  public dateOfBirth?: string;
   public address?: string;
   public password!: string;
   public email!: string;
@@ -41,9 +41,9 @@ User.init(
   {
     userId: {
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
     firstName: {
       allowNull: false,
@@ -68,7 +68,7 @@ User.init(
       type: DataTypes.ENUM('male', 'female', 'other'),
     },
     dateOfBirth: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING(20),
     },
     address: {
       type: DataTypes.STRING(100),
@@ -87,8 +87,7 @@ User.init(
       type: DataTypes.ENUM('patient', 'doctor', 'admin'),
     },
     createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
     },
     updatedAt: {
       type: DataTypes.DATE,

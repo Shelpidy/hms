@@ -4,7 +4,7 @@ import sequelize from '../database/connection';
 class Appointment extends Model {
   public appointmentId!: number;
   public appointmentStatus!: 'completed' | 'pending' | 'cancel';
-  public doctorId!: number;
+  public doctorId!: string;
   public reason?: string;
   public note?: string;
   public patientId!: number;
@@ -16,17 +16,17 @@ class Appointment extends Model {
 Appointment.init(
   {
     appointmentId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4
     },
     appointmentStatus: {
       type: DataTypes.ENUM('completed', 'pending', 'cancel'),
       allowNull: false,
     },
     doctorId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUIDV4,
       references: {
         model: 'Doctors',
         key: 'doctorId',
@@ -41,7 +41,7 @@ Appointment.init(
       type: DataTypes.STRING(8000),
     },
     patientId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUIDV4,
       references: {
         model: 'Patients',
         key: 'patientId',
@@ -56,12 +56,12 @@ Appointment.init(
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+  
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+     
     },
   },
   {

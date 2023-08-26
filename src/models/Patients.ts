@@ -2,10 +2,10 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database/connection';
 
 class Patient extends Model {
-  public patientId!: number;
-  public userId!: number;
+  public patientId!: string; // Change to string type
+  public userId!: string; // Change to string type
   public diagnosis!: string;
-  public bloodGroupId!: number;
+  public bloodGroupId!: string; // Change to string type
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -13,13 +13,13 @@ class Patient extends Model {
 Patient.init(
   {
     patientId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, // Change to STRING type
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     userId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, // Change to STRING type
       allowNull: false,
       references: {
         model: 'Users',
@@ -32,7 +32,7 @@ Patient.init(
       type: DataTypes.STRING(800),
     },
     bloodGroupId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID, // Change to STRING type
       references: {
         model: 'BloodGroups',
         key: 'bloodGroupId',
@@ -43,12 +43,10 @@ Patient.init(
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
     },
   },
   {

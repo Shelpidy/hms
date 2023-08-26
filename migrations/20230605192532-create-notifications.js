@@ -5,12 +5,12 @@ module.exports = {
     await queryInterface.createTable('Notifications', {
       notificationId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       senderId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Users',
           key: 'userId'
@@ -19,7 +19,7 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       receiverId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Users',
           key: 'userId'

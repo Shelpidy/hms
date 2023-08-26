@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 import { Add, GroupAdd, Groups, MenuOutlined, PostAdd, ShoppingBagOutlined, VerifiedUserOutlined } from "@mui/icons-material";
 import { IconButton, Typography, useTheme,Box } from "@mui/material";
@@ -54,3 +55,61 @@ export default function PatientDashboard() {
     </main>
   );
 }
+=======
+"use client"
+import PatientForm from '@/components/AddPatientsForm';
+import AppointmentForm from '@/components/AppointmentForm';
+import CustomButton from '@/components/CustomButton';
+import React, { useState } from 'react';
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { Box } from '@mui/material';
+import EditAppointmentForm from '@/components/EditAppointmentForm';
+import BasicModal from '@/components/UserModal';
+export default function PatientDashboard(){
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [toggle, setToggle] = useState(false)
+    const handleButtonClick = () => {
+       
+        setToggle(!toggle)
+    }
+    return(
+        <main className="flex min-h-screen">    
+            <Sidebar style={{opacity:1}} className='h-screen bg-primary w-40'>
+            <Menu style={{opacity:1}} className='h-screen bg-blue-900 mt-14'>
+                <MenuItem className="text-white hover:text-gray-700">
+                     <i className='pi pi-chart-bar'></i><span className='mx-2'>Patient Dashboard</span>
+                </MenuItem>
+                <MenuItem className="text-white hover:text-gray-700"> <i className='pi pi-users'></i><span className='mx-2'>Doctors</span> </MenuItem>
+                <MenuItem className="text-white hover:text-gray-700"> <i className='pi pi-users'></i><span className='mx-2'>Patients</span></MenuItem>
+                <SubMenu style={{opacity:1}} label="Appointment" className='bg-primary text-white'>
+                    <MenuItem className="text-white hover:text-gray-700"><i className='pi pi-chart-bar'></i><span className='mx-2'>Add Appointmets</span>  </MenuItem>
+                    <MenuItem className="text-white hover:text-gray-700"><i className='pi pi-chart-bar'></i><span className='mx-2'>All Appointments</span> </MenuItem>
+                </SubMenu>
+                <MenuItem className="text-white hover:text-gray-700"> <i className='pi pi-chart-bar'></i> <span className='mx-2'>Blood Group</span>  </MenuItem>
+                <MenuItem className="text-white hover:text-gray-700"> <i className='pi pi-chart-bar'></i> <span className='mx-2'>Blood Donors</span></MenuItem>
+                <MenuItem className="text-white hover:text-gray-700"> <i className='pi pi-chart-bar'></i><span className='mx-2'>Blood Requirer</span> </MenuItem>
+                <MenuItem className="text-white hover:text-gray-700"><i className='pi pi-chart-bar'></i> <span className='mx-2'>Blood Transfusion</span> </MenuItem>
+            </Menu>
+            </Sidebar>;
+           <div>
+            <h3>Patient Dashboard</h3>
+           </div>
+           <div style={{marginTop: 100,}}>
+            <Box
+            sx={{
+                
+            }}
+            >
+                <PatientForm/>
+            </Box>
+           
+           </div>
+        </main>)
+}
+
+ {/* 
+               !toggle ? <AppointmentForm/> : <EditAppointmentForm/>
+*/}
+>>>>>>> 1147ee3b0296db526aaa24dbb0dc4c0096f95e1a

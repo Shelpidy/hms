@@ -5,13 +5,13 @@ module.exports = {
     await queryInterface.createTable('Patients', {
       patientId: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'Users',
           key: 'userId'
@@ -23,7 +23,7 @@ module.exports = {
         type: Sequelize.STRING(800)
       },
       bloodGroupId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'BloodGroups',
           key: 'bloodGroupId'

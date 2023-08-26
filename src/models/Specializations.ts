@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../database/connection';
 
 interface SpecializationAttributes {
-  specializationId: number;
+  specializationId: string;
   specializationName: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -11,7 +11,7 @@ interface SpecializationAttributes {
 interface SpecializationCreationAttributes extends Optional<SpecializationAttributes, 'specializationId' | 'createdAt' | 'updatedAt'> {}
 
 class Specialization extends Model<SpecializationAttributes, SpecializationCreationAttributes> implements SpecializationAttributes {
-  public specializationId!: number;
+  public specializationId!: string;
   public specializationName!: string;
   public createdAt?: Date;
   public updatedAt?: Date;
@@ -21,20 +21,19 @@ Specialization.init(
   {
     specializationId: {
       allowNull: false,
-      autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4
     },
     specializationName: {
       allowNull: false,
       type: DataTypes.STRING(50),
     },
     createdAt: {
-      allowNull: false,
+      
       type: DataTypes.DATE,
     },
     updatedAt: {
-      allowNull: false,
       type: DataTypes.DATE,
     },
   },

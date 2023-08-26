@@ -15,7 +15,7 @@ type PatientProfile = {
 }
 
 type AppointmentDetail = {
-    doctor:DoctorProfile
+    doctor:DoctorProfile 
     patient:PatientProfile
     appointment:Appointment
   }
@@ -31,7 +31,7 @@ const AdminAppointmentsDisplay:React.FC = () => {
         )
     }
     return (
-        <Box>
+        <Box className="grid grid-cols-1 pt-[10vh] md:grid-cols-2 gap-5 px-3">
             All Appointments
         </Box>
     );

@@ -19,7 +19,7 @@ const AdminProfileDisplay:React.FC = () => {
         )
     }
     return (
-        <Box>
+        <Box className="grid grid-cols-1 pt-[10vh] md:grid-cols-2 gap-5 px-3">
             AdminProfile
         </Box>
     );

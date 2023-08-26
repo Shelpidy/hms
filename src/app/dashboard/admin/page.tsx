@@ -34,11 +34,10 @@ export default function AdminDashboard() {
                   // only apply styles on first level elements of the tree
                   if (level === 0)
                     return {
-                      color: disabled ?"#f6f6f6": "white",
-                      backgroundColor: active ?theme.palette.primary.light:undefined,
+                      color: disabled ?"white": theme.palette.primary.main,
+                      backgroundColor: active ?theme.palette.primary.main:undefined,
                       borderRadius:'5px',
                       margin:'5px'
-    
                     };
                 },
               }}

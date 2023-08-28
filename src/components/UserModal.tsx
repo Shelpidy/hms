@@ -8,6 +8,7 @@ import { Person } from "@mui/icons-material";
 import { TextField } from '@mui/material';
 import DoctorForm from './AddDoctorForm'; // Replace with your DoctorForm component
 import PatientForm from './AddPatientsForm'; // Replace with your PatientForm component
+import ClearIcon from '@mui/icons-material/Clear';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -24,8 +25,9 @@ const style = {
 
 type UserType = "doctor" | "patient";
 
-export default function UserModal() {
-  const [open, setOpen] = useState(false);
+export default function UserModal({users, openModal,closeModal} : { users: any, closeModal:any,openModal: boolean}) {
+ 
+ 
   const [userType, setUserType] = useState<UserType>("doctor");
   const [selectedUser, setSelectedUser] = useState<null | any>(null); // Initialize with null
 
@@ -33,40 +35,31 @@ export default function UserModal() {
   const lessThanTab = useMediaQuery(theme.breakpoints.down("md"));
   const aboutImgWidth = lessThanTab ? "33vw" : "22vw";
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   const handleUserTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserType(event.target.value as UserType);
     setSelectedUser(null); // Reset selected user when user type changes
   };
 
-  const handleUserSelection = (user:any) => {
-    setSelectedUser(user);
-    handleOpen();
-  };
-
+ 
   // Sample user data for demonstration
   const dummyUser = {
-    firstName: "John",
-    lastName: "Doe",
+    firstName: users.firstName || "John",
+    lastName: users.lastName || "Doe",
     profileImage: "https://www.bing.com/th?id=OIP.0apGbushC7Ydb4uRp555XwHaIO&pid=3.1&cb=&w=300&h=300&p=0", // Replace with your image URL
-    email: "john.doe@example.com",
-    contactNumber: "123-456-7890",
-    gender: "Male",
-    address: "123 Main St, City, Country",
-    role: "Doctor",
+    email: users.email || "john.doe@example.com",
+    contactNumber: users.contactNumber || "123-456-7890",
+    gender: users.gender || "Male",
+    address: users.address || "123 Main St, City, Country",
+    role: users.role || "Doctor",
   };
 
   return (
     <div>
-      {/* Button to open modal */}
-      <CustomButton onClick={() => handleUserSelection(dummyUser)}>Open User Modal</CustomButton>
-
+ 
       {/* Modal */}
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={openModal}
+        onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -74,9 +67,15 @@ export default function UserModal() {
           <Box>
            
               <>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+                <Typography mt={-2} id="modal-modal-title" variant="h6" component="h2">
                   User Details
                 </Typography>
+                {/* Button to close modal */}
+                <Box mt={-6} mr={-4} textAlign="end">
+                <IconButton color='primary' onClick={closeModal}>
+                  <ClearIcon />
+                </IconButton>
+                </Box>
                 <Box
                   sx={{
                     display: "flex",
@@ -142,11 +141,6 @@ export default function UserModal() {
               <FormControlLabel value="doctor" control={<Radio />} label="Doctor" />
               <FormControlLabel value="patient" control={<Radio />} label="Patient" />
             </RadioGroup>
-          </Box>
-          
-          {/* Button to close modal */}
-          <Box mt={2} textAlign="center">
-            <CustomButton onClick={handleClose}>Close</CustomButton>
           </Box>
         </Box>
       </Modal>

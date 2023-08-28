@@ -1,18 +1,57 @@
-import User from "@/models/Users";
+import Appointment from "@/models/Appointments";
 import Doctor from "@/models/Doctors";
 import Patient from "@/models/Patients";
-import Appointment from "@/models/Appointments";
+import User from "@/models/Users";
 
+export async function GET(req: Request) {
+  try {
+    const appointments = await Appointment.findAll();
 
-export async function GET(req: Request){
-    try {
-        const appointments = await Appointment.findAll();
-        return new Response(JSON.stringify({appointments})) 
-    } catch (error) {
-        console.log(error);
-        return new Response(JSON.stringify({message: "Server error", error: error}))
-    }
+    const appointmentsWithDetails = await Promise.all(
+      appointments.map(async (appointment:any) => {
+        const doctor = await Doctor.findOne({
+          where: { doctorId: appointment.doctorId },
+        });
+
+        const patient = await Patient.findOne({
+          where: { patientId: appointment.patientId },
+        });
+
+        const doctorUser = await User.findOne({
+          where: { userId: doctor?.userId },
+          attributes: ['userId', 'firstName', 'lastName', 'profileImage', 'contactNumber', 'gender', 'dateOfBirth', 'address', 'email', 'role'],
+        });
+
+        const patientUser = await User.findOne({
+          where: { userId: patient?.userId },
+          attributes: ['userId', 'firstName', 'lastName', 'profileImage', 'contactNumber', 'gender', 'dateOfBirth', 'address', 'email', 'role'],
+        });
+
+        return {
+          appointmentId: appointment.appointmentId,
+          appointmentStatus: appointment.appointmentStatus,
+          doctor: {
+            doctorId: doctor?.doctorId,
+            user: doctorUser,
+          },
+          patient: {
+            patientId: patient?.patientId,
+            user: patientUser,
+          },
+          reason: appointment.reason,
+          note: appointment.note,
+          appointmentDate: appointment.appointmentDate,
+        };
+      })
+    );
+
+    return new Response(JSON.stringify({ appointments: appointmentsWithDetails }));
+  } catch (error) {
+    console.log(error);
+    return new Response(JSON.stringify({ message: "Server error", error: error }));
+  }
 }
+
 export async function POST(req: Request) {
     try {
         const data = await req.formData();

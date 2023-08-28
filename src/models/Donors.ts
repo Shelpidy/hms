@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database/connection';
 
 class Donor extends Model {
-  public donorId!: number;
+  public donorId!: string;
   public firstName!: string;
   public middleName?: string;
   public lastName!: string;
@@ -11,7 +11,7 @@ class Donor extends Model {
   public address!: string;
   public contactNumber!: string;
   public email!: string;
-  public bloodGroupId?: number;
+  public bloodGroupId?: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }

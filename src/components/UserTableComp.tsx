@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { UUIDV4 } from 'sequelize';
+import UserModal from './UserModal';
 
 const id = Math.random().toString()
 
@@ -16,31 +17,40 @@ const columns: GridColDef[] = [
   { field: 'role', headerName: 'Role', width: 130 },
 ];
 
-
-
-const userToRow = (user:any) => ({
-  id: user.id,
-  firstName: user.firstName,
-  lastName: user.lastName,
-  profileImage: user.profileImage,
-  contactNumber: user.contactNumber,
-  gender: user.gender || 'male',
-  address: user.address,
-  email: user.email,
-  role: user.role || 'patient',
-});
-
 const userToRowVal = (users: any) => {
     const { createdAt, updatedAt, ...rowData } = users;
     return rowData;
   };
 
 export default function UserDataTable({ users }: any) {
+
+  const [selectedUser, setSelectedUser] = React.useState({});
+  const [openModal, setOpenModal] = React.useState(false);
   const rows = users?.map(userToRowVal);
+
+  const handleCellClick = (params: any) => {
+    const selectedUserId = params.id; // This should be params.id, not params.userId
+    const selectedUser = rows.find((user: any) => user.userId === selectedUserId);
+    console.log(selectedUser)
+    setSelectedUser(selectedUser);
+    setOpenModal(true);
+  };
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
   
   return (
     <div style={{ height: 400, width: '100%',}}>
-      <DataGrid rows={rows} columns={columns} getRowId={Math.random} autoPageSize checkboxSelection />
+      <DataGrid 
+       onCellClick={handleCellClick} 
+       rows={rows} 
+       columns={columns} 
+       getRowId={(row) => row.userId} 
+       autoPageSize 
+       checkboxSelection 
+       />
+        <UserModal closeModal={closeModal} openModal={openModal} users={selectedUser} />
     </div>
   );
 }

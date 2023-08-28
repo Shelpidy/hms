@@ -2,15 +2,37 @@ import Doctor from "@/models/Doctors";
 import Specialization from "@/models/Specializations";
 import User from "@/models/Users";
 
-  export async function GET(req: Request){
-    try {
-        const doctors = await Doctor.findAll();
-        return new Response(JSON.stringify({doctors}))
-    } catch (error:any) {
-        console.log(error);
-        return new Response(JSON.stringify({message: "server error", error: error.message}), {status:500});
-    }
+export async function GET(req: Request){
+  try {
+    const doctors = await Doctor.findAll();
+
+    const doctorsWithDetails = await Promise.all(
+      doctors.map(async (doctor) => {
+        const specialization = await Specialization.findOne({
+          where: { specializationId: doctor.specializationId },
+          attributes: ['specializationId', 'specializationName'],
+        });
+
+        const user = await User.findOne({
+          where: { userId: doctor.userId },
+          attributes: ['userId', 'firstName', 'lastName', 'profileImage', 'contactNumber', 'gender', 'dateOfBirth', 'address', 'email', 'role'],
+        });
+
+        return {
+          doctorId: doctor.doctorId,
+          specialization,
+          user,
+        };
+      })
+    );
+
+    return new Response(JSON.stringify({ doctors: doctorsWithDetails }));
+  } catch (error:any) {
+    console.log(error);
+    return new Response(JSON.stringify({ message: "server error", error: error.message }), { status: 500 });
   }
+}
+
 
   export async function POST(req: Request){
     try {
@@ -40,10 +62,19 @@ import User from "@/models/Users";
     }
   }
   
+  // need to check the put request
   export async function PUT(req: Request) {
     try {
+      const url = new URL(req.url);
+      const id = url.searchParams.get('id');
+
+        if (!id) {
+          return new Response(JSON.stringify({ message: 'Missing id parameter' }), {
+           status: 400,
+          });
+        }
       const data = await req.formData();
-      const doctorId = data.get('doctorId') as string;
+      const doctorId = id
       const newSpecialization = data.get('Specialization') as string;
   
       // Find the doctor by doctorId

@@ -34,7 +34,7 @@ export default function DoctorDashboard(){
                 <AppointmentForm/>
             </Box>  */}
             <Box sx={{}}>
-                <UserModal/>
+                
             </Box>
            </div>
         </main>)

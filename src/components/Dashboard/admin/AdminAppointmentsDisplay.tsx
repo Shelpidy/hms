@@ -1,7 +1,8 @@
 "use client"
-
-import { Box, CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { appointmentDetails } from "@/utils/data";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import AdminAppointmentsTable from "./subcomponents/AdminAppointmentsTable";
 
 type DoctorProfile = {
     doctor:Doctor
@@ -14,7 +15,7 @@ type PatientProfile = {
     user:User
 }
 
-type AppointmentDetail = {
+export type AppointmentDetail = {
     doctor:DoctorProfile
     patient:PatientProfile
     appointment:Appointment
@@ -23,6 +24,11 @@ type AppointmentDetail = {
 const AdminAppointmentsDisplay:React.FC = () => {
     const [appointments,setAppointments] = useState<AppointmentDetail[]|null>()
 
+    useEffect(()=>{
+        setAppointments(appointmentDetails)
+
+    },[])
+  
     if(!appointments){
         return(
             <Box sx={{height:"95vh",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
@@ -32,7 +38,8 @@ const AdminAppointmentsDisplay:React.FC = () => {
     }
     return (
         <Box>
-            All Appointments
+             <Typography>Appointments</Typography>
+             <AdminAppointmentsTable appointments={appointmentDetails} />
         </Box>
     );
 }

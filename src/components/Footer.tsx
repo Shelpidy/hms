@@ -5,7 +5,6 @@ import { IconButton,Box} from "@mui/material"
 import { FacebookOutlined, Twitter, Instagram, LinkedIn, GitHub } from "@mui/icons-material"
 import Link from "next/link"
 
-
 function Footer() {
   return (
     <Box sx={{backgroundColor:"primary.main",width:"100%"}} className="p-6 shadow-lg w-100 bottom-0 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">

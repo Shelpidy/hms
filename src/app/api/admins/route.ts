@@ -4,7 +4,7 @@ import Admin from "@/models/Admins";
 export async function GET(req: Request){
     try {
         const admins = await Admin.findAll();
-        return new Response(JSON.stringify({admins}))
+        return new Response(JSON.stringify({admins}),{status:200})
     } catch (error) {
         console.log(error);
         return new Response(JSON.stringify({message: "server error in the GET request"}), {status:500})
@@ -25,7 +25,7 @@ export async function POST(req:Request){
             username,
             userId
         })
-        return new Response(JSON.stringify({message:"new Admin created", singleAdmin}))
+        return new Response(JSON.stringify({message:"new Admin created", singleAdmin}),{status:201})
     } catch (error:any) {
         console.log(error);
         return new Response(JSON.stringify({message: "something went wrong in the POST request", errror: error.message}), {status:500})
@@ -46,7 +46,7 @@ export async function PUT(req:Request){
          username
         }, {where: {adminId:id}})
 
-        return new Response(JSON.stringify({message: "admin updated successfully", updatedAdmin}), {status:201})
+        return new Response(JSON.stringify({message: "admin updated successfully", updatedAdmin}), {status:202})
     } catch (error) {
         console.log(error);
         return new Response(JSON.stringify({message: "something went wrong in the POST request"}), {status:500})
@@ -65,7 +65,7 @@ export async function DELETE(req:Request) {
            return new Response(JSON.stringify({message: "missing admin"}), {status:404})
         }
         await admin.destroy();
-        return new Response(JSON.stringify({message: "admin deleted"}), {status:200})
+        return new Response(JSON.stringify({message: "admin deleted"}), {status:203})
     } catch (error:any) {
         console.log(error);
         return new Response(JSON.stringify({message: "something went wrong in the DELETE request", error: error.message}), {status:500})

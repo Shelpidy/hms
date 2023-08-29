@@ -21,7 +21,7 @@ import AdminRequirerDisplay from "@/components/Dashboard/admin/AdminRequirersDis
 export default function AdminDashboard() {
   const theme = useTheme()
   const [sideBarCollapsed,setSideBarCollapse] = useState<boolean>(true)
-  const [activePage,setActivePage] = useState<string>('profile')
+  const [activePage,setActivePage] = useState<string>('appointments')
 
   return (
     <main className="min-h-screen grid grid-cols-dashboard">
@@ -35,7 +35,7 @@ export default function AdminDashboard() {
                   if (level === 0)
                     return {
                       color: disabled ?"#f6f6f6": "white",
-                      backgroundColor: active ?theme.palette.primary.light:undefined,
+                      backgroundColor: active ?theme.palette.primary.contrastText:theme.palette.primary.main,
                       borderRadius:'5px',
                       margin:'5px'
     
@@ -52,11 +52,11 @@ export default function AdminDashboard() {
           <MenuItem icon={<GroupAdd/>} onClick={()=> setActivePage("transfusions")}>Transfusions</MenuItem>
           <MenuItem icon={<GroupAdd/>} onClick={()=> setActivePage("appointments")}>Appointments</MenuItem>
           <MenuItem icon={<GroupAdd/>} onClick={()=> setActivePage("donors")}>Donors</MenuItem>
-          <MenuItem icon={<Add/>} onClick={()=> setActivePage("requirers")}>Requirers</MenuItem>
+          <MenuItem icon={<GroupAdd/>} onClick={()=> setActivePage("requirers")}>Requirers</MenuItem>
        </Menu>
     </Sidebar>
     </div>
-    <div className='m-10 h-screen overflow-y-scroll hide-scrollbar'>
+    <div className='m-5 py-[10vh] h-screen overflow-y-scroll hide-scrollbar'>
     {activePage === 'profile' && <AdminProfileDisplay/>}
     {activePage === 'users' && <AdminUsersDisplay/>}
     {activePage === 'patients' && <AdminPatientDisplay/>}
@@ -64,7 +64,7 @@ export default function AdminDashboard() {
     {activePage === 'transfusions' && <AdminBloodTransfusionsDisplay/>}
     {activePage === 'appointments' && <AdminAppointmentsDisplay/>}
     {activePage === 'donors' && <AdminDonorsDisplay/>}
-    {activePage === 'requirers' && <AdminRequirerDisplay/>}
+    {activePage === 'requirers' && <AdminRequirerDisplay/>} 
     </div>
      
     </main>

@@ -26,7 +26,7 @@ declare interface Admin{
 
 declare interface Doctor{
   doctorId: string;
-  specilization: string;
+  specilizationId: string;
   userId:string;
   createdAt: Date;
   updatedAt: Date;
@@ -99,8 +99,8 @@ declare interface Patient {
 }
 
 declare interface Requirer {
-   requirerId: number;
-   userId: number;
+   requirerId: string;
+   userId: string;
    createdAt: Date;
    updatedAt: Date;
 }
@@ -113,7 +113,7 @@ declare interface ContactFormObject {
 }
 
 declare interface Specialization{
-  specializationId: number;
+  specializationId: string;
   specializationName: string;
   createdAt?: Date;
   updatedAt?: Date;

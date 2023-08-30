@@ -22,24 +22,41 @@ export type AppointmentDetail = {
   }
 
 const AdminAppointmentsDisplay:React.FC = () => {
-    const [appointments,setAppointments] = useState<AppointmentDetail[]|null>()
+    const [appointments,setAppointments] = useState<AppointmentDetail[]|null>(null)
+    const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(()=>{
-        setAppointments(appointmentDetails)
 
-    },[])
-  
-    if(!appointments){
-        return(
-            <Box sx={{height:"95vh",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+    const handleRefetch = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch("/api/appointments", { cache: "no-cache" });
+          const data = await response.json();
+          console.log(data);
+          setAppointments(data.appointments);
+        } catch (error) {
+          console.error("Error fetching appointments:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+    useEffect(() => {
+        handleRefetch()
+    }, []);
+ 
+      
+      if(!appointments){
+        return (
+              <Box sx={{height:"95vh",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
                 <CircularProgress size="large" />
             </Box>
         )
-    }
+      }
+      
     return (
         <Box>
-             <Typography>Appointments</Typography>
-             <AdminAppointmentsTable appointments={appointmentDetails} />
+        <Typography>Appointments</Typography>
+        <AdminAppointmentsTable appointments={appointments} onRefetch={handleRefetch} />
         </Box>
     );
 }

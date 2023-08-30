@@ -1,6 +1,7 @@
 "use client";
 import { Add, GroupAdd, Groups, MenuOutlined, PostAdd, ShoppingBagOutlined, VerifiedUserOutlined } from "@mui/icons-material";
-import { IconButton, Typography, useTheme,Box } from "@mui/material";
+import { IconButton, Typography,Box } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import React, { useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";

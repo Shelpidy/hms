@@ -2,9 +2,9 @@
 import AnimatableScroll from "@/components/AnimatableScroll";
 import CustomDropDown from "@/components/CustomDropDown";
 import Image from "next/image";
-import {
-  blogPageBannerItems as homeBannerItems,
-} from "@/utils/data";
+// import {
+//   blogPageBannerItems as homeBannerItems,
+// } from "@/utils/data";
 import AboutSection from "@/components/AboutSection";
 import ContactUs from "@/components/ContactUsSection";
 import Footer from "@/components/Footer";

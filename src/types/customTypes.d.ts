@@ -39,7 +39,7 @@ declare interface Appointment {
   reason?: string;
   note?: string;
   patientId:string;
-  appointmentDate: Date;
+  appointmentDate:Date;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -51,42 +51,6 @@ const bannerTextVariant = {
    },
 };
 
-<<<<<<< HEAD
-  const setPrevSlide = () => {
-    if(index <= 0){
-      setIndex(items.length - 1)
-    }else{
-      setIndex(index - 1);
-    } 
-  };
-
-  return (
-    <Box sx={{ width: "100vw", height: "95vh" }} className="relative">
-      <Image src={items[index].imageUrl} priority fill alt="Carousel Item" />
-      <Box className="absolute left-10 bottom-20 p-3">
-        <Typography className="text-stroke" variant="h2">
-          {items[index]?.title1}
-        </Typography>
-        <Box className='flex flex-row items-center gap-2 my-2'>
-           <CustomButton size='medium' color={theme.palette.primary.main} variant='contained'>Get Started Today</CustomButton>
-           <CustomButton size='medium' color={theme.palette.primary.main} variant="outlined" >Download Brochure</CustomButton>
-        </Box>
-    
-      </Box>
-      <Box className="absolute inset-0 flex flex-row items-center justify-between px-5">
-        <Button onClick={setPrevSlide}>
-          <ChevronLeft className="w-6 h-6 md:w-10 md:h-10 text-white cursor-pointer" />
-        </Button>
-        <Button onClick={setNextSlide}>
-          <ChevronRight className="w-6 h-6 md:w-10 md:h-10 text-white cursor-pointer" />
-        </Button>
-      </Box>
-      <Box className="absolute w-full flex items-center justify-center bottom-5 p-3">
-        <PositionIndicator position={index} numberOfPosition={items.length} />
-      </Box>
-    </Box>
-)
-=======
 function Banner() {
    const mytheme = useTheme();
    const lessThanTab = useMediaQuery(mytheme.breakpoints.down("md"));
@@ -123,7 +87,6 @@ function Banner() {
          />
       </div>
    );
->>>>>>> 1147ee3b0296db526aaa24dbb0dc4c0096f95e1a
 }
 
 export default Banner;

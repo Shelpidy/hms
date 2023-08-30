@@ -51,7 +51,7 @@ const SignUpPage: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setFormData((prevData:any) => ({
       ...prevData,
       [name]: value,
   }));
@@ -148,7 +148,7 @@ const SignUpPage: React.FC = () => {
                 label="Email"
                 name="email"
                 value={formData.email}
-                onChange={(e) => {
+                onChange={(e:any) => {
                   handleInputChange(e);
                   validateEmail(e.target.value);
                 }}
@@ -169,7 +169,7 @@ const SignUpPage: React.FC = () => {
                 name="password"
                 type="password"
                 value={formData.password}
-                onChange={(e) => {
+                onChange={(e:any) => {
                   handleInputChange(e);
                   checkPasswordStrength(e.target.value);
                 }}
@@ -190,7 +190,7 @@ const SignUpPage: React.FC = () => {
                 name="confirmPassword"
                 type="password"
                 value={formData.confirmPassword}
-                onChange={(e) => {
+                onChange={(e:any) => {
                   handleInputChange(e);
                   confirmPasswordChecker(e.target.value);
                 }}
@@ -252,7 +252,7 @@ const SignUpPage: React.FC = () => {
                 label="Phone Number"
                 name="contactNumber"
                 value={formData.contactNumber}
-                onChange={(e) => {
+                onChange={(e:any) => {
                   handleInputChange(e);
                   validatePhoneNumber(e.target.value);
                 }}

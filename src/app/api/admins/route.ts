@@ -3,13 +3,29 @@ import Admin from "@/models/Admins";
 
 export async function GET(req: Request){
     try {
-        const admins = await Admin.findAll();
-        return new Response(JSON.stringify({admins}),{status:200})
-    } catch (error) {
-        console.log(error);
-        return new Response(JSON.stringify({message: "server error in the GET request"}), {status:500})
+      const admins = await Admin.findAll();
+  
+      const adminsWithDetails = await Promise.all(
+        admins.map(async (admin:any) => {
+          const user = await User.findOne({
+          where: {userId: admin.userId},
+          attributes: ['userId', 'firstName', 'lastName', 'profileImage', 'contactNumber', 'gender', 'dateOfBirth', 'address', 'email', 'role'],
+          });
+  
+          return {
+            adminId: admin.adminId,
+            username: admin.username,
+            user,
+          };
+        })
+      );
+  
+      return new Response(JSON.stringify({ admins: adminsWithDetails }));
+    } catch (error:any) {
+      console.log(error);
+      return new Response(JSON.stringify({ message: "server error", error: error.message }), { status: 500 });
     }
-}
+  }
 export async function POST(req:Request){
     try {
         const data = await req.formData();

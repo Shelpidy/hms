@@ -2,16 +2,39 @@ import Patient from "@/models/Patients"
 import BloodGroup from "@/models/BloodGroups";
 import User from "@/models/Users";
 
-export async function GET(req:Request){
- try {
+export async function GET(req: Request) {
+  try {
     const patients = await Patient.findAll();
-    return new Response(JSON.stringify(patients))
- } catch (error) {
+
+    const patientsWithDetails = await Promise.all(
+      patients.map(async (patient) => {
+        const bloodGroup = await BloodGroup.findOne({
+          where: { bloodGroupId: patient.bloodGroupId },
+        });
+
+        const user = await User.findOne({
+          where: { userId: patient.userId },
+          attributes: ['userId', 'firstName', 'lastName', 'profileImage', 'contactNumber', 'gender', 'dateOfBirth', 'address', 'email', 'role'],
+        });
+
+        return {
+          patientId: patient.patientId,
+          diagnosis: patient.diagnosis,
+          bloodGroup,
+          user,
+          createdAt: patient.createdAt,
+          updatedAt: patient.updatedAt,
+        };
+      })
+    );
+
+    return new Response(JSON.stringify({ patients: patientsWithDetails }));
+  } catch (error) {
     console.log(error);
-    return new Response(JSON.stringify({message: "Something went wrong in the get all patients"}),{
-        status: 500
-    })
- }
+    return new Response(JSON.stringify({ message: "Something went wrong in the get all patients" }), {
+      status: 500
+    });
+  }
 }
 
 export async function POST(req: Request) {

@@ -7,7 +7,7 @@ declare interface User {
   profileImage?: string;
   contactNumber: string;
   gender: 'male' | 'female' | 'other';
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   address?: string;
   password: string;
   email: string;
@@ -94,6 +94,7 @@ declare interface Patient {
   userId: string;
   diagnosis: string;
   bloodGroupId: string;
+  groupName: string;
   createdAt: Date;
   updatedAt: Date;
 }

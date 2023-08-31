@@ -2,6 +2,9 @@ import User from "@/models/Users";
 import Doctor from "@/models/Doctors";
 import Patient from "@/models/Patients";
 import Appointment from "@/models/Appointments";
+import Specialization from "@/models/Specializations";
+import BloodGroup from "@/models/BloodGroups";
+
 import { NextRequest } from "next/server";
 
 
@@ -14,10 +17,17 @@ export async function GET(req: NextRequest) {
           const doctor = await Doctor.findOne({
             where: { doctorId: appointment.doctorId },
           });
-  
+          const specialization = await Specialization.findOne({
+            where: {specializationId: doctor?.specializationId}
+          })
+
           const patient = await Patient.findOne({
             where: { patientId: appointment.patientId },
           });
+
+          const bloodGroup = await BloodGroup.findOne({
+            where: {bloodGroupId: patient?.bloodGroupId}
+          })   
   
           const doctorUser = await User.findOne({
             where: { userId: doctor?.userId },
@@ -32,10 +42,12 @@ export async function GET(req: NextRequest) {
           return {
             doctor: {
               doctorId: doctor?.doctorId,
+              specialization,
               user: doctorUser,
             },
             patient: {
-              patientId: patient?.patientId,
+              patient,
+              bloodGroup,
               user: patientUser,
             },
             appointment: {

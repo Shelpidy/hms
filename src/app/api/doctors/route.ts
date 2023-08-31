@@ -19,7 +19,7 @@ export async function GET(req: Request){
         });
 
         return {
-          doctorId: doctor.doctorId,
+          doctor,
           specialization,
           user,
         };
@@ -35,9 +35,9 @@ export async function GET(req: Request){
 
   export async function POST(req: Request){
     try {
-        const data = await req.formData();
-        const email =  data.get('email') as string;
-        const specialization = data.get('specialization') as string;
+        const data = await req.json();
+        const email =  data.doctorEmail as string;
+        const specialization = data.specialization as string;
 
         const spec = await Specialization.create({
             specializationName: specialization
@@ -63,9 +63,9 @@ export async function GET(req: Request){
   
   export async function PUT(req: Request) {
     try {
-      const data = await req.formData();
-      const doctorId = data.get('doctorId') as string;
-      const newSpecialization = data.get('Specialization') as string;
+      const data = await req.json();
+      const doctorId = data.doctorId as string;
+      const newSpecialization = data.specialization as string;
   
       // Find the doctor by doctorId
       const doctor = await Doctor.findByPk(doctorId);
@@ -88,7 +88,7 @@ export async function GET(req: Request){
       return new Response(
         JSON.stringify({ message: 'Doctor specialization updated' ,updatedSpecialization}),
         {
-          status: 200, // OK status code
+          status: 202, // OK status code
         }
       );
     } catch (error) {
@@ -102,7 +102,7 @@ export async function GET(req: Request){
   export async function DELETE(req: Request){
       try {
         const url = new URL(req.url)
-        const id = url.searchParams.get('id');
+        const id = url.searchParams.get('doctorId');
         
         if(!id){
             return new Response(JSON.stringify({message: "missing Parameters"}), {status: 404})
@@ -118,7 +118,7 @@ export async function GET(req: Request){
          }
          await spec.destroy()
          await doctor.destroy();
-         return new Response(JSON.stringify({ message: 'Doctor  deleted succesfully, also its specialization'}), {status:204})
+         return new Response(JSON.stringify({ message: 'Doctor  deleted succesfully, also its specialization'}), {status:203})
     } catch (error) {
         console.log(error)
         return new Response(JSON.stringify({ message:"Server error"}), {status:500})

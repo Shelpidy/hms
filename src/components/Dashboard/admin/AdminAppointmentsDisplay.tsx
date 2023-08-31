@@ -7,12 +7,13 @@ import AdminAppointmentsTable from "./subcomponents/AdminAppointmentsTable";
 type DoctorProfile = {
     doctor:Doctor
     user:User
-    specilization:Specialization
+    specialization:Specialization
 }
 
 type PatientProfile = {
     patient:Patient
     user:User
+    bloodGroup:BloodGroup
 }
 
 export type AppointmentDetail = {

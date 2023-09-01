@@ -18,18 +18,18 @@ export async function GET(request:Request) {
 export async function POST(req: Request) {
   try {
     
-    const data = await req.formData();
-    const firstName = data.get('firstName') as string;
-    const lastName = data.get('lastName') as string;
-    const middleName = data.get('middleName') as string;
-    const email = data.get('email') as string;
-    const address = data.get('address') as string;
-    const gender = data.get('gender') as 'male';
-    const profileImage = data.get('profileImage') as string;
-    const contactNumber = data.get('contactNumber') as string;
-    const role = data.get('role') as 'patient';
-    const password = data.get('password') as string;
-    const dateOfBirth = data.get('dateOfBirth') as string;
+    const data = await req.json();
+    const firstName = data.firstName as string;
+    const lastName = data.lastName as string;
+    const middleName = data.middleName as string;
+    const email = data.email as string;
+    const address = data.address as string;
+    const gender = data.gender ;
+    const profileImage = data.profileImage as string;
+    const contactNumber = data.contactNumber as string;
+    const role = data.role;
+    const password = data.password as string;
+    const dateOfBirth = data.dateOfBirth as string;
 
     // Check if a user with the same email already exists
     const existingUser = await User.findOne({ where: { email: email } });
@@ -81,19 +81,19 @@ export async function PUT(request: Request) {
     }
 
     // Parse the incoming form data
-    const data = await request.formData();
+    const data = await request.json();
     const updatedData = {
-      firstName: data.get('firstName') as string,
-      lastName: data.get('lastName') as string,
-      middleName: data.get('middleName') as string,
-      email: data.get('email') as string,
-      address: data.get('address') as string,
-      gender: data.get('gender') as "male",
-      profileImage: data.get('profileImage') as string,
-      contactNumber: data.get('contactNumber') as string,
-      role: data.get('role') as "patient",
-      password: data.get('password') as string,
-      dateOfBirth: data.get('dateOfBirth') as string,
+      firstName: data.firstName as string,
+      lastName: data.lastName as string,
+      middleName: data.middleName as string,
+      email: data.email as string,
+      address: data.address as string,
+      gender: data.gender,
+      profileImage: data.profileImage as string,
+      contactNumber: data.contactNumber as string,
+      role: data.role,
+      password: data.password as string,
+      dateOfBirth: data.dateOfBirth as string,
     };
 
     // Find the user by id

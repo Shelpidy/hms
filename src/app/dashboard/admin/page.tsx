@@ -22,7 +22,7 @@ import AdminRequirerDisplay from "@/components/Dashboard/admin/AdminRequirersDis
 export default function AdminDashboard() {
   const theme = useTheme()
   const [sideBarCollapsed,setSideBarCollapse] = useState<boolean>(true)
-  const [activePage,setActivePage] = useState<string>('appointments')
+  const [activePage,setActivePage] = useState<string>('users')
 
   return (
     <main className="min-h-screen grid grid-cols-dashboard">

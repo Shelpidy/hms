@@ -17,9 +17,6 @@ import {
   InputAdornment,
   IconButton,
   InputLabel,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
   Modal,
   Typography
 } from "@mui/material";
@@ -72,7 +69,6 @@ const AdminDoctorsTable : React.FC<AdminDoctorTableProps> = ({ doctors, onRefetc
     const [openUpdate, setOpenUpdate] = useState(false);
     const [expand, setExpand] = useState(false);
     const [selectedDoctor, setSelectedDoctor] = useState<DoctorProfile | null>(null);
-    const [selectedUpdateDoctor, setSelectedUpdateDoctor] = useState<DoctorProfile | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     
     const [newDoctor, setNewDoctor] = useState<{doctorEmail: string, specialization: string}> ({

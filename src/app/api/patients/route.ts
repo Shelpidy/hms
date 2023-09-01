@@ -18,17 +18,14 @@ export async function GET(req: Request) {
         });
 
         return {
-          patientId: patient.patientId,
-          diagnosis: patient.diagnosis,
+          patient,
           bloodGroup,
           user,
-          createdAt: patient.createdAt,
-          updatedAt: patient.updatedAt,
         };
       })
     );
 
-    return new Response(JSON.stringify({ patients: patientsWithDetails }));
+    return new Response(JSON.stringify({ patients: patientsWithDetails }), {status: 200});
   } catch (error) {
     console.log(error);
     return new Response(JSON.stringify({ message: "Something went wrong in the get all patients" }), {
@@ -39,11 +36,11 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
     try {
-      const data = await req.formData();
+      const data = await req.json();
   
-      const bldGroup = data.get('bloodGroup') as string;
-      const email = data.get('email') as string;
-      const diagnosis = data.get('diagnosis') as string;
+      const bldGroup = data.bloodGroup as string;
+      const email = data.patientEmail as string;
+      const diagnosis = data.diagnosis as string;
   
       // Check if a user with the given email exists
       const user = await User.findOne({ where: { email: email } });
@@ -72,7 +69,7 @@ export async function POST(req: Request) {
   
       // Create a new patient
       const newPatient = await Patient.create({
-        userId: user.userId,
+        userId: user.userId, // Set the user ID explicitly
         diagnosis,
         bloodGroupId,
       });
@@ -83,9 +80,9 @@ export async function POST(req: Request) {
           status: 201,
         }
       );
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
-      return new Response(JSON.stringify({ message: 'Something went wrong' }), {
+      return new Response(JSON.stringify({ message: 'Something went wrong' , error: error.message}), {
         status: 500,
       });
     }
@@ -93,21 +90,15 @@ export async function POST(req: Request) {
   
 export async function PUT(req: Request){
     try {
-         const url = new URL(req.url);
-         const id = url.searchParams.get('id');
 
-         if (!id) {
-           return new Response(JSON.stringify({ message: 'Missing id parameter' }), {
-           status: 400,
-         });
-        }
-        const data = await req.formData();
+        const data = await req.json();
         
-           const email = data.get('email') as string
-           const diagnosis = data.get('diagnosis') as string
-           const bloodGrp = data.get('bloodGroup') as string
+           const email = data.patientEmail as string
+           const patientId = data.patientId as string
+           const diagnosis = data.diagnosis as string
+           const bloodGrp = data.bloodGroup as string
         
-        const patient = await Patient.findOne({ where: { patientId: id } });
+        const patient = await Patient.findOne({ where: { patientId:patientId } });
        if (!patient) {
             return new Response(JSON.stringify({ message: 'Patient not found' }), {
            status: 404,
@@ -115,28 +106,29 @@ export async function PUT(req: Request){
         }
         const { bloodGroupId, userId } = patient.dataValues
         const bloodGrpTable = await BloodGroup.findOne({where: {bloodGroupId: bloodGroupId}})
-        if(!bloodGrpTable) {
-            return new Response(JSON.stringify({message: "BloodGroup not found"}))
-        }
+        // if(!bloodGrpTable) {
+        //     return new Response(JSON.stringify({message: "BloodGroup not found"}))
+        // }
         await BloodGroup.update({
             groupName:bloodGrp,
             bloodGroupId,
         }, {where: {bloodGroupId: bloodGroupId}})
         
         await patient.update({
-           patientId: id,
+           patientId,
            userId,
            diagnosis,
-        }, { where: { patientId: id } });
+           bloodGroupId
+        }, { where: { patientId } });
 
-        const updatedPatient = await Patient.findOne({ where: { userId: id } });
+        // const updatedPatient = await Patient.findOne({ where: { patientId: patientId } });
    
-        return new Response(JSON.stringify({ message: 'User updated successfully', updatedPatient }), {
-         status: 200,
+        return new Response(JSON.stringify({ message: 'User updated successfully' }), {
+         status: 202,
        });
-    } catch (error) {
+    } catch (error:any) {
         console.log(error)
-        return new Response(JSON.stringify({message:"Something went wrong in PUT"}),{
+        return new Response(JSON.stringify({message:"Something went wrong in PUT", error: error.message}),{
             status:500
         })
     }
@@ -145,7 +137,7 @@ export async function PUT(req: Request){
 export async function DELETE(req: Request){
     try {
         const url = new URL(req.url);
-        const id = url.searchParams.get('id');
+        const id = url.searchParams.get('patientId');
         if (!id) {
           return new Response(JSON.stringify({ message: 'Missing id parameter' }), {
           status: 400,
@@ -164,8 +156,8 @@ export async function DELETE(req: Request){
        }
        await singleBloodGroup.destroy()
        await patient.destroy();
-       return new Response(null, {
-        status: 204,
+       return new Response(JSON.stringify({message: "patient deleted successfully"}), {
+        status: 203,
       });
     } catch (error){
         console.log(error)

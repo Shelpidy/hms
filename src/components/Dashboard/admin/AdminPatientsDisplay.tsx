@@ -1,7 +1,8 @@
 "use client"
 
-import { Box, CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import AdminPatientsTable from "./subcomponents/AdminPatientsTable";
 
 type PatientProfile = {
     patient:Patient
@@ -11,6 +12,24 @@ type PatientProfile = {
 
 const AdminPatientDisplay:React.FC = () => {
     const [patients,setPatients] = useState<PatientProfile[]|null>()
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleRefetch = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch("/api/patients", { cache: "no-cache" });
+          const data = await response.json();
+          console.log(data);
+          setPatients(data.patients);
+        } catch (error) {
+          console.error("Error fetching appointments:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };    
+      useEffect(() => {
+        handleRefetch()
+    }, []);
 
     if(!patients){
         return(
@@ -21,7 +40,8 @@ const AdminPatientDisplay:React.FC = () => {
     }
     return (
         <Box>
-            All Patients
+            <Typography>All Patients</Typography>
+            <AdminPatientsTable patients={patients} onRefetch={handleRefetch}/>
         </Box>
     );
 }

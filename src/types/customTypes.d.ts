@@ -94,7 +94,6 @@ declare interface Patient {
   userId: string;
   diagnosis: string;
   bloodGroupId: string;
-  groupName: string;
   createdAt: Date;
   updatedAt: Date;
 }

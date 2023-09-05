@@ -2,8 +2,9 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database/connection';
 
 class Requirer extends Model {
-  public requirerId!: number;
-  public userId!: number;
+  public requirerId!: string;
+  public userId!: string;
+  public bloodGroupId!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -26,15 +27,24 @@ Requirer.init(
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
     },
+    bloodGroupId: {
+      type: DataTypes.UUID,
+      references: {
+        model: 'BloodGroups',
+        key: 'bloodGroupId',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+     
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
+    
     },
   },
   {

@@ -1,23 +1,35 @@
 "use client"
 
-import { Box, CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import AdminRequirersTable from "./subcomponents/AdminRequirersTable";
 
-type PatientProfile = {
-    patient:Patient
-    user:User
-    bloodGroup:BloodGroup
-}
 type RequirerDetail = {
     requirer:Requirer
-    patient:PatientProfile
+    user: User
 } 
 
 const AdminRequirerDisplay:React.FC = () => {
-    const [donors,setDonors] = useState<RequirerDetail[]|null>()
-    const [bloogGroups,setBloodGroups] = useState<BloodGroup[]|null>()
+    const [requirers,setRequirers] = useState<RequirerDetail[]|null>()
+    const [isLoading, setIsLoading] = useState(false)
+    const handleRefetch = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch("/api/requirers", { cache: "no-cache" });
+          const data = await response.json();
+          console.log(data);
+          setRequirers(data.requirers);
+        } catch (error) {
+          console.error("Error fetching appointments:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };    
+      useEffect(() => {
+        handleRefetch()
+    }, []);
 
-    if(!donors){
+    if(!requirers){
         return(
             <Box sx={{height:"95vh",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
                 <CircularProgress size="large" />
@@ -26,7 +38,8 @@ const AdminRequirerDisplay:React.FC = () => {
     }
     return (
         <Box>
-            All Requirers
+            <Typography>All Requirers</Typography>
+            <AdminRequirersTable requirers={requirers} onRefetch={handleRefetch}/>
         </Box>
     );
 }

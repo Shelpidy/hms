@@ -13,8 +13,7 @@ export async function GET(req: Request){
           });
   
           return {
-            adminId: admin.adminId,
-            username: admin.username,
+            admin,
             user,
           };
         })
@@ -25,7 +24,8 @@ export async function GET(req: Request){
       console.log(error);
       return new Response(JSON.stringify({ message: "server error", error: error.message }), { status: 500 });
     }
-  }
+}
+
 export async function POST(req:Request){
     try {
         const data = await req.formData();

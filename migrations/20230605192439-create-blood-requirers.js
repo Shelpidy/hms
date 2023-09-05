@@ -2,6 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+
     await queryInterface.createTable('Requirers', {
       requirerId: {
         allowNull: false,
@@ -30,7 +31,18 @@ module.exports = {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
       }
     });
+
+    await queryInterface.addColumn('Requirers', 'bloodGroupId', {
+      type: Sequelize.UUID,
+      references: {
+        model: 'BloodGroups', // Replace with the actual model name if needed
+        key: 'bloodGroupId',  // Replace with the actual primary key of the BloodGroups table
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    });
   },
+  
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Requirers');
   }

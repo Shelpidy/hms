@@ -104,7 +104,7 @@ const AdminUsersTable : React.FC<AdminUserTableProps> = ({ users }) => {
         <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Users</TableCell>
+            <TableCell>User</TableCell>
             <TableCell>Address</TableCell>
             <TableCell>Date Added</TableCell>
             <TableCell>Action</TableCell>
@@ -173,7 +173,7 @@ const AdminUsersTable : React.FC<AdminUserTableProps> = ({ users }) => {
                     />
                           <div>
                       <Typography variant="h6">
-                        <strong>Patient Name:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
+                        <strong>Name:</strong> {selectedUser?.firstName} {selectedUser?.lastName}
                       </Typography>
                       <Typography variant="body1">
                         <strong>Email:</strong> {selectedUser?.email}

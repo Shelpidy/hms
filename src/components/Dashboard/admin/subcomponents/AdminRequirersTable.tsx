@@ -18,7 +18,10 @@ import {
   IconButton,
   InputLabel,
   Modal,
-  Typography
+  Typography,
+  SelectChangeEvent,
+  MenuItem,
+  Select
 } from "@mui/material";
 import { Delete, Edit, Add, Search,} from "@mui/icons-material";
 import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
@@ -28,6 +31,7 @@ import Swal from "sweetalert2";
 type RequirerDetails = {
     requirer:Requirer
     user:User
+    bloodGroup:BloodGroup
     
 }
 
@@ -72,8 +76,9 @@ const AdminRequirersTable : React.FC<AdminRequirerTableProps> = ({ requirers, on
     const [selectedRequirer, setSelectedRequirer] = useState<RequirerDetails | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     
-    const [newRequirer, setNewRequirer] = useState<{email: string}> ({
+    const [newRequirer, setNewRequirer] = useState<{email: string, bloodGroup: string}> ({
         email: "",
+        bloodGroup: "",
     });
 
     const Toast = Swal.mixin({
@@ -181,6 +186,14 @@ const AdminRequirersTable : React.FC<AdminRequirerTableProps> = ({ requirers, on
       };
 
       const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setNewRequirer((prevRequirer) => ({
+          ...prevRequirer,
+          [name]: value,
+        }));
+      };
+
+      const handleSelectInputChange = (event:SelectChangeEvent<any>) => {
         const { name, value } = event.target;
         setNewRequirer((prevRequirer) => ({
           ...prevRequirer,
@@ -310,6 +323,9 @@ const AdminRequirersTable : React.FC<AdminRequirerTableProps> = ({ requirers, on
                         <strong>Email:</strong> {selectedRequirer?.user?.email}
                       </Typography>
                       <Typography variant="body1">
+                        <strong>Blood Group:</strong> {selectedRequirer?.bloodGroup.groupName}
+                      </Typography>
+                      <Typography variant="body1">
                         <strong>Contact Number:</strong> {selectedRequirer?.user?.contactNumber}
                       </Typography>
                       <Typography variant="body1">
@@ -338,6 +354,20 @@ const AdminRequirersTable : React.FC<AdminRequirerTableProps> = ({ requirers, on
                   onChange={handleInputChange}
                   margin="normal"
                 />
+                <InputLabel>Blood Group</InputLabel>
+                <Select
+                    fullWidth
+                    name="bloodGroup"
+                    value={newRequirer.bloodGroup}
+                    onChange={handleSelectInputChange}
+                    margin="dense"
+                    >
+                     {["A+","A-","B+","B-","AB+","AB-","O+","O-",].map((group) => (
+                        <MenuItem key={group} value={group}>
+                            {group}
+                        </MenuItem>
+                       ))}
+                </Select>
              </DialogContent>
              <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>

@@ -109,7 +109,6 @@ const AdminPatientsTable : React.FC<AdminPatientTableProps> = ({ patients, onRef
         setSelectedPatient(null);
       };
 
-
       const handleUpdateClose = () => {
         setOpenUpdate(false);
       }

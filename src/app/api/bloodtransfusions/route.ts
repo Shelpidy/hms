@@ -9,33 +9,32 @@ export async function GET(req: Request){
     try {
         const bloodTransfusions = await BloodTransfusion.findAll()
         const bloodTransfusionsDetails = await Promise.all(
-            bloodTransfusions.map(async(bldTransfusion) => {
+            bloodTransfusions.map(async(transfusion) => {
                 const donor = await Donor.findOne({
-                    where: {donorId: bldTransfusion.donorId},
+                    where: {donorId: transfusion.donorId},
                     attributes: ["firstName", "lastName", "middleName", "gender", "dateOfBirth", "address", "contactNumber", "email",]
                 })
 
-                const requirer = await Requirer.findOne({where: {requirerId: bldTransfusion.recipientId}})
-                const { userId } = requirer?.dataValues
-                const recipient = await User.findOne({
+                const recipientAll = await Requirer.findOne({where: {requirerId: transfusion.recipientId}})
+                const { userId } = recipientAll?.dataValues
+                const user = await User.findOne({
                     where: {userId: userId},
-                    attributes: ["firstName", "lastName", "middleName", "profileImage", "gender", "dateOfBirth", "address", "contactNumber", "email",]
                 })
 
                 const bloodGroup = await BloodGroup.findOne({
-                    where: {bloodGroupId: bldTransfusion.bloodGroupId}
+                    where: {bloodGroupId: transfusion.bloodGroupId}
                 })
 
                 return {
-                    bldTransfusion,
+                    transfusion,
                     donor,
-                    recipient,
+                    requirer: {user, recipientAll},
                     bloodGroup,
                     
                 }
             })
         )
-        return new Response(JSON.stringify({tranfusions: bloodTransfusionsDetails}), { status: 200 })
+        return new Response(JSON.stringify({transfusions: bloodTransfusionsDetails}), { status: 200 })
     } catch (error: any) {
         console.log(error)
         return new Response(JSON.stringify({message: "server error", error: error.message}), { status:500})
@@ -46,31 +45,29 @@ export async function POST(req: Request){
     try {
         const data = await req.json();
         const donorEmail = data.donorEmail as string;
-        const requiresEmail = data.requirerEmail as string;
-        const transfusionDate = data.transfusionDate as string
+        const transfusionDateStr = data.transfusionDate as string
+        const requirerId = data.requirerId as string
 
         const donor = await Donor.findOne({where: {email: donorEmail}})
-        const requirer = await User.findOne({where: {email: requiresEmail}})
-        if(!donor && !requirer) {
-            return new Response(JSON.stringify({message: "Donor and User is not found, put a valid email"}), {status: 404})
+        if(!donor) {
+            return new Response(JSON.stringify({message: "Donor is not found, put a valid email"}), {status: 404})
         }
          
-        const userId = requirer?.userId
-        const recipient = await Requirer.create({ userId })
+        
         const { donorId, bloodGroupId } = donor?.dataValues
-        const { requirerId } = recipient?.dataValues
+        const transfusionDate = new Date(transfusionDateStr);
 
         const bldtransfusion = await BloodTransfusion.create({
             donorId,
-            recipientId: requirerId,
             transfusionDate,
-            bloodGroupId
+            bloodGroupId,
+            recipientId: requirerId,
         })
 
         return new Response(JSON.stringify({message: "blood transfusion created", bldtransfusion}), {status:201});
     } catch (error:any) {
         console.log(error);
-        return new Response(JSON.stringify({message: "server error"}), {status:400});
+        return new Response(JSON.stringify({message: "server error", error: error.message}), {status:400});
     }
 }
 
@@ -93,9 +90,9 @@ export async function DELETE(req: Request){
 
         const tranfusion = await BloodTransfusion.findOne({where: {transfusionId: id}})
         const { recipientId } = tranfusion?.dataValues
-        const requirer = await Requirer.findOne({where: {requirerId: recipientId}})
+        
 
-        await requirer?.destroy()
+        
         await tranfusion?.destroy()
         return new Response(JSON.stringify({message: "transfusion deleted successfully"}), {status: 203})
     } catch (error:any) {

@@ -7,6 +7,7 @@ import AdminRequirersTable from "./subcomponents/AdminRequirersTable";
 type RequirerDetail = {
     requirer:Requirer
     user: User
+    bloodGroup: BloodGroup
 } 
 
 const AdminRequirerDisplay:React.FC = () => {

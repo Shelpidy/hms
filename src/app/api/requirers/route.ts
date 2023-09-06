@@ -1,5 +1,6 @@
 import User from "@/models/Users";
 import Requirer from "@/models/Requirers";
+import BloodGroup from "@/models/BloodGroups";
 
 export async function GET(req: Request){
    try {
@@ -8,9 +9,11 @@ export async function GET(req: Request){
         requirers.map(async(requirer) => {
            const user = await User.findOne({where: {userId: requirer.userId}})
 
+           const bloodGroup = await BloodGroup.findOne({where: {bloodGroupId: requirer.bloodGroupId}})
            return {
             requirer,
             user,
+            bloodGroup,
            }
         })
      )
@@ -25,17 +28,23 @@ export async function POST(req: Request){
    try {
       const data = await req.json();
       const email = data.email;
+      const bloodGroup = data.bloodGroup;
 
       const user = await User.findOne({ where: {email: email }});
       if(!user){
         return new Response(JSON.stringify({message: "User not found"}), {status: 404})
       }
+      const bloogGrp  =await BloodGroup.create({
+         groupName: bloodGroup
+      })
+      const { bloodGroupId } = bloogGrp.dataValues
       const  userId  = user?.userId
       const requirer = await Requirer.create({
-        userId
+        userId,
+        bloodGroupId
       })
 
-      return new Response(JSON.stringify({message: "Requirer created successfully", requirer}), { status:201})
+      return new Response(JSON.stringify({message: "created successfully", requirer}), { status:201})
 
    } catch (error:any) {
     console.log(error);

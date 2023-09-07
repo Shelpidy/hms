@@ -90,8 +90,8 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
     const [openUpdate, setOpenUpdate] = useState(false);
     const [expand, setExpand] = useState(false);
     const [selectedTransfusion, setSelectedTransfusion] = useState<BloodTransfusionDetail | null>(null);
+    const [selectedUpdateTransfusion, setSelectedUpdateTransfusion] = useState<BloodTransfusionDetail | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [searchUpdateQuery, setSearchUpdateQuery] = useState("");
     const [searchQueryRequirer, setSearchQueryRequirer] = useState("");
     const [searchUpdateQueryRequirer, setSearchUpdateQueryRequirer] = useState("");
     const [requirersDetails, setRequirersDetails] = useState<RequirerDetails[] | null>(null);
@@ -102,9 +102,9 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
        requirerId: "",
     });
 
-    const [updateTransfusion, setUpdateTransfusion] = useState<{donorEmail: string, transfusionDateStr: string, requirerId: string, transfusionId: string}> ({
+    const [updateTransfusion, setUpdateTransfusion] = useState<{donorEmail: string, transfusionDate: Date, requirerId: string, transfusionId: string}> ({
        donorEmail: "",
-       transfusionDateStr: "",
+       transfusionDate: new Date(),
        requirerId: "",
        transfusionId: "",
     });
@@ -148,28 +148,27 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
         });
       };
 
-      const handleUpdateRequirerSelect = (required: RequirerDetails,selectedTransfusion: BloodTransfusionDetail) => {
-        // Update the searchQueryRequirer with the selected email
-        setSearchUpdateQueryRequirer(required.user.email);
-      
-        // Update the requirerId in the newTransfusion state with the selected ID
-        setUpdateTransfusion({
-          ...updateTransfusion,
-          requirerId: required.requirer.requirerId,
-          transfusionId: selectedTransfusion.transfusion.transfusionId
-        });
+      const handleUpdateRequirerSelect = (requirer: RequirerDetails) => {
+        console.log(updateRequirersDetails)
+        setSearchUpdateQueryRequirer(requirer.user.email)
+        // setUpdateTransfusion({
+        //     ...updateTransfusion,
+        //     transfusionId: selectedUpdateTransfusion?.transfusion?.transfusionId
+        // })
+        
       };
       
       
 
       const handleEdit = (transfusion: BloodTransfusionDetail) => {
         console.log(transfusion)
-        setSelectedTransfusion(transfusion)
+        setSelectedUpdateTransfusion(transfusion)
         setUpdateTransfusion({
-          donorEmail: transfusion.donor.email,
-          requirerId: transfusion.requirer.recipientAll.requirerId,
-          transfusionId: transfusion.transfusion.transfusionId,
-          transfusionDateStr: transfusion.transfusion?.transfusionDate?.toString()
+            donorEmail: transfusion.donor.email,
+            requirerId: transfusion.requirer.recipientAll.requirerId,
+            transfusionDate: transfusion.transfusion.transfusionDate,
+            transfusionId: transfusion.transfusion.transfusionId
+            
         })
         setOpenUpdate(true);
       }
@@ -601,21 +600,24 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
                 />
                 <List>
                     {updateRequirersDetails
-                    ?.filter((requirersDetail) =>
-                        requirersDetail.user.email.toLowerCase().includes(searchQueryRequirer)
-                    )
-                    .slice(0, 3)
-                    .map((requirersDetail, index) => (
-                        <ListItem
-                        key={index}
-                        button
-                        onClick={() =>
-                            selectedTransfusion && handleUpdateRequirerSelect(requirersDetail, selectedTransfusion)
-                        }
-                        >
-                        <ListItemText primary={requirersDetail.user.email} />
+                         ?.filter(requirer => 
+                            requirer.user.email.includes(searchUpdateQueryRequirer.toLowerCase())
+                               )
+                          .slice(0,3)
+                          .map((requirer, index) => (
+                            <ListItem
+                              key={index}
+                               button
+                              onClick={() =>
+                                       handleUpdateRequirerSelect(requirer)
+                                   }
+                             >
+                          <ListItemText primary={requirer.user.email} />
                         </ListItem>
-                    ))}
+                          ))
+
+                    }
+                    
                 </List>
                 </div>
               </Card>
@@ -633,7 +635,7 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
                   fullWidth
                   name="transfusionDateStr"
                   type="datetime-local"
-                  value={updateTransfusion.transfusionDateStr}
+                  value={updateTransfusion.transfusionDate}
                   onChange={handleUpdateInputChange}
                   margin="normal"
                   InputLabelProps={{

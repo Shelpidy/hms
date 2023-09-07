@@ -34,7 +34,7 @@ import Swal from "sweetalert2";
 
 
 type RequirerProfile = {
-    requirer:Requirer
+    recipientAll:Requirer
     user:User
 }
 
@@ -42,6 +42,7 @@ type BloodTransfusionDetail = {
     donor:Donor
     requirer:RequirerProfile
     transfusion:BloodTransfusion
+    bloodGroup:BloodGroup
 }
 
 interface AdminBloodTransfusionTableProps {
@@ -90,18 +91,22 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
     const [expand, setExpand] = useState(false);
     const [selectedTransfusion, setSelectedTransfusion] = useState<BloodTransfusionDetail | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
+    const [searchUpdateQuery, setSearchUpdateQuery] = useState("");
     const [searchQueryRequirer, setSearchQueryRequirer] = useState("");
+    const [searchUpdateQueryRequirer, setSearchUpdateQueryRequirer] = useState("");
     const [requirersDetails, setRequirersDetails] = useState<RequirerDetails[] | null>(null);
+    const [updateRequirersDetails, setUpdateRequirersDetails] = useState<RequirerDetails[] | null> (null);
     const [newTransfusion, setNewTransfusion] = useState<{donorEmail: string, transfusionDateStr: string, requirerId: string}> ({
        donorEmail: "",
        transfusionDateStr: "",
        requirerId: "",
     });
 
-    const [updateTransfusion, setUpdateTransfusion] = useState<{donorEmail: string, transfusionDateStr: string, requirerId: string,}> ({
+    const [updateTransfusion, setUpdateTransfusion] = useState<{donorEmail: string, transfusionDateStr: string, requirerId: string, transfusionId: string}> ({
        donorEmail: "",
        transfusionDateStr: "",
        requirerId: "",
+       transfusionId: "",
     });
 
     const Toast = Swal.mixin({
@@ -139,6 +144,19 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
         setNewTransfusion({
           ...newTransfusion,
           requirerId: selectedTransfusion.requirer.requirerId,
+          
+        });
+      };
+
+      const handleUpdateRequirerSelect = (required: RequirerDetails,selectedTransfusion: BloodTransfusionDetail) => {
+        // Update the searchQueryRequirer with the selected email
+        setSearchUpdateQueryRequirer(required.user.email);
+      
+        // Update the requirerId in the newTransfusion state with the selected ID
+        setUpdateTransfusion({
+          ...updateTransfusion,
+          requirerId: required.requirer.requirerId,
+          transfusionId: selectedTransfusion.transfusion.transfusionId
         });
       };
       
@@ -146,14 +164,14 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
 
       const handleEdit = (transfusion: BloodTransfusionDetail) => {
         console.log(transfusion)
-        // setSelectedPatient(patient)
-        // setUpdatePatient({
-        //   patientId: patient.patient.patientId,
-        //   patientEmail:patient.user.email,
-        //   bloodGroup: patient.bloodGroup?.groupName,
-        //   diagnosis: patient.patient?.diagnosis
-        // })
-        // setOpenUpdate(true);
+        setSelectedTransfusion(transfusion)
+        setUpdateTransfusion({
+          donorEmail: transfusion.donor.email,
+          requirerId: transfusion.requirer.recipientAll.requirerId,
+          transfusionId: transfusion.transfusion.transfusionId,
+          transfusionDateStr: transfusion.transfusion?.transfusionDate?.toString()
+        })
+        setOpenUpdate(true);
       }
 
       async function handleDelete(transfusionId: string){
@@ -225,6 +243,7 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
                 const request = await fetch("/api/requirers", {cache : "no-cache"})
                 console.log(request)
                 const data = await request.json()
+                setUpdateRequirersDetails(data.requirers)
                 setRequirersDetails(data.requirers)
             } catch (error) {
                 console.log(error)
@@ -269,14 +288,6 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
  
       };
 
-     
-      const handleSelectUpdateInputChange = (event:SelectChangeEvent<any>) => {
-        const { name, value } = event.target;
-        setUpdateTransfusion((prevTransfusion) => ({
-          ...prevTransfusion,
-          [name]: value,
-        }));
-      };
 
       const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -298,6 +309,10 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
 
       const handleRequirerSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQueryRequirer(event.target.value);
+      };
+     
+      const handleUpdateRequirerSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchUpdateQueryRequirer(event.target.value);
       };
 
 
@@ -370,11 +385,134 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
                 )}
         </TableBody>
         </Table>
+        <Modal
+        open={expand}
+        onClose={() => setExpand(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description" 
+        >
+          <Box sx={style}>
+          <Box
+            sx={{
+             display: 'flex',
+             justifyContent: 'flex-end',
+             marginTop: -5,
+             marginRight: -5,
+            }}
+           >
+             <IconButton onClick={() => setExpand(false)}>
+                 <CloseIcon color="primary"/>
+              </IconButton>
+             </Box>
+             <Box sx={{marginTop: -1, textAlign: "center"}}>
+             <Card variant="outlined" sx={{ padding: 2, marginBottom: 2 , boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.4)'}}>
+               <div>
+                <Typography variant="h5">Donor Details</Typography>
+                <Box
+                   sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",   
+                      marginTop: 2,         
+                    }}
+               >
+                    <img
+                        alt="Profile"
+                      style={{
+                          width: "28%", // Adjust the width as needed
+                          height: "auto", // Auto height to maintain aspect ratio
+                          maxWidth: '75%',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                            }}
+                          src={dummyUser.profileImage} // Use user's profile image
+                    />
+                          <div>
+                      <Typography variant="h6">
+                        <strong>Donor Name:</strong> {selectedTransfusion?.donor.firstName} {selectedTransfusion?.donor.lastName}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Blood Group:</strong> {selectedTransfusion?.bloodGroup.groupName}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Email:</strong> {selectedTransfusion?.donor.email}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Contact Number:</strong> {selectedTransfusion?.donor.contactNumber}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Gender:</strong> {selectedTransfusion?.donor.gender}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Address:</strong> {selectedTransfusion?.donor.address}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Birth Date:</strong> {selectedTransfusion?.donor.dateOfBirth?.toString()}
+                      </Typography>
+                    </div>    
+                </Box>
+                </div>
+                </Card>
+             </Box>
+             <Box sx={{marginTop: 3, textAlign: "center"}}>
+             <Card variant="outlined" sx={{ padding: 2, marginBottom: 2 , boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.4)'}}>
+               <div>
+                <Typography variant="h5">Requirers Details</Typography>
+                <Box
+                   sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",   
+                      marginTop: 2,         
+                    }}
+               >
+                    <img
+                        alt="Profile"
+                      style={{
+                          width: "28%", // Adjust the width as needed
+                          height: "auto", // Auto height to maintain aspect ratio
+                          maxWidth: '75%',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                            }}
+                          src={dummyUser.profileImage} // Use user's profile image
+                    />
+                          <div>
+                      <Typography variant="h6">
+                        <strong>Donor Name:</strong> {selectedTransfusion?.requirer.user.firstName} {selectedTransfusion?.requirer.user.lastName}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Blood Group:</strong> {selectedTransfusion?.bloodGroup.groupName}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Email:</strong> {selectedTransfusion?.requirer.user.email}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Contact Number:</strong> {selectedTransfusion?.requirer.user.contactNumber}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Gender:</strong> {selectedTransfusion?.requirer.user.gender}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Address:</strong> {selectedTransfusion?.requirer.user.address}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Birth Date:</strong> {selectedTransfusion?.requirer.user.dateOfBirth?.toString()}
+                      </Typography>
+                    </div>    
+                </Box>
+                </div>
+                </Card>
+             </Box>
+          </Box>
+        </Modal>
         <Box>
           <Dialog open={open} onClose={()=> setOpen(false)} sx={{maxWidth: "lg"}}>
             <DialogTitle>Add Transfusion</DialogTitle>
              <DialogContent>
-             <Card variant="outlined" sx={{ padding: 2, marginBottom: 2 }}>
+             <Card variant="outlined" sx={{ padding: 2, marginBottom: 2 , boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.4)'}}>
                 <div>
                 <InputLabel>Search Requirer</InputLabel>
                 <TextField
@@ -444,11 +582,47 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
         <Dialog open={openUpdate} onClose={()=> setOpenUpdate(false)} sx={{maxWidth: "md"}}>
            <DialogTitle>Update Transfusion Date</DialogTitle>
            <DialogContent>
+           <Card variant="outlined" sx={{ padding: 2, marginBottom: 2 , boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.4)'}}>
+                <div>
+                <InputLabel>Search Requirer</InputLabel>
+                <TextField
+                    label="Search"
+                    variant="outlined"
+                    size="small"
+                    value={searchUpdateQueryRequirer}
+                    onChange={handleUpdateRequirerSearchChange}
+                    InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                        <Search />
+                        </InputAdornment>
+                    ),
+                    }}
+                />
+                <List>
+                    {updateRequirersDetails
+                    ?.filter((requirersDetail) =>
+                        requirersDetail.user.email.toLowerCase().includes(searchQueryRequirer)
+                    )
+                    .slice(0, 3)
+                    .map((requirersDetail, index) => (
+                        <ListItem
+                        key={index}
+                        button
+                        onClick={() =>
+                            selectedTransfusion && handleUpdateRequirerSelect(requirersDetail, selectedTransfusion)
+                        }
+                        >
+                        <ListItemText primary={requirersDetail.user.email} />
+                        </ListItem>
+                    ))}
+                </List>
+                </div>
+              </Card>
                 <InputLabel>Donor Email</InputLabel>
                 <TextField
                   fullWidth
                   name="donorEmail"
-                  disabled
                   value={updateTransfusion.donorEmail}
                   onChange={handleUpdateInputChange}
                   margin="normal"
@@ -458,9 +632,13 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
                 <TextField
                   fullWidth
                   name="transfusionDateStr"
+                  type="datetime-local"
                   value={updateTransfusion.transfusionDateStr}
                   onChange={handleUpdateInputChange}
                   margin="normal"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
              </DialogContent>
               <DialogActions>

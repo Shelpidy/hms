@@ -21,6 +21,7 @@ import {
   MenuItem,
   SelectChangeEvent,
   Modal,
+  Card,
   Typography
 } from "@mui/material";
 import { Delete, Edit, Add, Search,} from "@mui/icons-material";
@@ -395,6 +396,8 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({ appoint
         </IconButton>
         </Box>
         <Box sx={{marginTop: -1, textAlign: "center"}}>
+        <Card variant="outlined" sx={{ padding: 2, marginBottom: 2 , boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.4)'}}>
+         <div> 
         <Typography variant="h5">Doctor Details</Typography>
           <Box
           sx={{
@@ -439,9 +442,13 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({ appoint
                   <strong>Birth Date:</strong> {selectedAppointment?.doctor.user.dateOfBirth}
                 </Typography>
               </div>                              
-          </Box>          
+          </Box>   
+          </div>
+          </Card>       
         </Box>
         <Box sx={{marginTop: 2, textAlign: "center"}}>
+        <Card variant="outlined" sx={{ padding: 2, marginBottom: 2 , boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.4)'}}>
+        <div>
         <Typography variant="h5">Patients Details</Typography>
           <Box
           sx={{
@@ -491,9 +498,12 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({ appoint
           </div>
            
          </Box>
-        
+        </div>
+        </Card>
         </Box>
         <Box sx={{marginTop: 3, textAlign: "center"}}>
+        <Card variant="outlined" sx={{ padding: 2, marginBottom: 2 , boxShadow: '4px 4px 8px rgba(0, 0, 0, 0.4)'}}>
+        <div>
         <Typography variant="h5">Appointment Details</Typography>
           <div style={{marginTop: 5}}>
             <Typography variant="body1"><strong>Appointment Date</strong>: {selectedAppointment?.appointment.appointmentDate.toString()}</Typography>
@@ -501,6 +511,8 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({ appoint
             <Typography variant="body1"><strong>Note</strong>: {selectedAppointment?.appointment.note}</Typography>
             <Typography variant="body1"><strong>Reason</strong>: {selectedAppointment?.appointment.reason}</Typography>
           </div>          
+        </div>
+        </Card>
         </Box>
         </Box>
       </Modal>

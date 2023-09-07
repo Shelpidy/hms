@@ -73,9 +73,33 @@ export async function POST(req: Request){
 
 export async function PUT(req: Request){
     try {
+        const data = await req.json();
+        const requirerId = data.requirerId as string;
+        const transfusionId = data.transfusionId as string;
+        const donorEmail = data.donorEmail as string;
+        const transfusionDateStr = data.transfusionDate as string
+
+        const donor = await Donor.findOne({where: {email: donorEmail}})
+        if(!donor) {
+            return new Response(JSON.stringify({message: "Donor is not found, put a valid email"}), {status: 404})
+        }
+         
         
-    } catch (error) {
-        
+        const { donorId, bloodGroupId } = donor?.dataValues
+        const transfusionDate = new Date(transfusionDateStr);
+
+
+        const bldtransfusion = await BloodTransfusion.update({
+            donorId,
+            transfusionDate,
+            bloodGroupId,
+            recipientId: requirerId,
+        }, {where: {transfusionId}})
+
+        return new Response(JSON.stringify({message: "updated successfully", bldtransfusion}), {status: 202})
+    } catch (error: any) {
+        console.log(error)
+        return new Response(JSON.stringify({message: "server error", error: error.message}), {status:500})
     }
 }
 
@@ -89,10 +113,7 @@ export async function DELETE(req: Request){
         }
 
         const tranfusion = await BloodTransfusion.findOne({where: {transfusionId: id}})
-        const { recipientId } = tranfusion?.dataValues
-        
 
-        
         await tranfusion?.destroy()
         return new Response(JSON.stringify({message: "transfusion deleted successfully"}), {status: 203})
     } catch (error:any) {

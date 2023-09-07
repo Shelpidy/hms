@@ -13,10 +13,11 @@ type BloodTransfusionDetail = {
     donor:Donor
     requirer:RequirerDetails
     transfusion:BloodTransfusion
+    bloodGroup:BloodGroup
   }
 
 type RequirerDetails = {
-    requirer:Requirer
+    recipientAll:Requirer
     user:User
     bloodGroup:BloodGroup
     

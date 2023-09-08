@@ -138,6 +138,7 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
 
       const handleRequirerSelect = (selectedTransfusion: RequirerDetails) => {
         // Update the searchQueryRequirer with the selected email
+        console.log(selectedTransfusion)
         setSearchQueryRequirer(selectedTransfusion.user.email);
       
         // Update the requirerId in the newTransfusion state with the selected ID
@@ -149,7 +150,7 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
       };
 
       const handleUpdateRequirerSelect = (requirer: RequirerDetails) => {
-        // console.log(requirer)
+        console.log(requirer)
         setSearchUpdateQueryRequirer(requirer.user.email)
         setUpdateTransfusion({
             ...updateTransfusion,
@@ -163,9 +164,11 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
       const handleEdit = (transfusion: BloodTransfusionDetail) => {
         console.log(transfusion)
         setSelectedUpdateTransfusion(transfusion)
+
         setUpdateTransfusion({
             ...updateTransfusion,
-            transfusionId: transfusion.transfusion.transfusionId
+            donorEmail: transfusion.donor.email,
+            transfusionId: transfusion.transfusion.transfusionId,
         })
         setOpenUpdate(true);
       }
@@ -630,7 +633,7 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
                   fullWidth
                   name="transfusionDateStr"
                   type="datetime-local"
-                  value={updateTransfusion.transfusionDate}
+                  value={updateTransfusion.transfusionDate.toISOString().slice(0, 16)}
                   onChange={handleUpdateInputChange}
                   margin="normal"
                   InputLabelProps={{

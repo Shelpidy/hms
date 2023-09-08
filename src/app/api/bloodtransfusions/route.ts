@@ -115,7 +115,7 @@ export async function DELETE(req: Request){
         const tranfusion = await BloodTransfusion.findOne({where: {transfusionId: id}})
 
         await tranfusion?.destroy()
-        return new Response(JSON.stringify({message: "transfusion deleted successfully"}), {status: 203})
+        return new Response(JSON.stringify({message: "deleted successfully"}), {status: 203})
     } catch (error:any) {
        console.log(error);
        return new Response(JSON.stringify({message: "server error", error: error.message}), {status: 500});

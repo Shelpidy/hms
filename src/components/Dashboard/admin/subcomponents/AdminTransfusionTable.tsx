@@ -149,26 +149,23 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
       };
 
       const handleUpdateRequirerSelect = (requirer: RequirerDetails) => {
-        console.log(updateRequirersDetails)
+        // console.log(requirer)
         setSearchUpdateQueryRequirer(requirer.user.email)
-        // setUpdateTransfusion({
-        //     ...updateTransfusion,
-        //     transfusionId: selectedUpdateTransfusion?.transfusion?.transfusionId
-        // })
+        setUpdateTransfusion({
+            ...updateTransfusion,
+            donorEmail: updateTransfusion.donorEmail,
+            transfusionDate: updateTransfusion.transfusionDate,
+            requirerId: requirer.requirer.requirerId
+        })
         
       };
       
-      
-
       const handleEdit = (transfusion: BloodTransfusionDetail) => {
         console.log(transfusion)
         setSelectedUpdateTransfusion(transfusion)
         setUpdateTransfusion({
-            donorEmail: transfusion.donor.email,
-            requirerId: transfusion.requirer.recipientAll.requirerId,
-            transfusionDate: transfusion.transfusion.transfusionDate,
+            ...updateTransfusion,
             transfusionId: transfusion.transfusion.transfusionId
-            
         })
         setOpenUpdate(true);
       }
@@ -250,7 +247,7 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
           }
 
         getRequirers()
-    }, [setRequirersDetails]);
+    }, [setRequirersDetails,setUpdateRequirersDetails]);
       
       async function handleAdd(){
         try {
@@ -615,9 +612,7 @@ const AdminTransfionsTable : React.FC<AdminBloodTransfusionTableProps> = ({ tran
                           <ListItemText primary={requirer.user.email} />
                         </ListItem>
                           ))
-
-                    }
-                    
+                    } 
                 </List>
                 </div>
               </Card>

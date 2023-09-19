@@ -82,6 +82,7 @@ export async function PUT(request: Request) {
 
     // Parse the incoming form data
     const data = await request.json();
+    const userId = data.userId as string;
     const updatedData = {
       firstName: data.firstName as string,
       lastName: data.lastName as string,
@@ -97,7 +98,7 @@ export async function PUT(request: Request) {
     };
 
     // Find the user by id
-    const user = await User.findOne({ where: { userId: id } });
+    const user = await User.findOne({ where: { userId } });
 
     if (!user) {
       return new Response(JSON.stringify({ message: 'User not found' }), {
@@ -106,12 +107,12 @@ export async function PUT(request: Request) {
     }
 
     // Update user data
-     await User.update(updatedData, { where: { userId: id } });
+     await User.update(updatedData, { where: { userId } });
 
-     const updatedUser = await User.findOne({ where: { userId: id } });
+     const updatedUser = await User.findOne({ where: { userId } });
 
     return new Response(JSON.stringify({ message: 'User updated successfully', updatedUser }), {
-      status: 200,
+      status: 202,
     });
   } catch (error) {
     console.error(error);

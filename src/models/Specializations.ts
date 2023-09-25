@@ -1,5 +1,5 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import sequelize from '../database/connection';
+import { Model, DataTypes, Optional } from "sequelize";
+import sequelize from "../database/connection";
 
 interface SpecializationAttributes {
   specializationId: string;
@@ -8,9 +8,16 @@ interface SpecializationAttributes {
   updatedAt?: Date;
 }
 
-interface SpecializationCreationAttributes extends Optional<SpecializationAttributes, 'specializationId' | 'createdAt' | 'updatedAt'> {}
+interface SpecializationCreationAttributes
+  extends Optional<
+    SpecializationAttributes,
+    "specializationId" | "createdAt" | "updatedAt"
+  > {}
 
-class Specialization extends Model<SpecializationAttributes, SpecializationCreationAttributes> implements SpecializationAttributes {
+class Specialization
+  extends Model<SpecializationAttributes, SpecializationCreationAttributes>
+  implements SpecializationAttributes
+{
   public specializationId!: string;
   public specializationName!: string;
   public createdAt?: Date;
@@ -23,14 +30,13 @@ Specialization.init(
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
     },
     specializationName: {
       allowNull: false,
       type: DataTypes.STRING(50),
     },
     createdAt: {
-      
       type: DataTypes.DATE,
     },
     updatedAt: {
@@ -39,11 +45,11 @@ Specialization.init(
   },
   {
     sequelize,
-    modelName: 'Specialization',
-    tableName: 'Specializations',
+    modelName: "Specialization",
+    tableName: "Specializations",
     timestamps: false,
     underscored: false,
-  }
+  },
 );
 
 export default Specialization;

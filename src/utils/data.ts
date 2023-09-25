@@ -1,229 +1,166 @@
-import { AppointmentDetail } from "@/components/Dashboard/admin/AdminAppointmentsDisplay";
+import jwt from "jsonwebtoken";
+import * as bcrypt from "bcrypt";
+import nodemailer from "nodemailer";
 
-type gender = 'male'
-export const appointmentDetails:AppointmentDetail[] = [
-  {
-    doctor: {
-      doctor: {
-        doctorId: "doctor1",
-        specilizationId: "spec1",
-        userId: "user3",
-        createdAt: new Date("1013-01-01"),
-        updatedAt: new Date("1013-01-01"),
-      },
-      user: {
-        userId: "user3",
-        firstName: "Alice",
-        lastName: "Johnson",
-        profileImage: "profile3.jpg",
-        contactNumber: "555-113-4567",
-        gender: "male",
-        dateOfBirth: new Date("1988-07-11"),
-        address: "789 Oak Ave, Village",
-        password: "hashedpassword",
-        email: "alicejohnson@example.com",
-        role: "doctor",
-        createdAt: new Date("1013-01-01"),
-        updatedAt: new Date("1013-01-01"),
-      },
-      specilization: {
-        specializationId: "spec1",
-        specializationName: "Dermatology",
-        createdAt: new Date("1013-01-01"),
-        updatedAt: new Date("1013-01-01"),
-      },
-    },
-    patient: {
-      patient: {
-        patientId: "patient1",
-        userId: "user4",
-        diagnosis: "Allergies",
-        bloodGroupId: "group1",
-        createdAt: new Date("1013-01-03"),
-        updatedAt: new Date("1013-01-04"),
-      },
-      user: {
-        userId: "user4",
-        firstName: "Robert",
-        lastName: "Williams",
-        profileImage: "profile4.jpg",
-        contactNumber: "789-555-1134",
-        gender: "male",
-        dateOfBirth: new Date("1991-03-18"),
-        address: "567 Pine Rd, Hamlet",
-        password: "hashedpassword",
-        email: "robertwilliams@example.com",
-        role: "patient",
-        createdAt: new Date("1013-01-03"),
-        updatedAt: new Date("1013-01-04"),
-      },
-    },
-    appointment: {
-      appointmentId: "appointment1",
-      appointmentStatus: "pending",
-      doctorId: "doctor1",
-      reason: "Skin check",
-      patientId: "patient1",
-      appointmentDate: new Date("1013-09-10T15:30:00"),
-      createdAt: new Date("1013-01-05"),
-      updatedAt: new Date("1013-01-06"),
-    },
+// Create a transporter using SMTP transport
+const transporter = nodemailer.createTransport({
+  service: "your-email-service-provider", // e.g., 'Gmail', 'Outlook', etc.
+  auth: {
+    user: "your-email@gmail.com", // your email address
+    pass: "your-email-password", // your email password
   },
+});
 
-  {
-    doctor: {
-      doctor: {
-        doctorId: "doctor1",
-        specilizationId: "spec2",
-        userId: "user3",
-        createdAt: new Date("2023-02-01"),
-        updatedAt: new Date("2023-02-02"),
-      },
-      user: {
-        userId: "user3",
-        firstName: "Alice",
-        lastName: "Johnson",
-        profileImage: "profile3.jpg",
-        contactNumber: "555-123-4567",
-        gender: "female",
-        dateOfBirth: new Date("1988-07-12"),
-        address: "789 Oak Ave, Village",
-        password: "hashedpassword",
-        email: "alicejohnson@example.com",
-        role: "doctor",
-        createdAt: new Date("2023-02-01"),
-        updatedAt: new Date("2023-02-02"),
-      },
-      specilization: {
-        specializationId: "spec2",
-        specializationName: "Dermatology",
-        createdAt: new Date("2023-02-01"),
-        updatedAt: new Date("2023-02-02"),
-      },
-    },
-    patient: {
-      patient: {
-        patientId: "patient2",
-        userId: "user4",
-        diagnosis: "Allergies",
-        bloodGroupId: "group2",
-        createdAt: new Date("2023-02-03"),
-        updatedAt: new Date("2023-02-04"),
-      },
-      user: {
-        userId: "user4",
-        firstName: "Robert",
-        lastName: "Williams",
-        profileImage: "profile4.jpg",
-        contactNumber: "789-555-1234",
-        gender: "male",
-        dateOfBirth: new Date("1992-03-28"),
-        address: "567 Pine Rd, Hamlet",
-        password: "hashedpassword",
-        email: "robertwilliams@example.com",
-        role: "patient",
-        createdAt: new Date("2023-02-03"),
-        updatedAt: new Date("2023-02-04"),
-      },
-    },
-    appointment: {
-      appointmentId: "appointment2",
-      appointmentStatus: "pending",
-      doctorId: "doctor2",
-      reason: "Skin check",
-      patientId: "patient2",
-      appointmentDate: new Date("2023-09-10T15:30:00"),
-      createdAt: new Date("2023-02-05"),
-      updatedAt: new Date("2023-02-06"),
-    },
-  },
-  {
-    doctor: {
-      doctor: {
-        doctorId: "doctor1",
-        specilizationId: "spec1",
-        userId: "user1",
-        createdAt: new Date("2023-01-01"),
-        updatedAt: new Date("2023-01-02"),
-      },
-      user: {
-        userId: "user1",
-        firstName: "John",
-        lastName: "Doe",
-        profileImage: "profile1.jpg",
-        contactNumber: "123-456-7890",
-        gender: "male",
-        dateOfBirth: new Date("1980-05-15"),
-        address: "123 Main St, City",
-        password: "hashedpassword",
-        email: "johndoe@example.com",
-        role: "doctor",
-        createdAt: new Date("2023-01-01"),
-        updatedAt: new Date("2023-01-02"),
-      },
-      specilization: {
-        specializationId: "spec1",
-        specializationName: "Cardiology",
-        createdAt: new Date("2023-01-01"),
-        updatedAt: new Date("2023-01-02"),
-      },
-    },
-    patient: {
-      patient: {
-        patientId: "patient3",
-        userId: "user5",
-        diagnosis: "High Blood Pressure",
-        bloodGroupId: "group3",
-        createdAt: new Date("2023-03-03"),
-        updatedAt: new Date("2023-03-04"),
-      },
-      user: {
-        userId: "user5",
-        firstName: "Emily",
-        lastName: "Clark",
-        profileImage: "profile5.jpg",
-        contactNumber: "987-654-7890",
-        gender: "female",
-        dateOfBirth: new Date("1985-09-08"),
-        address: "789 Elm St, Suburb",
-        password: "hashedpassword",
-        email: "emilyclark@example.com",
-        role: "patient",
-        createdAt: new Date("2023-03-03"),
-        updatedAt: new Date("2023-03-04"),
-      },
-    },
-    appointment: {
-      appointmentId: "appointment3",
-      appointmentStatus: "completed",
-      doctorId: "doctor1",
-      reason: "Regular checkup",
-      note: "Patient's condition is stable.",
-      patientId: "patient3",
-      appointmentDate: new Date("2023-08-15T09:30:00"),
-      createdAt: new Date("2023-03-05"),
-      updatedAt: new Date("2023-03-06"),
-    },
-  },
-  // Add more appointment details here
-];
+type EmailParams = {
+  title: string;
+  message: string;
+  subject: string;
+  email: string;
+};
+// Function to send an email
+export async function sendEmail({
+  title,
+  message,
+  subject,
+  email,
+}: EmailParams) {
+  try {
+    // Define email data
+    const mailOptions = {
+      from: "your-email@gmail.com", // sender's email address
+      to: email, // recipient's email address
+      subject: subject,
+      html: `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Email Template</title>
+          
+          <!-- Add Google Fonts -->
+          <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+          
+          <!-- Add inline styles for email -->
+          <style>
+              body {
+                  font-family: 'Roboto', sans-serif;
+                  margin: 0;
+                  padding: 0;
+                  background-color: #f2f2f2;
+              }
+      
+              .container {
+                  max-width: 600px;
+                  margin: 0 auto;
+                  padding: 20px;
+                  background-color: #ffffff;
+                  border-radius: 5px;
+                  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+              }
+      
+              h1 {
+                  font-size: 24px;
+                  font-weight: 700;
+                  color: #333;
+              }
+      
+              p {
+                  font-size: 16px;
+                  font-weight: 300;
+                  color: #555;
+                  line-height: 1.5;
+              }
+      
+              .button {
+                  display: inline-block;
+                  padding: 10px 20px;
+                  background-color: #007bff;
+                  color: #fff;
+                  text-decoration: none;
+                  border-radius: 5px;
+                  font-weight: 500;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h1>${title}</h1>
+              <p>${message}.</p>
+              <a href="" class="button">ZHeath</a>
+          </div>
+      </body>
+      </html>
+      `, // HTML content
+    };
 
-  export const encodeFormData = (data: any): string =>{
-    return Object.keys(data).map(key=> `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`).join('&');
+    // Send the email
+    await transporter.sendMail(mailOptions);
+    return "email sent";
+
+    console.log("Email sent successfully");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return error;
   }
+}
 
-  export async function handleFormSubmitGeneral(formData: any, url: string): Promise<void>{
-    try {
-      const newformData = encodeFormData(formData);
-      const request = await fetch(url, {
+export async function jwtEncode(data: any) {
+  let encodedData = jwt.sign(data, process.env.APP_SECRET_KEY + "");
+  return encodedData;
+}
+
+export async function jwtDecode(token: string) {
+  let decodedData = jwt.decode(token);
+  return decodedData;
+}
+
+export async function encryptBankCardNumber(data: any) {
+  let encryptedData = jwt.sign(data, process.env.APP_SECRET_KEY + "mysceret");
+  return encryptedData;
+}
+
+export async function decryptBankCardNumber(token: string) {
+  let decryptedData = jwt.decode(token);
+  return decryptedData;
+}
+
+export async function hashData(_data: any) {
+  let data = String(_data);
+  let salt = await bcrypt.genSalt(10);
+  let encryptedData = await bcrypt.hash(data, salt);
+  return encryptedData;
+}
+
+export async function matchWithHashedData(data: string, hashedData: string) {
+  try {
+    let isMatch = await bcrypt.compare(data, hashedData);
+    return isMatch;
+  } catch (error) {
+    console.log({ "BCRYPT COMPARE": error });
+  }
+}
+
+export const encodeFormData = (data: any): string => {
+  return Object.keys(data)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+    .join("&");
+};
+
+export async function handleFormSubmitGeneral(
+  formData: any,
+  url: string,
+): Promise<void> {
+  try {
+    const newformData = encodeFormData(formData);
+    const request = await fetch(url, {
       method: "POST",
       body: newformData,
-      headers: { "Content-Type": "application/x-www-form-urlencoded",},
-      
-      })
-       const data = await request.json();
-        console.log(JSON.stringify(data));
-        } catch (error) {
-       console.log(error);
-      }
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
+    const data = await request.json();
+    console.log(JSON.stringify(data));
+  } catch (error) {
+    console.log(error);
+  }
 }

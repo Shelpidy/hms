@@ -26,112 +26,111 @@ import {
 import { Delete, Edit, Search } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
-
 const dummyAppointments = [
-    {
-      patient: {
-        patient: { name: "John Doe" },
-        user: { username: "johndoe" },
-        bloodGroup: "A+",
-      },
-      doctor: {
-        doctor: { name: "Dr. Smith" },
-        user: { username: "drsmith" },
-        specialization: "Cardiology",
-      },
-      appointment: {
-        date: "2023-09-20",
-        status: "pending",
-      },
+  {
+    patient: {
+      patient: { name: "John Doe" },
+      user: { username: "johndoe" },
+      bloodGroup: "A+",
     },
-    {
-      patient: {
-        patient: { name: "Jane Doe" },
-        user: { username: "janedoe" },
-        bloodGroup: "B-",
-      },
-      doctor: {
-        doctor: { name: "Dr. Johnson" },
-        user: { username: "drjohnson" },
-        specialization: "Dermatology",
-      },
-      appointment: {
-        date: "2023-09-21",
-        status: "completed",
-      },
+    doctor: {
+      doctor: { name: "Dr. Smith" },
+      user: { username: "drsmith" },
+      specialization: "Cardiology",
     },
-    {
-      patient: {
-        patient: { name: "Alice Johnson" },
-        user: { username: "alicejohnson" },
-        bloodGroup: "AB+",
-      },
-      doctor: {
-        doctor: { name: "Dr. Brown" },
-        user: { username: "drbrown" },
-        specialization: "Orthopedics",
-      },
-      appointment: {
-        date: "2023-09-22",
-        status: "pending",
-      },
+    appointment: {
+      date: "2023-09-20",
+      status: "pending",
     },
-    {
-      patient: {
-        patient: { name: "Bob Smith" },
-        user: { username: "bobsmith" },
-        bloodGroup: "O+",
-      },
-      doctor: {
-        doctor: { name: "Dr. Davis" },
-        user: { username: "drdavis" },
-        specialization: "Neurology",
-      },
-      appointment: {
-        date: "2023-09-23",
-        status: "completed",
-      },
+  },
+  {
+    patient: {
+      patient: { name: "Jane Doe" },
+      user: { username: "janedoe" },
+      bloodGroup: "B-",
     },
-    {
-      patient: {
-        patient: { name: "Ella Williams" },
-        user: { username: "ellawilliams" },
-        bloodGroup: "A-",
-      },
-      doctor: {
-        doctor: { name: "Dr. Lee" },
-        user: { username: "drlee" },
-        specialization: "Pediatrics",
-      },
-      appointment: {
-        date: "2023-09-24",
-        status: "completed",
-      },
+    doctor: {
+      doctor: { name: "Dr. Johnson" },
+      user: { username: "drjohnson" },
+      specialization: "Dermatology",
     },
-    {
-      patient: {
-        patient: { name: "David Turner" },
-        user: { username: "davidturner" },
-        bloodGroup: "B+",
-      },
-      doctor: {
-        doctor: { name: "Dr. White" },
-        user: { username: "drwhite" },
-        specialization: "Gastroenterology",
-      },
-      appointment: {
-        date: "2023-09-25",
-        status: "pending",
-      },
+    appointment: {
+      date: "2023-09-21",
+      status: "completed",
     },
-  ];
+  },
+  {
+    patient: {
+      patient: { name: "Alice Johnson" },
+      user: { username: "alicejohnson" },
+      bloodGroup: "AB+",
+    },
+    doctor: {
+      doctor: { name: "Dr. Brown" },
+      user: { username: "drbrown" },
+      specialization: "Orthopedics",
+    },
+    appointment: {
+      date: "2023-09-22",
+      status: "pending",
+    },
+  },
+  {
+    patient: {
+      patient: { name: "Bob Smith" },
+      user: { username: "bobsmith" },
+      bloodGroup: "O+",
+    },
+    doctor: {
+      doctor: { name: "Dr. Davis" },
+      user: { username: "drdavis" },
+      specialization: "Neurology",
+    },
+    appointment: {
+      date: "2023-09-23",
+      status: "completed",
+    },
+  },
+  {
+    patient: {
+      patient: { name: "Ella Williams" },
+      user: { username: "ellawilliams" },
+      bloodGroup: "A-",
+    },
+    doctor: {
+      doctor: { name: "Dr. Lee" },
+      user: { username: "drlee" },
+      specialization: "Pediatrics",
+    },
+    appointment: {
+      date: "2023-09-24",
+      status: "completed",
+    },
+  },
+  {
+    patient: {
+      patient: { name: "David Turner" },
+      user: { username: "davidturner" },
+      bloodGroup: "B+",
+    },
+    doctor: {
+      doctor: { name: "Dr. White" },
+      user: { username: "drwhite" },
+      specialization: "Gastroenterology",
+    },
+    appointment: {
+      date: "2023-09-25",
+      status: "pending",
+    },
+  },
+];
 
 const DoctorAppointmentTable: React.FC = () => {
   // State for filtering appointments
   const [filter, setFilter] = useState("all");
   // State for marking appointments as completed
   const [completedAppointments, setCompletedAppointments] = useState<number[]>(
-    []
+    [],
   );
   // State for search input
   const [searchText, setSearchText] = useState("");
@@ -139,7 +138,7 @@ const DoctorAppointmentTable: React.FC = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   // State to track the appointment to delete
   const [appointmentToDelete, setAppointmentToDelete] = useState<number | null>(
-    null
+    null,
   );
 
   const Toast = Swal.mixin({
@@ -214,7 +213,7 @@ const DoctorAppointmentTable: React.FC = () => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="end">
-                <Search/> {/* Add the Search icon here */}
+                <Search /> {/* Add the Search icon here */}
               </InputAdornment>
             ),
           }}
@@ -246,7 +245,9 @@ const DoctorAppointmentTable: React.FC = () => {
                   .includes(searchText.toLowerCase());
 
               if (
-                (filter === "all" || (filter === "completed" && isCompleted) || (filter === "pending" && isPending)) &&
+                (filter === "all" ||
+                  (filter === "completed" && isCompleted) ||
+                  (filter === "pending" && isPending)) &&
                 matchesSearch
               ) {
                 return (
@@ -278,9 +279,7 @@ const DoctorAppointmentTable: React.FC = () => {
                       <IconButton>
                         <Edit />
                       </IconButton>
-                      <IconButton
-                        onClick={() => handleOpenDeleteDialog(index)}
-                      >
+                      <IconButton onClick={() => handleOpenDeleteDialog(index)}>
                         <Delete />
                       </IconButton>
                     </TableCell>
@@ -309,11 +308,7 @@ const DoctorAppointmentTable: React.FC = () => {
           <Button onClick={handleCloseDeleteDialog} color="primary">
             Cancel
           </Button>
-          <Button
-            onClick={handleDeleteAppointment}
-            color="primary"
-            autoFocus
-          >
+          <Button onClick={handleDeleteAppointment} color="primary" autoFocus>
             Delete
           </Button>
         </DialogActions>

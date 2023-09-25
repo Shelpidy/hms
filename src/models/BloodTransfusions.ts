@@ -1,5 +1,5 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database/connection';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database/connection";
 
 class BloodTransfusion extends Model {
   public transfusionId!: number;
@@ -17,25 +17,25 @@ BloodTransfusion.init(
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
     },
     donorId: {
       type: DataTypes.UUID,
       references: {
-        model: 'Donors',
-        key: 'donorId',
+        model: "Donors",
+        key: "donorId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     recipientId: {
       type: DataTypes.UUID,
       references: {
-        model: 'Requirers',
-        key: 'requirerId',
+        model: "Requirers",
+        key: "requirerId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     transfusionDate: {
       type: DataTypes.DATE,
@@ -44,30 +44,28 @@ BloodTransfusion.init(
     bloodGroupId: {
       type: DataTypes.UUID,
       references: {
-        model: 'BloodGroups',
-        key: 'bloodGroupId',
+        model: "BloodGroups",
+        key: "bloodGroupId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      
     },
   },
   {
     sequelize,
-    modelName: 'BloodTransfusion',
-    tableName: 'BloodTransfusions',
+    modelName: "BloodTransfusion",
+    tableName: "BloodTransfusions",
     timestamps: true,
     underscored: false,
-  }
+  },
 );
 
 export default BloodTransfusion;

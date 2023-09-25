@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Typography,Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 
 interface TextShortenerProps {
   text: string;
@@ -41,7 +41,11 @@ const TextShortener: React.FC<TextShortenerProps> = ({
 
   return (
     <Box style={containerStyle}>
-      <Typography variant='body1' dangerouslySetInnerHTML={{ __html: shortenText }} style={_style} >
+      <Typography
+        variant="body1"
+        dangerouslySetInnerHTML={{ __html: shortenText }}
+        style={_style}
+      >
         {showViewMore && (
           <Typography
             component="span"

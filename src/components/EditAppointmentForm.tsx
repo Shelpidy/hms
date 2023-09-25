@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { AddAppointments, AddPatient } from '@/app/actions';
+import React, { useState, useEffect } from "react";
+import { AddAppointments, AddPatient } from "@/app/actions";
 import {
   FormControl,
   InputLabel,
@@ -11,73 +11,68 @@ import {
   makeStyles,
   TextField,
   Grid,
-} from '@mui/material';
-import { AddCircleOutline } from '@mui/icons-material';
-import CustomButton from './CustomButton';
-
+} from "@mui/material";
+import { AddCircleOutline } from "@mui/icons-material";
+import CustomButton from "./CustomButton";
 
 // Interface for Patient data
 interface AppointmentData {
-    patientemail: string;
-    doctoremail: string;
-    reasons: string;
-    note: string;
-    date:string;
+  patientemail: string;
+  doctoremail: string;
+  reasons: string;
+  note: string;
+  date: string;
 }
 
-
-
 const EditAppointmentForm: React.FC = () => {
+  const [appointmentData, setAppointmentData] = useState<AppointmentData>({
+    patientemail: "",
+    doctoremail: "",
+    reasons: "",
+    note: "",
+    date: "",
+  });
+  const [patientEmailVerification, setPatientEmailVerification] =
+    useState<string>("");
+  const [doctorEmailVerification, setDoctorEmailVerification] =
+    useState<string>("");
+  const validateEmail = (email: string, people: string) => {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    const [appointmentData, setAppointmentData] = useState<AppointmentData>({
-        patientemail: '',
-        doctoremail: "",
-        reasons: "",
-        note: "",
-        date: "",
-      });
-      const [patientEmailVerification, setPatientEmailVerification] = useState<string>("")
-      const [doctorEmailVerification, setDoctorEmailVerification] = useState<string>("")
-      const validateEmail = (email: string, people: string) => {
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    
-        let emailVerification = emailPattern.test(email);
-        if(!emailVerification && people !== "doctor") {
-          setDoctorEmailVerification("Invalid Email")  
-          
-        }
-        else if (!emailVerification && people !== "patient"){
-            setPatientEmailVerification("Invalid Email");
-        }
-        else {
-              setPatientEmailVerification("");
-              setDoctorEmailVerification("")
-      }
+    let emailVerification = emailPattern.test(email);
+    if (!emailVerification && people !== "doctor") {
+      setDoctorEmailVerification("Invalid Email");
+    } else if (!emailVerification && people !== "patient") {
+      setPatientEmailVerification("Invalid Email");
+    } else {
+      setPatientEmailVerification("");
+      setDoctorEmailVerification("");
     }
+  };
 
-    const handleInputChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => {
-        const { name, value } = e.target;
-        setAppointmentData((prevData) => ({
-          ...prevData,
-          [name]: value,
-        }));
-      };
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setAppointmentData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-      async function handleAddAppointment() : Promise<void> {
-        await AddAppointments(appointmentData);
-       console.log('Patient Data:', appointmentData);
-     };
-    return(
+  async function handleAddAppointment(): Promise<void> {
+    await AddAppointments(appointmentData);
+    console.log("Patient Data:", appointmentData);
+  }
+  return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Box>
-            <Typography variant="h5">Update Appoinment</Typography>
+          <Typography variant="h5">Update Appoinment</Typography>
         </Box>
       </Grid>
       <Grid item xs={12}>
-      <TextField
+        <TextField
           label="Doctor-Email"
           variant="outlined"
           fullWidth
@@ -88,16 +83,25 @@ const EditAppointmentForm: React.FC = () => {
           }}
           name="doctoremail"
         />
-        <Box sx={{ marginTop: 1}} color={patientEmailVerification ? (patientEmailVerification ? 'red' : 'green') : ''}>
-                {patientEmailVerification ? (
-                  <ul>
-                    <li>{patientEmailVerification}</li>
-                  </ul>
-                ) : null}
+        <Box
+          sx={{ marginTop: 1 }}
+          color={
+            patientEmailVerification
+              ? patientEmailVerification
+                ? "red"
+                : "green"
+              : ""
+          }
+        >
+          {patientEmailVerification ? (
+            <ul>
+              <li>{patientEmailVerification}</li>
+            </ul>
+          ) : null}
         </Box>
-      </Grid> 
+      </Grid>
       <Grid item xs={12}>
-      <TextField
+        <TextField
           label="Patient-Email"
           variant="outlined"
           fullWidth
@@ -108,27 +112,36 @@ const EditAppointmentForm: React.FC = () => {
           }}
           name="patientemail"
         />
-        <Box sx={{ marginTop: 1}} color={doctorEmailVerification ? (doctorEmailVerification ? 'red' : 'green') : ''}>
-                {doctorEmailVerification ? (
-                  <ul>
-                    <li>{doctorEmailVerification}</li>
-                  </ul>
-                ) : null}
+        <Box
+          sx={{ marginTop: 1 }}
+          color={
+            doctorEmailVerification
+              ? doctorEmailVerification
+                ? "red"
+                : "green"
+              : ""
+          }
+        >
+          {doctorEmailVerification ? (
+            <ul>
+              <li>{doctorEmailVerification}</li>
+            </ul>
+          ) : null}
         </Box>
       </Grid>
       <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Appointment Date"
-                name="date"
-                type="date"
-                value={appointmentData.date}
-                onChange={handleInputChange}
-              />
-       </Grid> 
+        <TextField
+          required
+          fullWidth
+          label="Appointment Date"
+          name="date"
+          type="date"
+          value={appointmentData.date}
+          onChange={handleInputChange}
+        />
+      </Grid>
       <Grid item xs={12}>
-      <TextField
+        <TextField
           label="Reasons"
           variant="outlined"
           fullWidth
@@ -138,7 +151,7 @@ const EditAppointmentForm: React.FC = () => {
         />
       </Grid>
       <Grid item xs={12}>
-      <TextField
+        <TextField
           label="Notes"
           variant="outlined"
           multiline
@@ -150,23 +163,17 @@ const EditAppointmentForm: React.FC = () => {
         />
       </Grid>
       <Grid item xs={6}>
-        <CustomButton 
-        onClick={handleAddAppointment}
-        >
-            update appointment
+        <CustomButton onClick={handleAddAppointment}>
+          update appointment
         </CustomButton>
       </Grid>
       <Grid item xs={6}>
-        <CustomButton 
-        color="red"
-        onClick={handleAddAppointment}
-        >
-            delete appointment
+        <CustomButton color="red" onClick={handleAddAppointment}>
+          delete appointment
         </CustomButton>
       </Grid>
     </Grid>
-
-    )
-}
+  );
+};
 
 export default EditAppointmentForm;

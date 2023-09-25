@@ -15,7 +15,7 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-body{
+body {
   background-color: #f3f3f9;
 }
 
@@ -119,26 +119,24 @@ body{
   }
 }
 
-
-.hide-scrollbar::-webkit-scrollbar{
-  width:0;
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
   background: transparent;
-
 }
 
-.scroll-snap-x-mandatory{
+.scroll-snap-x-mandatory {
   scroll-snap-type: x mandatory;
 }
 
-.scroll-snap-align-center{
-  scroll-snap-align:center;
+.scroll-snap-align-center {
+  scroll-snap-align: center;
 }
 
-.scroll-snap-align-start{
-  scroll-snap-align:start;
+.scroll-snap-align-start {
+  scroll-snap-align: start;
 }
 
-.text-stroke{
+.text-stroke {
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke-color: white;
   -webkit-text-stroke-width: 1px;
@@ -174,36 +172,36 @@ body{
 
 @-webkit-keyframes animate-banner-image {
   from {
-     transform: translateY(10px);
+    transform: translateY(10px);
   }
   to {
-     transform: translateY(0px);
+    transform: translateY(0px);
   }
 }
 
 @keyframes animate-banner-image {
   from {
-     transform: translateY(10px);
+    transform: translateY(10px);
   }
   to {
-     transform: translateY(0px);
+    transform: translateY(0px);
   }
 }
 
 @-moz-keyframes animate-banner-image {
   from {
-     transform: translateY(10px);
+    transform: translateY(10px);
   }
   to {
-     transform: translateY(0px);
+    transform: translateY(0px);
   }
 }
 
 @-o-keyframes animate-banner-image {
   from {
-     transform: translateY(10px);
+    transform: translateY(10px);
   }
   to {
-     transform: translateY(0px);
+    transform: translateY(0px);
   }
 }

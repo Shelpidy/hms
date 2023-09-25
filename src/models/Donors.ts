@@ -1,12 +1,12 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database/connection';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database/connection";
 
 class Donor extends Model {
   public donorId!: string;
   public firstName!: string;
   public middleName?: string;
   public lastName!: string;
-  public gender!: 'male' | 'female' | 'other';
+  public gender!: "male" | "female" | "other";
   public dateOfBirth?: Date;
   public address!: string;
   public contactNumber!: string;
@@ -22,7 +22,7 @@ Donor.init(
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
     },
     firstName: {
       type: DataTypes.STRING(50),
@@ -36,7 +36,7 @@ Donor.init(
       allowNull: false,
     },
     gender: {
-      type: DataTypes.ENUM('male', 'female', 'other'),
+      type: DataTypes.ENUM("male", "female", "other"),
       allowNull: false,
     },
     dateOfBirth: {
@@ -57,16 +57,15 @@ Donor.init(
     bloodGroupId: {
       type: DataTypes.UUID,
       references: {
-        model: 'BloodGroups',
-        key: 'bloodGroupId',
+        model: "BloodGroups",
+        key: "bloodGroupId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
- 
     },
     updatedAt: {
       allowNull: false,
@@ -75,11 +74,11 @@ Donor.init(
   },
   {
     sequelize,
-    modelName: 'Donor',
-    tableName: 'Donors',
+    modelName: "Donor",
+    tableName: "Donors",
     timestamps: true,
     underscored: false,
-  }
+  },
 );
 
 export default Donor;

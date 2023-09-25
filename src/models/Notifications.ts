@@ -1,5 +1,5 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database/connection';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database/connection";
 
 class Notification extends Model {
   public notificationId!: number;
@@ -18,25 +18,25 @@ Notification.init(
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
     },
     senderId: {
       type: DataTypes.UUID,
       references: {
-        model: 'Users',
-        key: 'userId',
+        model: "Users",
+        key: "userId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     receiverId: {
       type: DataTypes.UUID,
       references: {
-        model: 'Users',
-        key: 'userId',
+        model: "Users",
+        key: "userId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     title: {
       type: DataTypes.TEXT,
@@ -52,21 +52,19 @@ Notification.init(
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-  
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-    
     },
   },
   {
     sequelize,
-    modelName: 'Notification',
-    tableName: 'Notifications',
+    modelName: "Notification",
+    tableName: "Notifications",
     timestamps: true,
     underscored: false,
-  }
+  },
 );
 
 export default Notification;

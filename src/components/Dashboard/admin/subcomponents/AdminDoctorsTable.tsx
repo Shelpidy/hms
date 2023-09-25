@@ -18,23 +18,22 @@ import {
   IconButton,
   InputLabel,
   Modal,
-  Typography
+  Typography,
 } from "@mui/material";
-import { Delete, Edit, Add, Search,} from "@mui/icons-material";
-import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
-import CloseIcon from '@mui/icons-material/Close';
+import { Delete, Edit, Add, Search } from "@mui/icons-material";
+import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
+import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 
 type DoctorProfile = {
-    doctor:Doctor
-    user:User
-    specialization:Specialization
-}
-
+  doctor: Doctor;
+  user: User;
+  specialization: Specialization;
+};
 
 interface AdminDoctorTableProps {
-    doctors: DoctorProfile[]
-    onRefetch: () => void;
+  doctors: DoctorProfile[];
+  onRefetch: () => void;
 }
 
 const dummyUser = {
@@ -45,201 +44,209 @@ const dummyUser = {
   firstName: "Dennis",
   gender: "male",
   lastName: "Kamara",
-  profileImage: null || "https://www.bing.com/th?id=OIP.rq0bLboVfwhtwS9EnvZ0CAHaJl&w=76&h=100&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
+  profileImage:
+    null ||
+    "https://www.bing.com/th?id=OIP.rq0bLboVfwhtwS9EnvZ0CAHaJl&w=76&h=100&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
   role: "patient",
 };
 
 const style = {
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '80%',
-    maxWidth: 400,
-    maxHeight: "88vh",
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    overflow: 'auto',
+  position: "fixed",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "80%",
+  maxWidth: "70vw",
+  maxHeight: "88vh",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  overflow: "auto",
 };
 
-const AdminDoctorsTable : React.FC<AdminDoctorTableProps> = ({ doctors, onRefetch}) => {
-    const [open, setOpen] = useState(false);
-    const [openUpdate, setOpenUpdate] = useState(false);
-    const [expand, setExpand] = useState(false);
-    const [selectedDoctor, setSelectedDoctor] = useState<DoctorProfile | null>(null);
-    const [searchQuery, setSearchQuery] = useState("");
-    
-    const [newDoctor, setNewDoctor] = useState<{doctorEmail: string, specialization: string}> ({
-        doctorEmail: "",
-        specialization: "",
+const AdminDoctorsTable: React.FC<AdminDoctorTableProps> = ({
+  doctors,
+  onRefetch,
+}) => {
+  const [open, setOpen] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [expand, setExpand] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState<DoctorProfile | null>(
+    null,
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [newDoctor, setNewDoctor] = useState<{
+    doctorEmail: string;
+    specialization: string;
+  }>({
+    doctorEmail: "",
+    specialization: "",
+  });
+
+  const [updateDoctor, setUpdateDoctor] = useState<{
+    doctorEmail: string;
+    specialization: string;
+    doctorId: string;
+  }>({
+    doctorId: "",
+    doctorEmail: "",
+    specialization: "",
+  });
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "center",
+    timer: 3000,
+    timerProgressBar: true,
+    showConfirmButton: false,
+  });
+  const handleExpand = (doctors: DoctorProfile) => {
+    console.log(doctors);
+    setSelectedDoctor(doctors);
+    setExpand(true);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedDoctor(null);
+  };
+
+  const handleUpdateClose = () => {
+    setOpenUpdate(false);
+  };
+
+  const handleEdit = (doctor: DoctorProfile) => {
+    console.log(doctor);
+    setSelectedDoctor(doctor);
+    setUpdateDoctor({
+      doctorId: doctor.doctor.doctorId,
+      doctorEmail: doctor.user.email,
+      specialization: doctor.specialization.specializationName,
     });
+    setOpenUpdate(true);
+  };
 
-    const [updateDoctor, setUpdateDoctor] = useState<{doctorEmail: string, specialization: string, doctorId: string}> ({
-       doctorId: "",	 
-       doctorEmail: "",
-        specialization: "",
-    });
-
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'center',
-        timer: 3000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-        
-      })
-      const handleExpand = (doctors: DoctorProfile) => {
-        console.log(doctors)
-        setSelectedDoctor(doctors)
-        setExpand(true)
+  async function handleDelete(doctorId: string) {
+    console.log(doctorId);
+    try {
+      // Logic to delete the appointment
+      console.log(doctorId);
+      const request = await fetch(`/api/doctors?doctorId=${doctorId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await request.json();
+      if (request.status === 203) {
+        Toast.fire({
+          icon: "success",
+          iconColor: "green",
+          text: data?.message,
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          iconColor: "red",
+          text: data?.message,
+        });
       }
-      const handleOpen = () => {
-        setOpen(true);
-      };
+      onRefetch();
+      // Update the appointments state after deletion
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-      const handleClose = () => {
-        setOpen(false);
-        setSelectedDoctor(null);
-      };
-
-
-      const handleUpdateClose = () => {
-        setOpenUpdate(false);
+  async function handleUpdate() {
+    // Logic to update the appointment
+    console.log(updateDoctor);
+    try {
+      const request = await fetch("/api/doctors", {
+        method: "PUT",
+        body: JSON.stringify(updateDoctor),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await request.json();
+      if (request.status === 202) {
+        Toast.fire({
+          icon: "success",
+          iconColor: "green",
+          text: data?.message,
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          iconColor: "red",
+          text: data?.message,
+        });
       }
+      onRefetch();
+    } catch (error) {
+      console.log(error);
+    }
+    // Update the appointments state after updating
+    handleUpdateClose();
+  }
 
-      const handleEdit = (doctor: DoctorProfile) => {
-        console.log(doctor)
-        setSelectedDoctor(doctor)
-        setUpdateDoctor({
-          doctorId: doctor.doctor.doctorId,
-          doctorEmail:doctor.user.email,
-          specialization:doctor.specialization.specializationName
-        })
-        setOpenUpdate(true);
+  async function handleAdd() {
+    try {
+      console.log("New Appointment", newDoctor);
+      // Logic to add a new appointment
+      const request = await fetch("/api/doctors", {
+        method: "POST",
+        body: JSON.stringify(newDoctor),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await request.json();
+      if (request.status === 201) {
+        console.log(JSON.stringify(data));
+        Toast.fire({
+          icon: "success",
+          iconColor: "green",
+          text: data?.message,
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          iconColor: "red",
+          text: data?.message,
+        });
       }
+      onRefetch();
+    } catch (error) {
+      console.log(error);
+    }
+    // Update the appointments state after adding
+    handleClose();
+    newDoctor.doctorEmail = "";
+    newDoctor.specialization = "";
+  }
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setNewDoctor((prevDoctor) => ({
+      ...prevDoctor,
+      [name]: value,
+    }));
+  };
+  const handleUpdateInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { name, value } = event.target;
+    setUpdateDoctor((prevDoctor) => ({
+      ...prevDoctor,
+      [name]: value,
+    }));
+  };
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
 
-      async function handleDelete(doctorId: string){
-        console.log(doctorId)
-        try {
-          // Logic to delete the appointment
-          console.log(doctorId)
-          const request = await fetch(`/api/doctors?doctorId=${doctorId}`, {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"}  
-          })
-          const data = await request.json()
-          if(request.status === 203) {
-            Toast.fire({
-              icon: "success",
-              iconColor: "green",
-              text: data?.message
-            })        
-          }
-          else{
-            Toast.fire({
-              icon: "error",
-              iconColor: "red",
-              text: data?.message
-            })       
-          }
-          onRefetch()
-          // Update the appointments state after deletion
-        } catch (error) {
-          console.log(error);
-        }
-
-      }
-
-      async function handleUpdate(){
-        // Logic to update the appointment
-        console.log(updateDoctor)
-        try {
-          const request = await fetch ("/api/doctors", {
-            method: "PUT",
-            body: JSON.stringify(updateDoctor),
-            headers: {"Content-Type": "application/json"}
-          })
-          const data = await request.json()
-          if (request.status === 202) {
-            Toast.fire({
-              icon: "success",
-              iconColor: "green",
-              text: data?.message
-            })
-          }
-          else{
-            Toast.fire({
-              icon: "error",
-              iconColor: "red",
-              text: data?.message
-            })       
-          }
-          onRefetch()
-        } catch (error) {
-          console.log(error);
-        }
-        // Update the appointments state after updating
-        handleUpdateClose();
-      };
-
-      async function handleAdd(){
-        try {
-          console.log("New Appointment",newDoctor)
-        // Logic to add a new appointment
-        const request = await fetch("/api/doctors", {
-          method: "POST",
-          body: JSON.stringify(newDoctor),
-          headers: { "Content-Type": "application/json"}
-        })
-        const data = await request.json();
-          if(request.status === 201){
-            console.log(JSON.stringify(data));
-            Toast.fire({
-              icon: "success",
-              iconColor: "green",
-              text: data?.message
-            })}
-            
-    
-          else{
-              Toast.fire({
-                icon: "error",
-                iconColor: "red",
-                text: data?.message
-              })
-            }
-            onRefetch()
-        } catch (error) {
-          console.log(error)
-        }
-        // Update the appointments state after adding
-         handleClose();
-         newDoctor.doctorEmail = ""
-         newDoctor.specialization = ""
- 
-      };
-      const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setNewDoctor((prevDoctor) => ({
-          ...prevDoctor,
-          [name]: value,
-        }));
-      };
-      const handleUpdateInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setUpdateDoctor((prevDoctor) => ({
-          ...prevDoctor,
-          [name]: value,
-        }));
-      };
-      const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
-      };
-      
-    return (
-        <Box>
+  return (
+    <Box>
       <Box
         sx={{
           display: "flex",
@@ -263,7 +270,7 @@ const AdminDoctorsTable : React.FC<AdminDoctorTableProps> = ({ doctors, onRefetc
           }}
         />
         <Button
-         size="small"
+          size="small"
           variant="contained"
           startIcon={<Add />}
           onClick={handleOpen}
@@ -273,131 +280,147 @@ const AdminDoctorsTable : React.FC<AdminDoctorTableProps> = ({ doctors, onRefetc
       </Box>
       <TableContainer component={Paper}>
         <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Doctor</TableCell>
-            <TableCell>Specialization</TableCell>
-            <TableCell>Date Added</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>          
-        
-        <TableBody>
-          {doctors
-                .filter(doctor => 
+          <TableHead>
+            <TableRow>
+              <TableCell>Doctor</TableCell>
+              <TableCell>Specialization</TableCell>
+              <TableCell>Date Added</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {doctors
+              .filter(
+                (doctor) =>
                   doctor.user.email.includes(searchQuery) ||
-                  doctor.specialization.specializationName.includes(searchQuery)                  
-                  )
-                .map((doctor, index) => 
-                  <TableRow key={index}>
-                    <TableCell>{doctor?.user?.email}</TableCell>
-                    <TableCell>{doctor?.specialization?.specializationName}</TableCell>
-                    <TableCell>{doctor?.doctor?.createdAt.toString()}</TableCell>
-                    <TableCell>
-                       <IconButton onClick = {() => handleExpand(doctor)}>
-                        <ExpandCircleDownIcon/>
-                       </IconButton>
-                       <IconButton onClick={() => handleEdit(doctor)}>
-                         <Edit />
-                       </IconButton>
-                       <IconButton onClick={() => handleDelete(doctor.doctor.doctorId)}>
-                        <Delete />
-                      </IconButton>
-                    </TableCell>               
-                  </TableRow> 
-                 )}
-        </TableBody>
+                  doctor.specialization.specializationName.includes(
+                    searchQuery,
+                  ),
+              )
+              .map((doctor, index) => (
+                <TableRow key={index}>
+                  <TableCell>{doctor?.user?.email}</TableCell>
+                  <TableCell>
+                    {doctor?.specialization?.specializationName}
+                  </TableCell>
+                  <TableCell>{doctor?.doctor?.createdAt.toString()}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => handleExpand(doctor)}>
+                      <ExpandCircleDownIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleEdit(doctor)}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDelete(doctor.doctor.doctorId)}
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
         </Table>
         <Modal
-        open={expand}
-        onClose={() => setExpand(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description" 
+          open={expand}
+          onClose={() => setExpand(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-          <Box
-            sx={{
-             display: 'flex',
-             justifyContent: 'flex-end',
-             marginTop: -5,
-             marginRight: -5,
-            }}
-           >
-             <IconButton onClick={() => setExpand(false)}>
-                 <CloseIcon color="primary"/>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: -5,
+                marginRight: -5,
+              }}
+            >
+              <IconButton onClick={() => setExpand(false)}>
+                <CloseIcon color="primary" />
               </IconButton>
-             </Box>
-             <Box sx={{marginTop: -1, textAlign: "center"}}>
-                <Typography variant="h5">Doctor Details</Typography>
-                <Box
-                   sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",   
-                      marginTop: 2,         
-                    }}
-               >
-                    <img
-                        alt="Profile"
-                      style={{
-                          width: "28%", // Adjust the width as needed
-                          height: "auto", // Auto height to maintain aspect ratio
-                          maxWidth: '75%',
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                            }}
-                          src={dummyUser.profileImage} // Use user's profile image
-                    />
-                          <div>
-                      <Typography variant="h6">
-                        <strong>Doctor Name:</strong> {selectedDoctor?.user.firstName} {selectedDoctor?.user.lastName}
-                      </Typography>
-                      <Typography variant="h6">
-                        <strong>Specialization:</strong> {selectedDoctor?.specialization.specializationName}
-                      </Typography>
-                      <Typography variant="body1">
-                        <strong>Email:</strong> {selectedDoctor?.user?.email}
-                      </Typography>
-                      <Typography variant="body1">
-                        <strong>Contact Number:</strong> {selectedDoctor?.user?.contactNumber}
-                      </Typography>
-                      <Typography variant="body1">
-                        <strong>Gender:</strong> {selectedDoctor?.user?.gender}
-                      </Typography>
-                      <Typography variant="body1">
-                        <strong>Address:</strong> {selectedDoctor?.user?.address}
-                      </Typography>
-                      <Typography variant="body1">
-                        <strong>Birth Date:</strong> {selectedDoctor?.user?.dateOfBirth?.toString()}
-                      </Typography>
-                    </div>    
-                </Box>
-             </Box>
+            </Box>
+            <Box sx={{ marginTop: -1, textAlign: "center" }}>
+              <Typography variant="h5">Doctor Details</Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 2,
+                }}
+              >
+                <img
+                  alt="Profile"
+                  style={{
+                    width: "28%", // Adjust the width as needed
+                    height: "auto", // Auto height to maintain aspect ratio
+                    maxWidth: "75%",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                  src={dummyUser.profileImage} // Use user's profile image
+                />
+                <div>
+                  <Typography variant="h6">
+                    <strong>Doctor Name:</strong>{" "}
+                    {selectedDoctor?.user.firstName}{" "}
+                    {selectedDoctor?.user.lastName}
+                  </Typography>
+                  <Typography variant="h6">
+                    <strong>Specialization:</strong>{" "}
+                    {selectedDoctor?.specialization.specializationName}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Email:</strong> {selectedDoctor?.user?.email}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Contact Number:</strong>{" "}
+                    {selectedDoctor?.user?.contactNumber}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Gender:</strong> {selectedDoctor?.user?.gender}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Address:</strong> {selectedDoctor?.user?.address}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Birth Date:</strong>{" "}
+                    {selectedDoctor?.user?.dateOfBirth?.toString()}
+                  </Typography>
+                </div>
+              </Box>
+            </Box>
           </Box>
         </Modal>
         <Box>
-          <Dialog open={open} onClose={()=> setOpen(false)} sx={{maxWidth: "lg"}}>
+          <Dialog
+            open={open}
+            onClose={() => setOpen(false)}
+            sx={{ maxWidth: "lg" }}
+          >
             <DialogTitle>Add Doctor</DialogTitle>
-             <DialogContent>
-                <InputLabel>Doctor Email</InputLabel>
-                <TextField
-                  fullWidth
-                  name="doctorEmail"
-                  value={newDoctor.doctorEmail}
-                  onChange={handleInputChange}
-                  margin="normal"
-                />
-                <InputLabel>Specialization</InputLabel>
-                <TextField
-                  fullWidth
-                  name="specialization"
-                  value={newDoctor.specialization}
-                  onChange={handleInputChange}
-                  margin="normal"
-                />
-             </DialogContent>
-             <DialogActions>
+            <DialogContent>
+              <InputLabel>Doctor Email</InputLabel>
+              <TextField
+                fullWidth
+                name="doctorEmail"
+                value={newDoctor.doctorEmail}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+              <InputLabel>Specialization</InputLabel>
+              <TextField
+                fullWidth
+                name="specialization"
+                value={newDoctor.specialization}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+            </DialogContent>
+            <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
               <Button onClick={handleAdd} color="primary">
                 Add
@@ -405,38 +428,41 @@ const AdminDoctorsTable : React.FC<AdminDoctorTableProps> = ({ doctors, onRefetc
             </DialogActions>
           </Dialog>
         </Box>
-        <Dialog open={openUpdate} onClose={()=> setOpenUpdate(false)} sx={{maxWidth: "md"}}>
-           <DialogTitle>Update Doctor</DialogTitle>
-           <DialogContent>
-                <InputLabel>Doctor Email</InputLabel>
-                <TextField
-                  fullWidth
-                  name="doctorEmail"
-                  disabled
-                  value={updateDoctor.doctorEmail}
-                  onChange={handleUpdateInputChange}
-                  margin="normal"
-                />
-                <InputLabel>Specialization</InputLabel>
-                <TextField
-                  fullWidth
-                  name="specialization"
-                  value={updateDoctor.specialization}
-                  onChange={handleUpdateInputChange}
-                  margin="normal"
-                />
-             </DialogContent>
-              <DialogActions>
-                <Button onClick={handleUpdateClose}>Cancel</Button>
-                <Button onClick={handleUpdate} color="primary">
-                  Update
-                </Button>
-              </DialogActions>             
+        <Dialog
+          open={openUpdate}
+          onClose={() => setOpenUpdate(false)}
+          sx={{ maxWidth: "md" }}
+        >
+          <DialogTitle>Update Doctor</DialogTitle>
+          <DialogContent>
+            <InputLabel>Doctor Email</InputLabel>
+            <TextField
+              fullWidth
+              name="doctorEmail"
+              disabled
+              value={updateDoctor.doctorEmail}
+              onChange={handleUpdateInputChange}
+              margin="normal"
+            />
+            <InputLabel>Specialization</InputLabel>
+            <TextField
+              fullWidth
+              name="specialization"
+              value={updateDoctor.specialization}
+              onChange={handleUpdateInputChange}
+              margin="normal"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleUpdateClose}>Cancel</Button>
+            <Button onClick={handleUpdate} color="primary">
+              Update
+            </Button>
+          </DialogActions>
         </Dialog>
       </TableContainer>
-        </Box>
-    )
-}
+    </Box>
+  );
+};
 
-export default AdminDoctorsTable
-
+export default AdminDoctorsTable;

@@ -1,5 +1,5 @@
-import { Model, DataTypes, Optional,Sequelize } from 'sequelize';
-import sequelize from '../database/connection';
+import { Model, DataTypes, Optional, Sequelize } from "sequelize";
+import sequelize from "../database/connection";
 
 interface UserAttributes {
   userId: string;
@@ -8,33 +8,41 @@ interface UserAttributes {
   lastName: string;
   profileImage?: string | null;
   contactNumber: string;
-  gender: 'male' | 'female' | 'other';
+  gender: "male" | "female" | "other";
   dateOfBirth?: string | null;
   address?: string;
   password: string;
   email: string;
-  role: 'patient' | 'doctor' | 'admin';
+  role: "patient" | "doctor" | "admin";
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'userId' | 'createdAt' | 'updatedAt'> {}
+interface UserCreationAttributes
+  extends Optional<UserAttributes, "userId" | "createdAt" | "updatedAt"> {}
 
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+class User
+  extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes
+{
   public userId!: string;
   public firstName!: string;
   public middleName?: string;
   public lastName!: string;
   public profileImage?: string;
   public contactNumber!: string;
-  public gender!: 'male' | 'female' | 'other';
+  public gender!: "male" | "female" | "other";
   public dateOfBirth?: string;
   public address?: string;
   public password!: string;
   public email!: string;
-  public role!: 'patient' | 'doctor' | 'admin';
+  public role!: "patient" | "doctor" | "admin";
   public createdAt?: Date;
   public updatedAt?: Date;
+
+  public getFullname() {
+    return this.firstName + " " + this.middleName + " " + this.lastName;
+  }
 }
 
 User.init(
@@ -43,7 +51,7 @@ User.init(
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
     },
     firstName: {
       allowNull: false,
@@ -65,7 +73,8 @@ User.init(
     },
     gender: {
       allowNull: false,
-      type: DataTypes.ENUM('male', 'female', 'other'),
+      type: DataTypes.ENUM("male", "female", "other"),
+      defaultValue: "other",
     },
     dateOfBirth: {
       type: DataTypes.STRING(20),
@@ -75,7 +84,7 @@ User.init(
     },
     password: {
       allowNull: false,
-      type: DataTypes.STRING(50),
+      type: DataTypes.TEXT,
     },
     email: {
       allowNull: false,
@@ -84,7 +93,8 @@ User.init(
     },
     role: {
       allowNull: false,
-      type: DataTypes.ENUM('patient', 'doctor', 'admin'),
+      type: DataTypes.ENUM("patient", "doctor", "admin", "user"),
+      defaultValue: "user",
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -95,11 +105,11 @@ User.init(
   },
   {
     sequelize,
-    modelName: 'User',
-    tableName: 'Users',
+    modelName: "User",
+    tableName: "Users",
     timestamps: false,
     underscored: false,
-  }
+  },
 );
 
 export default User;

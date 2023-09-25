@@ -2,6 +2,7 @@
 import "./globals.css";
 import "primeicons/primeicons.css";
 import "primereact/primereact.all";
+import "react-chat-elements/dist/main.css";
 
 import { Inter, Poppins } from "next/font/google";
 import { CssBaseline, createTheme, useMediaQuery } from "@mui/material";
@@ -11,6 +12,7 @@ import Footer from "@/components/Footer";
 import Provider from "react-redux";
 import Store from "@/redux/store";
 import Header from "@/components/NavHeader/Header";
+import { CookiesProvider } from "react-cookie";
 
 // const inter = Inter({ subsets: ['latin'] })
 // const poppinsLight = Poppins({weight:"300",variable:"--poppinsLight",subsets: ['latin']})
@@ -36,27 +38,45 @@ export default function RootLayout({
         palette: {
           mode: prefersDarkMode || themeMode === "dark" ? "dark" : "light",
           primary: {
-            main: "#18246b",
-            light: "#f6f6f6",
+            main:
+              prefersDarkMode || themeMode === "dark" ? "#ffb3b5" : "#a83542",
+            light:
+              prefersDarkMode || themeMode === "light" ? "#ffb3b5" : "#a83542",
+          },
+          secondary: {
+            main:
+              prefersDarkMode || themeMode === "dark" ? "#e6bdbd" : "#765657",
           },
         },
         typography: {
           fontFamily: ["Poppins-Medium", "Poppins-Light", "Inter"].join(","),
         },
       }),
-    [prefersDarkMode, themeMode]
+    [prefersDarkMode, themeMode],
   );
 
   return (
     <html lang="en">
-      <body className={themeMode === 'dark'?"hide-scrollbar bg-black":"hide-scrollbar bg-white"}>
+      <body
+        className={
+          themeMode === "dark"
+            ? "hide-scrollbar bg-black"
+            : "hide-scrollbar bg-white"
+        }
+      >
         <div>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Header setThemeMode={()=> setThemeMode(themeMode == 'light'?'dark':"light")} />
-          {children}
-          <Footer />
-        </ThemeProvider>
+          <CookiesProvider defaultSetOptions={{ path: "/" }}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <Header
+                setThemeMode={() =>
+                  setThemeMode(themeMode == "light" ? "dark" : "light")
+                }
+              />
+              {children}
+              <Footer />
+            </ThemeProvider>
+          </CookiesProvider>
         </div>
       </body>
     </html>

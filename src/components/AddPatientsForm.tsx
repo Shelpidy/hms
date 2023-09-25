@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 import {
   FormControl,
@@ -11,12 +11,12 @@ import {
   makeStyles,
   TextField,
   Grid,
-} from '@mui/material';
-import { AddCircleOutline } from '@mui/icons-material';
-import CustomButton from './CustomButton';
-import { handleFormSubmitGeneral } from '@/utils/data';
+} from "@mui/material";
+import { AddCircleOutline } from "@mui/icons-material";
+import CustomButton from "./CustomButton";
+import { handleFormSubmitGeneral } from "@/utils/data";
 // Sample blood groups fetched from the database
-const sampleBloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+const sampleBloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 // Interface for Patient data
 interface PatientData {
@@ -27,31 +27,30 @@ interface PatientData {
 
 const PatientForm: React.FC = () => {
   const [patientData, setPatientData] = useState<PatientData>({
-    email: '',
-    diagnosis: '',
-    bloodGroup: '',
+    email: "",
+    diagnosis: "",
+    bloodGroup: "",
   });
   const [bloodGroupsList, setBloodGroupsList] = useState<string[]>([]);
-  const [emailVerification, setEmailVerification] = useState<string>("")
+  const [emailVerification, setEmailVerification] = useState<string>("");
 
   const validateEmail = (email: string) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     let emailVerification = emailPattern.test(email);
-    if(!emailVerification) {
-      setEmailVerification('Invalid email address');
+    if (!emailVerification) {
+      setEmailVerification("Invalid email address");
+    } else {
+      setEmailVerification("");
     }
-    else {
-          setEmailVerification("");
-  }
-}
+  };
   // Simulate fetching blood groups from the database
   useEffect(() => {
     setBloodGroupsList(sampleBloodGroups);
   }, []);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setPatientData((prevData) => ({
@@ -60,20 +59,20 @@ const PatientForm: React.FC = () => {
     }));
   };
 
-   async function handleAddPatient() : Promise<void> {
-     await handleFormSubmitGeneral(patientData, "/api/patients");
-    console.log('Patient Data:', patientData);
-  };
+  async function handleAddPatient(): Promise<void> {
+    await handleFormSubmitGeneral(patientData, "/api/patients");
+    console.log("Patient Data:", patientData);
+  }
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
         <Box>
-            <Typography variant="h5">Add Patient</Typography>
+          <Typography variant="h5">Add Patient</Typography>
         </Box>
       </Grid>
       <Grid item xs={12}>
-      <TextField
+        <TextField
           label="Email"
           variant="outlined"
           fullWidth
@@ -84,14 +83,17 @@ const PatientForm: React.FC = () => {
           }}
           name="email"
         />
-        <Box sx={{ marginTop: 1}} color={emailVerification ? (emailVerification ? 'red' : 'green') : ''}>
-                {emailVerification ? (
-                  <ul>
-                    <li>{emailVerification}</li>
-                  </ul>
-                ) : null}
+        <Box
+          sx={{ marginTop: 1 }}
+          color={emailVerification ? (emailVerification ? "red" : "green") : ""}
+        >
+          {emailVerification ? (
+            <ul>
+              <li>{emailVerification}</li>
+            </ul>
+          ) : null}
         </Box>
-      </Grid>  
+      </Grid>
       <Grid item xs={12}>
         <TextField
           label="Diagnosis"
@@ -107,7 +109,7 @@ const PatientForm: React.FC = () => {
           <InputLabel>Blood Group</InputLabel>
           <Select
             value={patientData.bloodGroup}
-            onChange={(e:any)=>handleInputChange(e)}
+            onChange={(e: any) => handleInputChange(e)}
             label="Blood Group"
             name="bloodGroup"
           >
@@ -120,11 +122,7 @@ const PatientForm: React.FC = () => {
         </FormControl>
       </Grid>
       <Grid item xs={12}>
-        <CustomButton 
-        onClick={handleAddPatient}
-        >
-            submit
-        </CustomButton>
+        <CustomButton onClick={handleAddPatient}>submit</CustomButton>
       </Grid>
     </Grid>
   );

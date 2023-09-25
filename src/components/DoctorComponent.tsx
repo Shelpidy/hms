@@ -1,48 +1,50 @@
-"use client"
-import React from "react"
-import Card from "@mui/material/Card"
-import CardContent from "@mui/material/CardContent"
-import CardMedia from "@mui/material/CardMedia"
-import Typography from "@mui/material/Typography"
-import { IconButton, useMediaQuery, useTheme, Link, Box } from "@mui/material"
-import { FacebookOutlined, Twitter, Instagram, LinkedIn, GitHub } from "@mui/icons-material"
+"use client";
+import React from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { IconButton, useMediaQuery, useTheme, Link, Box } from "@mui/material";
+import {
+  FacebookOutlined,
+  Twitter,
+  Instagram,
+  LinkedIn,
+  GitHub,
+} from "@mui/icons-material";
 
-import AOS from "aos"
-import "aos/dist/aos.css"
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 type DoctorProps = {
-    id: number
-    imageUrl: string
-    position: string
-    media: MediaObject
-    name: string
-}
+  id: number;
+  imageUrl: string;
+  position: string;
+  media: MediaObject;
+  name: string;
+};
 
 type MediaObject = {
-    facebook?: string
-    twitter?: string
-    linkedin?: string
-    github?: string
-    instagram?: string
-    link?: string
-}
+  facebook?: string;
+  twitter?: string;
+  linkedin?: string;
+  github?: string;
+  instagram?: string;
+  link?: string;
+};
 
 function DoctorComponent({ position, name, media, imageUrl }: DoctorProps) {
-  const mytheme = useTheme()
-  const lessThanTab = useMediaQuery(mytheme.breakpoints.down("md"))
+  const mytheme = useTheme();
+  const lessThanTab = useMediaQuery(mytheme.breakpoints.down("md"));
 
-  const aboutImgWidth = lessThanTab ? "100vw" : "50vw"
+  const aboutImgWidth = lessThanTab ? "100vw" : "50vw";
 
   React.useEffect(() => {
-    AOS.init({ duration: 2000 })
-  }, [])
+    AOS.init({ duration: 2000 });
+  }, []);
 
   return (
-    <Box
-      bgcolor={mytheme.palette.mode === "dark" ? "#381E72" : "white"}
-      data-aos="zoom-in"
-      className="shadow-lg  rounded-md dark:shadow-lg"
-    >
+    <Card data-aos="zoom-in">
       <CardContent>
         <img
           alt="Memeber"
@@ -103,8 +105,8 @@ function DoctorComponent({ position, name, media, imageUrl }: DoctorProps) {
           {position}
         </Typography>
       </CardContent>
-    </Box>
-  )
+    </Card>
+  );
 }
 
 function DoctorsComponent() {
@@ -161,26 +163,28 @@ function DoctorsComponent() {
         github: "",
       },
     },
-  ]
+  ];
 
   return (
-    <Box sx={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center"
-    }}>
-      <Box >
-          <Typography variant="h3">
-            Meet Our Doctors
-          </Typography>
-       </Box>
-    <div className="py-5 px-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {Doctors.map((item: DoctorProps, index: number) => {
-        return (<DoctorComponent key={item.id} {...item} />)
-      })}
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Box>
+        <Typography variant="h4" color="primary">
+          Meet Our Doctors
+        </Typography>
+      </Box>
+      <div className="py-5 px-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {Doctors.map((item: DoctorProps, index: number) => {
+          return <DoctorComponent key={item.id} {...item} />;
+        })}
+      </div>
     </Box>
-  )
+  );
 }
 
-export default DoctorsComponent
+export default DoctorsComponent;

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import AnimatableScroll from "@/components/AnimatableScroll";
 import CustomDropDown from "@/components/CustomDropDown";
 import Image from "next/image";
@@ -10,33 +10,32 @@ import ContactUs from "@/components/ContactUsSection";
 import Footer from "@/components/Footer";
 import Banner from "@/components/Banner";
 import ServicesSection from "@/components/OurServices";
-import  DoctorsComponent  from "@/components/DoctorComponent";
+import DoctorsComponent from "@/components/DoctorComponent";
 import DonorsComponent from "@/components/DonorComponent";
 import { ServerInsertedHTMLContext } from "next/navigation";
 // ECEEF4
 
 export default function Home() {
-
+  // Fetch Doctor and Patient Here
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pb-5 px-5">
       <Banner />
       <AnimatableScroll>
-        <AboutSection imageUrl='https://picsum.photos/300/300'/>
+        <AboutSection imageUrl="https://picsum.photos/300/300" />
       </AnimatableScroll>
       <AnimatableScroll>
-        <ServicesSection/>
+        <ServicesSection />
       </AnimatableScroll>
       <AnimatableScroll>
-        <DoctorsComponent/>
+        <DoctorsComponent />
       </AnimatableScroll>
       <AnimatableScroll>
-        <DonorsComponent/>
+        <DonorsComponent />
       </AnimatableScroll>
       <AnimatableScroll>
-          <ContactUs/>
+        <ContactUs />
       </AnimatableScroll>
-     
 
       <code>let name = `&quot`Mohamed | Dennis</code>
     </main>

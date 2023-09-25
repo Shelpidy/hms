@@ -1,11 +1,25 @@
-"use client"
-import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead,Box,TableRow, Paper, Avatar, Checkbox, IconButton, TextField, TablePagination } from '@mui/material';
-import { Search as SearchIcon ,Add} from '@mui/icons-material';
-import CustomButton from './CustomButton';
+"use client";
+import React, { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  Box,
+  TableRow,
+  Paper,
+  Avatar,
+  Checkbox,
+  IconButton,
+  TextField,
+  TablePagination,
+} from "@mui/material";
+import { Search as SearchIcon, Add } from "@mui/icons-material";
+import CustomButton from "./CustomButton";
 
 interface Blogger {
-  bloggerId:string,
+  bloggerId: string;
   displayName: string;
   position: string;
   dateAdded: string;
@@ -17,11 +31,10 @@ interface Props {
   initialData: Blogger[];
 }
 
-
 const BloggersTableComponents: React.FC<Props> = ({ initialData }) => {
   const [data, setData] = useState(initialData);
   const [page, setPage] = useState(1);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -29,7 +42,6 @@ const BloggersTableComponents: React.FC<Props> = ({ initialData }) => {
     // Replace this with your actual fetch logic using query params
     // For example: fetchTableData(newPage, rowsPerPage);
   };
-
 
   // Simulate fetching data from the backend using query params
   // Replace this with your actual fetch logic using query params
@@ -39,33 +51,34 @@ const BloggersTableComponents: React.FC<Props> = ({ initialData }) => {
   //   setData(newData);
   // };
 
-//   const filteredData = data.filter(
-//     (item) =>
-//       item.displayName.toLowerCase().includes(searchText.toLowerCase()) ||
-//       item.position.toLowerCase().includes(searchText.toLowerCase())
-//   );
+  //   const filteredData = data.filter(
+  //     (item) =>
+  //       item.displayName.toLowerCase().includes(searchText.toLowerCase()) ||
+  //       item.position.toLowerCase().includes(searchText.toLowerCase())
+  //   );
 
   return (
     <Paper>
-        <Box className='flex flex-row justify-between mx-2 my-2'>
-        <CustomButton size='small'><Add></Add> New</CustomButton>
+      <Box className="flex flex-row justify-between mx-2 my-2">
+        <CustomButton size="small">
+          <Add></Add> New
+        </CustomButton>
         <TextField
-            sx={{justifySelf:"flex-end",marginBottom:"6px"}}
-                size='small'
-                label="Search"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                InputProps={{
-                endAdornment: (
-                    <IconButton>
-                    <SearchIcon />
-                    </IconButton>
-                ),
-                }}
-            />
+          sx={{ justifySelf: "flex-end", marginBottom: "6px" }}
+          size="small"
+          label="Search"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+            ),
+          }}
+        />
+      </Box>
 
-        </Box>
-    
       <TableContainer>
         <Table>
           <TableHead>
@@ -82,13 +95,17 @@ const BloggersTableComponents: React.FC<Props> = ({ initialData }) => {
             {data.slice(3).map((row) => (
               <TableRow key={row.bloggerId}>
                 <TableCell size="small">
-                  <Checkbox size='small' />
+                  <Checkbox size="small" />
                 </TableCell>
                 <TableCell size="small">{row.displayName}</TableCell>
                 <TableCell size="small">{row.position}</TableCell>
                 <TableCell size="small">{row.dateAdded}</TableCell>
                 <TableCell size="small">
-                  <Avatar sx={{width:25,height:25}} alt={row.displayName} src={row.profile} />
+                  <Avatar
+                    sx={{ width: 25, height: 25 }}
+                    alt={row.displayName}
+                    src={row.profile}
+                  />
                 </TableCell>
                 <TableCell size="small">{row.status}</TableCell>
               </TableRow>

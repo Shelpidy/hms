@@ -1,5 +1,5 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database/connection';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database/connection";
 
 class Patient extends Model {
   public patientId!: string; // Change to string type
@@ -22,11 +22,11 @@ Patient.init(
       type: DataTypes.UUID, // Change to STRING type
       allowNull: false,
       references: {
-        model: 'Users',
-        key: 'userId',
+        model: "Users",
+        key: "userId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     diagnosis: {
       type: DataTypes.STRING(800),
@@ -34,11 +34,11 @@ Patient.init(
     bloodGroupId: {
       type: DataTypes.UUID, // Change to STRING type
       references: {
-        model: 'BloodGroups',
-        key: 'bloodGroupId',
+        model: "BloodGroups",
+        key: "bloodGroupId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     createdAt: {
       allowNull: false,
@@ -51,11 +51,11 @@ Patient.init(
   },
   {
     sequelize,
-    modelName: 'Patient',
-    tableName: 'Patients',
+    modelName: "Patient",
+    tableName: "Patients",
     timestamps: true,
     underscored: false,
-  }
+  },
 );
 
 export default Patient;

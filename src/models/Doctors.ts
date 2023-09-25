@@ -1,5 +1,5 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database/connection';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database/connection";
 
 class Doctor extends Model {
   public doctorId!: string;
@@ -15,27 +15,27 @@ Doctor.init(
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
     },
     specializationId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Specializations',
-        key: 'specializationId',
+        model: "Specializations",
+        key: "specializationId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     userId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Users',
-        key: 'userId',
+        model: "Users",
+        key: "userId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -48,11 +48,11 @@ Doctor.init(
   },
   {
     sequelize,
-    modelName: 'Doctor',
-    tableName: 'Doctors',
+    modelName: "Doctor",
+    tableName: "Doctors",
     timestamps: true,
     underscored: false,
-  }
+  },
 );
 
 export default Doctor;

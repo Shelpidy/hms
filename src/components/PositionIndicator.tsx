@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Box,useTheme} from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 
 interface PositionIndicatorProps {
   position: number;
@@ -15,13 +15,13 @@ const PositionIndicator: React.FC<PositionIndicatorProps> = ({
 }) => {
   const [activePosition, setActivePosition] = useState(0);
   const [positions, setPositions] = useState<number[]>([]);
-  const theme = useTheme()
+  const theme = useTheme();
   useEffect(() => {
     const positionsArray = Array.from(
       {
         length: numberOfPosition || 3,
       },
-      (_, index) => index
+      (_, index) => index,
     );
     setPositions(positionsArray);
   }, [numberOfPosition]);

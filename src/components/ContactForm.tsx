@@ -62,7 +62,7 @@ function ContactForm({ email, phoneNumbers, address }: ContactFormProps) {
   const [showEmailCodeModal, setShowEmailCodeModal] =
     React.useState<boolean>(false);
   const [verificationCode, setVerificationCode] = React.useState<number | null>(
-    0
+    0,
   );
   const [emailVerificationRespObj, setEmailVerificationRespObj] =
     React.useState<NonNullable<EmailVerifyResp>>({});
@@ -82,7 +82,7 @@ function ContactForm({ email, phoneNumbers, address }: ContactFormProps) {
           "Content-Type": "application/json",
         },
         body: postCodeObj,
-      }
+      },
     )
       .then(async (res) => await res.json())
       .then((result) => {
@@ -102,7 +102,7 @@ function ContactForm({ email, phoneNumbers, address }: ContactFormProps) {
         Toast.fire(
           " ",
           "Error trying to make request. Make sure you are connected to the internet and try again",
-          "error"
+          "error",
         );
       });
   };
@@ -120,7 +120,7 @@ function ContactForm({ email, phoneNumbers, address }: ContactFormProps) {
           "Content-Type": "application/json",
         },
         body: postCodeObj,
-      }
+      },
     )
       .then(async (res) => await res.json())
       .then((result) => {
@@ -140,7 +140,7 @@ function ContactForm({ email, phoneNumbers, address }: ContactFormProps) {
         Toast.fire(
           " ",
           "Error trying to make request. Make sure you are connected to the internet and try again",
-          "error"
+          "error",
         );
       });
   };
@@ -186,7 +186,7 @@ function ContactForm({ email, phoneNumbers, address }: ContactFormProps) {
         Toast.fire(
           " ",
           "Error trying to make request. Make sure you are connected to the internet and try again",
-          "error"
+          "error",
         );
       });
   };
@@ -231,12 +231,13 @@ function ContactForm({ email, phoneNumbers, address }: ContactFormProps) {
               }}
               sx={{ height: "4vh", marginRight: "3px", color: "white" }}
             ></TextField>
-            <CustomButton 
-             onClick={handlEmailCodeVerificationForm}
+            <CustomButton
+              onClick={handlEmailCodeVerificationForm}
               loading={loading}
-              size="small">
-                <Send /> Send
-              </CustomButton>
+              size="small"
+            >
+              <Send /> Send
+            </CustomButton>
             {/* <LoadingButton
               sx={{ marginTop: 1 }}
               onClick={handlEmailCodeVerificationForm}
@@ -249,14 +250,14 @@ function ContactForm({ email, phoneNumbers, address }: ContactFormProps) {
             >
               Send
             </LoadingButton> */}
-         <CustomButton 
-             onClick={handlResendCode}
+            <CustomButton
+              onClick={handlResendCode}
               loading={_loading}
               size="small"
               variant="outlined"
-              >
-                <Send />  Resend Code
-              </CustomButton>
+            >
+              <Send /> Resend Code
+            </CustomButton>
             {/* <LoadingButton
               onClick={handlResendCode}
               loading={_loading}
@@ -357,14 +358,13 @@ function ContactForm({ email, phoneNumbers, address }: ContactFormProps) {
             label="Message"
             required
           ></TextField>
-          <CustomButton 
-             onClick={handleContactForm}
-              loading={loading}
-              variant="contained"
-             
-              >
-                Submit
-              </CustomButton>
+          <CustomButton
+            onClick={handleContactForm}
+            loading={loading}
+            variant="contained"
+          >
+            Submit
+          </CustomButton>
           {/* <LoadingButton
             className="rounded"
             onClick={handleContactForm}

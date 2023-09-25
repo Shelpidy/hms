@@ -7,7 +7,6 @@
 // import Appointment from "@/models/Appointments";
 // import bcrypt from "bcrypt";
 
-
 // export async function GetAllUsers(): Promise<User[]> {
 //     try {
 //       const users = await User.findAll();
@@ -22,10 +21,9 @@
 //   }
 // export async function AddUser(user:any) : Promise<void> {
 //  try {
-    
+
 //     const hashedPassword = await bcrypt.hash(user.password, 10);
-   
-    
+
 //     console.log(user.profileImage)
 //     const newUser = await  User.create({
 //        firstName: user.firstName,
@@ -70,7 +68,6 @@
 //         throw error;
 //     }
 // }
-
 
 // export async function AddDoctors({ email, specialization}: {
 //     email: string,
@@ -184,7 +181,3 @@
 //         console.error("An error occurred:", error);
 //     }
 // }
-
-
-
-

@@ -1,5 +1,5 @@
-import { Model, DataTypes, } from 'sequelize';
-import sequelize from '../database/connection';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database/connection";
 
 class Admin extends Model {
   public adminId!: string;
@@ -15,7 +15,7 @@ Admin.init(
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
     },
     username: {
       type: DataTypes.STRING(50),
@@ -25,31 +25,28 @@ Admin.init(
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'Users',
-        key: 'userId',
+        model: "Users",
+        key: "userId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-      
     },
   },
   {
     sequelize,
-    modelName: 'Admin',
-    tableName: 'Admins',
+    modelName: "Admin",
+    tableName: "Admins",
     timestamps: true,
     underscored: false,
-  }
+  },
 );
 
 export default Admin;
- 

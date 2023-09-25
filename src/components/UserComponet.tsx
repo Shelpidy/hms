@@ -1,4 +1,3 @@
-
 // import React, {useEffect } from "react";
 // import { Box, Grid, Typography } from "@mui/material";
 // import ImgMediaCard from "./CardComponent"
@@ -25,7 +24,7 @@
 //         console.error('Error fetching users:', error);
 //       });
 //   }, []);
-  
+
 //     return (
 //         <Box
 //         sx={{
@@ -35,7 +34,7 @@
 //             flexDirection: "column", // Ensure content is stacked vertically
 //           }}
 //         >
-//         <Box>  
+//         <Box>
 //          <Typography variant="h4" component="h1" gutterBottom>
 //            Users
 //          </Typography>
@@ -51,9 +50,8 @@
 //           })
 //         }
 //      </Box>
-       
+
 //         </Box>
 //     )
 // }
 // export default UserComponent
-

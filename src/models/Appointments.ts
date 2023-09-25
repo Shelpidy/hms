@@ -1,9 +1,9 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database/connection';
+import { Model, DataTypes } from "sequelize";
+import sequelize from "../database/connection";
 
 class Appointment extends Model {
   public appointmentId!: number;
-  public appointmentStatus!: 'completed' | 'pending' | 'cancel';
+  public appointmentStatus!: "completed" | "pending" | "cancel";
   public doctorId!: string;
   public reason?: string;
   public note?: string;
@@ -19,20 +19,20 @@ Appointment.init(
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
     },
     appointmentStatus: {
-      type: DataTypes.ENUM('completed', 'pending', 'cancel'),
+      type: DataTypes.ENUM("completed", "pending", "cancel"),
       allowNull: false,
     },
     doctorId: {
       type: DataTypes.UUIDV4,
       references: {
-        model: 'Doctors',
-        key: 'doctorId',
+        model: "Doctors",
+        key: "doctorId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     reason: {
       type: DataTypes.STRING(800),
@@ -43,11 +43,11 @@ Appointment.init(
     patientId: {
       type: DataTypes.UUIDV4,
       references: {
-        model: 'Patients',
-        key: 'patientId',
+        model: "Patients",
+        key: "patientId",
       },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
     },
     appointmentDate: {
       allowNull: false,
@@ -56,21 +56,19 @@ Appointment.init(
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
-  
     },
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE,
-     
     },
   },
   {
     sequelize,
-    modelName: 'Appointment',
-    tableName: 'Appointments',
+    modelName: "Appointment",
+    tableName: "Appointments",
     timestamps: true,
     underscored: false,
-  }
+  },
 );
 
 export default Appointment;

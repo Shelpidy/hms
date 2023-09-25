@@ -8,7 +8,7 @@ interface CustomButtonProps {
   onClick?: () => void;
   children: React.ReactNode;
   disabled?: boolean;
-  loading?:boolean
+  loading?: boolean;
 }
 
 const CustomButton = ({
@@ -23,20 +23,23 @@ const CustomButton = ({
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(()=>{
-    setIsLoading(loading)
-  },[loading])
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [loading]);
 
   const buttonStyle: CSSProperties = {
-    backgroundColor: variant === "contained" ? color || theme.palette.primary.main : "transparent",
+    backgroundColor:
+      variant === "contained"
+        ? color || theme.palette.primary.main
+        : "transparent",
     borderRadius: "3px",
-    border: `1px solid ${color}`,
+    border: `1px solid ${theme.palette.primary.main}`,
     padding: size === "small" ? "4px 4px" : "8px 16px",
     fontSize: size === "small" ? "12px" : "14px",
     fontWeight: "bold",
     cursor: "pointer",
     transition: "background-color 0.3s",
-    color: variant === "contained" ? "white" : color || theme.palette.primary.main,
+    color: theme.palette.primary.light,
     position: "relative",
   };
 
@@ -61,9 +64,17 @@ const CustomButton = ({
   };
 
   return (
-    <button style={buttonStyle} onClick={handleClick} disabled={isLoading||disabled}>
+    <button
+      style={buttonStyle}
+      onClick={handleClick}
+      disabled={isLoading || disabled}
+    >
       {isLoading && (
-        <CircularProgress size={20} style={loadingStyle} color={variant === "contained" ? "secondary" : "primary"} />
+        <CircularProgress
+          size={20}
+          style={loadingStyle}
+          color={variant === "contained" ? "secondary" : "primary"}
+        />
       )}
       {children}
     </button>

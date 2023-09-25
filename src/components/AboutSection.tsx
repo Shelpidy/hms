@@ -32,22 +32,28 @@ function AboutSection({
   // },[])
 
   return (
-    <Box className="mb-8 mt-5" 
-    sx={{
-      display: "flex",
-      justifyContent: "center", // Center horizontally
-      alignItems: "center", // Center vertically
-      flexDirection: "column", // Ensure content is stacked vertically
-    }}
+    <Box
+      className="mb-8 mt-5"
+      sx={{
+        display: "flex",
+        justifyContent: "center", // Center horizontally
+        alignItems: "center", // Center vertically
+        flexDirection: "column", // Ensure content is stacked vertically
+      }}
     >
-      <Box sx={{marginTop: 4, marginBottom: 1}}>
-          <Typography variant="h4" component="h3">About Us</Typography>
+      <Box sx={{ marginTop: 4, marginBottom: 1 }}>
+        <Typography variant="h4" color="primary">
+          About ZeeHealth
+        </Typography>
       </Box>
-      <Divider sx={{ width: "80%"}}/>
-      <Box className="grid w-full gird-cols-1 gap-5 md:grid-cols-2" sx={{marginTop: 3}}>
+      <Divider sx={{ width: "80%" }} />
+      <Box
+        className="grid w-full gird-cols-1 gap-5 md:grid-cols-2"
+        sx={{ marginTop: 3 }}
+      >
         <Box
           className="relative overflow-hidden rounded-sm pt-1"
-          sx={{ height: "65vh", }}
+          sx={{ height: "65vh" }}
         >
           <Image fill priority alt="About Image" src={imageUrl} />
         </Box>

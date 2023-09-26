@@ -110,7 +110,7 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({roomId,socket}) => {
       socket.disconnect();
     };
   }, [socket]);
-  
+
   return (
       <Box
         style={{
@@ -118,8 +118,8 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({roomId,socket}) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: "50vw",
-          backgroundColor: "#fff",
+          width: "100%",
+          backgroundColor: "#f6f6f6",
         }}
       >
         <Box

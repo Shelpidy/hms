@@ -91,12 +91,11 @@ const ChatScreen: React.FC = () => {
   }, []);
   return (
     <main
-      style={{ backgroundColor: "#f6f6f6", paddingTop: "12vh" }}
-      className="min-h-screen grid grid-cols-dashboard"
+      style={{paddingTop: "10vh",gap:4,justifyContent:"center"}}
+      className="min-h-screen grid grid-cols-dashboard md:px-40"
     >
-      <Box className="w-full sticky top-[10vh] md:w-[25vw]">
-        <Typography>Conversations</Typography>
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <Box className="w-full sticky top-[10vh] md:w-[30vw]">
+        <List sx={{ width: '100%',bgcolor: 'background.paper' }}>
           {
             rooms.map((room)=>{
               return(<MessageRoom handleClick={(roomId)=> setActiveRoom(roomId)} key={room.roomId} {...room}/>)

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client"
+import React, { useState,useEffect } from "react";
 import {
   Box,
   Button,
@@ -23,115 +24,42 @@ import {
   InputAdornment,
   TextField, // Add TextField component for search
 } from "@mui/material";
-import { Delete, Edit, Search } from "@mui/icons-material";
+import { CancelOutlined, Delete, Edit, Search } from "@mui/icons-material";
 import Swal from "sweetalert2";
+import moment from "moment"
+import CustomButton from "@/components/CustomButton";
 
-const dummyAppointments = [
-  {
-    patient: {
-      patient: { name: "John Doe" },
-      user: { username: "johndoe" },
-      bloodGroup: "A+",
-    },
-    doctor: {
-      doctor: { name: "Dr. Smith" },
-      user: { username: "drsmith" },
-      specialization: "Cardiology",
-    },
-    appointment: {
-      date: "2023-09-20",
-      status: "pending",
-    },
-  },
-  {
-    patient: {
-      patient: { name: "Jane Doe" },
-      user: { username: "janedoe" },
-      bloodGroup: "B-",
-    },
-    doctor: {
-      doctor: { name: "Dr. Johnson" },
-      user: { username: "drjohnson" },
-      specialization: "Dermatology",
-    },
-    appointment: {
-      date: "2023-09-21",
-      status: "completed",
-    },
-  },
-  {
-    patient: {
-      patient: { name: "Alice Johnson" },
-      user: { username: "alicejohnson" },
-      bloodGroup: "AB+",
-    },
-    doctor: {
-      doctor: { name: "Dr. Brown" },
-      user: { username: "drbrown" },
-      specialization: "Orthopedics",
-    },
-    appointment: {
-      date: "2023-09-22",
-      status: "pending",
-    },
-  },
-  {
-    patient: {
-      patient: { name: "Bob Smith" },
-      user: { username: "bobsmith" },
-      bloodGroup: "O+",
-    },
-    doctor: {
-      doctor: { name: "Dr. Davis" },
-      user: { username: "drdavis" },
-      specialization: "Neurology",
-    },
-    appointment: {
-      date: "2023-09-23",
-      status: "completed",
-    },
-  },
-  {
-    patient: {
-      patient: { name: "Ella Williams" },
-      user: { username: "ellawilliams" },
-      bloodGroup: "A-",
-    },
-    doctor: {
-      doctor: { name: "Dr. Lee" },
-      user: { username: "drlee" },
-      specialization: "Pediatrics",
-    },
-    appointment: {
-      date: "2023-09-24",
-      status: "completed",
-    },
-  },
-  {
-    patient: {
-      patient: { name: "David Turner" },
-      user: { username: "davidturner" },
-      bloodGroup: "B+",
-    },
-    doctor: {
-      doctor: { name: "Dr. White" },
-      user: { username: "drwhite" },
-      specialization: "Gastroenterology",
-    },
-    appointment: {
-      date: "2023-09-25",
-      status: "pending",
-    },
-  },
-];
 
-const DoctorAppointmentTable: React.FC = () => {
+type PatientProfile = {
+  patient: Patient;
+  user: User;
+  bloodGroup: BloodGroup;
+};
+
+type AppointmentDetail = {
+  patient: PatientProfile;
+  appointment: Appointment;
+  roomId:string
+};
+
+type DoctorAppointmentTableProps = {
+    appointments:AppointmentDetail[]
+    refresh:()=>void
+}
+
+
+const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({appointments,refresh}) => {
   // State for filtering appointments
   const [filter, setFilter] = useState("all");
   // State for marking appointments as completed
   const [completedAppointments, setCompletedAppointments] = useState<number[]>(
     [],
   );
+
+  const [Appointments, setAppointments] = useState<AppointmentDetail[]>(
+    [],
+  );
+
   // State for search input
   const [searchText, setSearchText] = useState("");
   // State for confirmation dialog
@@ -140,6 +68,10 @@ const DoctorAppointmentTable: React.FC = () => {
   const [appointmentToDelete, setAppointmentToDelete] = useState<number | null>(
     null,
   );
+
+  useEffect(()=>{
+      setAppointments(appointments)
+  },[])
 
   const Toast = Swal.mixin({
     toast: true,
@@ -224,32 +156,18 @@ const DoctorAppointmentTable: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell>Patient</TableCell>
-              <TableCell>Appointment Status</TableCell>
               <TableCell>Appointment Date</TableCell>
+              <TableCell>Appointment Status</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {dummyAppointments.map((appointment, index) => {
+            {Appointments.map((appointment, index) => {
               // Filter based on selected status and search text
-              const isCompleted =
-                completedAppointments.includes(index) &&
-                appointment.appointment.status === "completed";
-              const isPending =
-                !completedAppointments.includes(index) &&
-                appointment.appointment.status === "pending";
-              const matchesSearch =
-                searchText === "" ||
-                appointment.patient.patient.name
-                  .toLowerCase()
-                  .includes(searchText.toLowerCase());
-
-              if (
-                (filter === "all" ||
-                  (filter === "completed" && isCompleted) ||
-                  (filter === "pending" && isPending)) &&
-                matchesSearch
-              ) {
+              const isCompleted = appointment.appointment.appointmentStatus === 'completed'
+              const isPending = appointment.appointment.appointmentStatus === 'pending'
+              const isCancelled = appointment.appointment.appointmentStatus === "cancel"
+                
                 return (
                   <TableRow
                     key={index}
@@ -258,37 +176,26 @@ const DoctorAppointmentTable: React.FC = () => {
                       "&:hover": { backgroundColor: "#f4f4f4" },
                     }}
                   >
-                    <TableCell>{appointment.patient.patient.name}</TableCell>
+                    <TableCell>{appointment.patient.user.firstName}</TableCell>
+                    <TableCell>{moment(appointment.appointment.appointmentDate).fromNow()}</TableCell>
                     <TableCell>
-                      <Badge
-                        color={isCompleted ? "success" : "warning"}
-                        variant="dot"
-                      >
-                        {appointment.appointment.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{appointment.appointment.date}</TableCell>
-                    <TableCell>
-                      {!completedAppointments.includes(index) && (
+                      {
+                        isCancelled ? <CancelOutlined/> :
                         <Checkbox
-                          checked={completedAppointments.includes(index)}
-                          onChange={() => handleMarkCompleted(index)}
+                          checked={isCompleted}
+                          onChange={()=> handleMarkCompleted(index)}
                           color="primary"
                         />
-                      )}
-                      <IconButton>
-                        <Edit />
-                      </IconButton>
-                      <IconButton onClick={() => handleOpenDeleteDialog(index)}>
-                        <Delete />
-                      </IconButton>
-                    </TableCell>
+                      }
+                      </TableCell>
+                      <TableCell>
+                         <CustomButton size="small">
+                            more
+                          </CustomButton>
+                      </TableCell>
                   </TableRow>
                 );
-              } else {
-                return null;
-              }
-            })}
+              })}
           </TableBody>
         </Table>
       </TableContainer>

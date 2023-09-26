@@ -54,9 +54,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         return newMessage;
       }),
     );
-
+    console.log({ newMessages });
     return new NextResponse(JSON.stringify({ messages: newMessages }), {
       status: 200,
+      headers: { "Access-Control-Allow-Origin": "*" },
     });
   } catch (error) {
     return new NextResponse(

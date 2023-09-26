@@ -2,12 +2,12 @@
 import MessageBubble, { BubbleProps } from "@/components/chats/Bubble";
 import { SendOutlined } from "@mui/icons-material";
 import {
-    Avatar,
-    Box,
-    IconButton,
-    TextField,
-    Typography,
-    useTheme
+  Avatar,
+  Box,
+  IconButton,
+  TextField,
+  Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
@@ -65,11 +65,11 @@ const dummyMessages: BubbleProps[] = [
 ];
 
 interface MessageDisplayProps {
-    roomId:string,
-    socket:Socket
+  roomId: string;
+  socket: Socket;
 }
 
-const MessageDisplay: React.FC<MessageDisplayProps> = ({roomId,socket}) => {
+const MessageDisplay: React.FC<MessageDisplayProps> = ({ roomId, socket }) => {
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [messages, setMessages] = useState<BubbleProps[]>(dummyMessages);
@@ -79,7 +79,6 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({roomId,socket}) => {
   const theme = useTheme();
 
   useEffect(() => {
-
     socket.on("disconnect", () => {
       console.log("Disconnected from server");
     });
@@ -112,14 +111,28 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({roomId,socket}) => {
   }, [socket]);
 
   return (
+    <Box
+      style={{
+        minHeight: "80vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100%",
+        marginLeft: "12px",
+        backgroundColor: "#f6f6f6",
+      }}
+    >
       <Box
-        style={{
-          minHeight: "80vh",
+        sx={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
           alignItems: "center",
-          width: "100%",
-          backgroundColor: "#f6f6f6",
+          justifyContent: "space-between",
+          marginBottom: "20px",
+          minWidth: "50vw",
+          width: "inherit",
+          backgroundColor: theme.palette.primary.main,
+          padding: "8px",
         }}
       >
         <Box
@@ -127,76 +140,67 @@ const MessageDisplay: React.FC<MessageDisplayProps> = ({roomId,socket}) => {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: "20px",
-            minWidth: "50vw",
-            backgroundColor: theme.palette.primary.main,
-            paddingLeft: "10px",
-            padding: "5px",
+            justifyContent: "flex-start",
+            gap: 1,
+            padding: "8px",
+            borderRadius: "2px",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              gap: 1,
-            }}
-          >
-            <Avatar
-              alt="Profile Image"
-              src="https://picsum.photo/200/200"
-              sx={{ width: 30, height: 30 }}
-            />
-            <Typography variant="h6" color="primary">
-              Dennis Sesasy
-            </Typography>
-          </Box>
-          <Typography color="primary.light" variant="body1">
-            typing...
-          </Typography>
-          <Typography color="primary.light" variant="body1">
-            online
+          <Avatar
+            alt="Profile Image"
+            src="https://picsum.photo/200/200"
+            sx={{ width: 30, height: 30 }}
+          />
+          <Typography variant="h6" color="primary.light">
+            Dennis Sesasy
           </Typography>
         </Box>
-        <Box
-          className="hide-scrollbar"
-          sx={{
-            display: "flex",
-            minWidth: "50vw",
-            flexDirection: "column",
-            height: "90vh",
-            overFlowY: "auto",
-          }}
-        >
-          {messages.map((message) => {
-            return <MessageBubble key={message.messageId} {...message} />;
-          })}
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 3,
-            justifyContent: "center",
-            marginTop: "8px",
-          }}
-        >
-          <Box>
-            <TextField
-              variant="outlined"
-              multiline
-              size="small"
-              placeholder="Type a message..."
-            />
-          </Box>
-          <IconButton>
-            <SendOutlined />
-          </IconButton>
-        </Box>
+        <Typography color="primary.light" variant="body1">
+          typing...
+        </Typography>
+        <Typography className="mx-5" color="primary.light" variant="body1">
+          online
+        </Typography>
       </Box>
+      <Box
+        className="hide-scrollbar"
+        sx={{
+          display: "flex",
+          minWidth: "50vw",
+          width: "inherit",
+          flexDirection: "column",
+          height: "90vh",
+
+          overFlowY: "auto",
+        }}
+      >
+        {messages.map((message) => {
+          return <MessageBubble key={message.messageId} {...message} />;
+        })}
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 3,
+          justifyContent: "center",
+          marginTop: "8px",
+        }}
+      >
+        <Box>
+          <TextField
+            variant="outlined"
+            multiline
+            size="small"
+            placeholder="Type a message..."
+          />
+        </Box>
+        <IconButton>
+          <SendOutlined />
+        </IconButton>
+      </Box>
+    </Box>
   );
 };
 

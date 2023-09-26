@@ -1,6 +1,5 @@
 import { Sequelize } from "sequelize";
 
-console.log(Sequelize);
 const sequelize = new Sequelize("hmsdb", "root", "", {
   host: "localhost",
   dialect: "mysql",

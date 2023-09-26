@@ -26,6 +26,7 @@ import {
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import CustomButton from "../CustomButton";
+import { useCookies } from "react-cookie";
 
 type HeaderProps = {
   setThemeMode: () => void;
@@ -38,6 +39,12 @@ function Header({ setThemeMode }: HeaderProps) {
   const phoneView = useMediaQuery(theme.breakpoints.down("md"));
   const tabView = useMediaQuery(theme.breakpoints.down("lg"));
   const currentUser = useCurrentUser();
+  const [cookies,setCookie,removeCookie] = useCookies(["token"])
+
+  const handleSignOut =()=>{
+       removeCookie("token")
+       router.refresh()
+  }
 
   return (
     <AppBar
@@ -133,15 +140,9 @@ function Header({ setThemeMode }: HeaderProps) {
                     fontWeight: "bold",
                   }}
                 >
-                  <Link
-                    href="/"
-                    style={{
-                      color: theme.palette.primary.light,
-                      fontWeight: "bold",
-                    }}
-                  >
+                  <CustomButton onClick={handleSignOut}>
                     SignOut
-                  </Link>
+                  </CustomButton>
                 </li>
               )}
               {!currentUser && (

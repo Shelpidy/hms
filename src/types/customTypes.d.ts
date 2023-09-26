@@ -10,7 +10,7 @@ declare interface User {
   address?: string;
   password: string;
   email: string;
-  role: "patient" | "doctor" | "admin";
+  role: "patient" | "doctor" | "admin"|"user";
   createdAt?: Date;
   updatedAt?: Date;
 }

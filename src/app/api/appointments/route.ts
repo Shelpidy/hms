@@ -2,97 +2,9 @@ import User from "@/models/Users";
 import Doctor from "@/models/Doctors";
 import Patient from "@/models/Patients";
 import Appointment from "@/models/Appointments";
-import Specialization from "@/models/Specializations";
-import BloodGroup from "@/models/BloodGroups";
 
 import { NextRequest } from "next/server";
-
-export async function GET(req: NextRequest) {
-  try {
-    const appointments = await Appointment.findAll();
-
-    const appointmentsWithDetails = await Promise.all(
-      appointments.map(async (appointment: any) => {
-        const doctor = await Doctor.findOne({
-          where: { doctorId: appointment.doctorId },
-        });
-        const specialization = await Specialization.findOne({
-          where: { specializationId: doctor?.specializationId },
-        });
-
-        const patient = await Patient.findOne({
-          where: { patientId: appointment.patientId },
-        });
-
-        const bloodGroup = await BloodGroup.findOne({
-          where: { bloodGroupId: patient?.bloodGroupId },
-        });
-
-        const doctorUser = await User.findOne({
-          where: { userId: doctor?.userId },
-          attributes: [
-            "userId",
-            "firstName",
-            "lastName",
-            "profileImage",
-            "contactNumber",
-            "gender",
-            "dateOfBirth",
-            "address",
-            "email",
-            "role",
-          ],
-        });
-
-        const patientUser = await User.findOne({
-          where: { userId: patient?.userId },
-          attributes: [
-            "userId",
-            "firstName",
-            "lastName",
-            "profileImage",
-            "contactNumber",
-            "gender",
-            "dateOfBirth",
-            "address",
-            "email",
-            "role",
-          ],
-        });
-
-        return {
-          doctor: {
-            doctorId: doctor?.doctorId,
-            specialization,
-            user: doctorUser,
-          },
-          patient: {
-            patient,
-            bloodGroup,
-            user: patientUser,
-          },
-          appointment: {
-            appointmentId: appointment.appointmentId,
-            appointmentStatus: appointment.appointmentStatus,
-            reason: appointment.reason,
-            note: appointment.note,
-            appointmentDate: appointment.appointmentDate,
-          },
-        };
-      }),
-    );
-
-    return new Response(
-      JSON.stringify({ appointments: appointmentsWithDetails }),
-      { status: 200 },
-    );
-  } catch (error) {
-    console.log(error);
-    return new Response(
-      JSON.stringify({ message: "Server error", error: error }),
-    );
-  }
-}
+import Room from "@/models/Rooms";
 
 export async function POST(req: NextRequest) {
   try {
@@ -100,6 +12,7 @@ export async function POST(req: NextRequest) {
     const doctoremail = data.doctorEmail as string;
     const patientemail = data.patientEmail as string;
     const reason = data.reason as string;
+    const adminUserId = data.userId as string;
     const note = data.note as string;
     const appointmentDate = data.appointmentDate as string;
 
@@ -113,6 +26,12 @@ export async function POST(req: NextRequest) {
     if (doctorfromUser && patientfromUser) {
       const doctorUserId = doctorfromUser.userId;
       const patientUserId = patientfromUser.userId;
+
+      const rooms = await Room.bulkCreate([
+        { userOneId: adminUserId, userTwo: doctorUserId },
+        { userOneId: adminUserId, userTwo: patientUserId },
+        { userOneId: doctorUserId, userTwo: patientUserId },
+      ]);
 
       const doctor = await Doctor.findOne({ where: { userId: doctorUserId } });
       const patient = await Patient.findOne({
@@ -136,6 +55,7 @@ export async function POST(req: NextRequest) {
           JSON.stringify({
             message: "New appointment has been created",
             appointmentOne,
+            rooms,
           }),
           {
             status: 201,

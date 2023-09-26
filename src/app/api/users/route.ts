@@ -1,11 +1,17 @@
+import User from "@/models/Users";
 import { revalidatePath } from "next/cache";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = request.nextUrl;
-  console.log(searchParams.get(""));
+  try {
+    let users = await User.findAll();
 
-  return new Response(JSON.stringify({ message: "Post successfully" }), {
-    status: 200,
-  });
+    return new NextResponse(JSON.stringify({ users }), {
+      status: 200,
+    });
+  } catch (err) {
+    return new NextResponse(JSON.stringify({ error: String(err) }), {
+      status: 500,
+    });
+  }
 }

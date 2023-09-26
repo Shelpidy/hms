@@ -28,6 +28,8 @@ import { Delete, Edit, Add, Search } from "@mui/icons-material";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
+import CustomButton from "@/components/CustomButton";
+import { useCurrentUser } from "@/hooks/customHooks";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -53,6 +55,7 @@ type AppointmentDetail = {
   doctor: DoctorProfile;
   patient: PatientProfile;
   appointment: Appointment;
+  roomId:string
 };
 
 interface AdminAppointmentsTableProps {
@@ -113,7 +116,8 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
     useState<AppointmentDetail | null>(null);
   const [selectedUpdateAppointment, setSelectedUpdateAppointment] =
     useState<AppointmentDetail | null>(null);
-
+  
+  const currentUser = useCurrentUser()
   const [searchQuery, setSearchQuery] = useState("");
   const [newAppointment, setNewAppointment] = useState<
     Omit<
@@ -244,7 +248,7 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
       // Logic to add a new appointment
       const request = await fetch("/api/appointments", {
         method: "POST",
-        body: JSON.stringify(newAppointment),
+        body: JSON.stringify({...newAppointment,userId:currentUser?.userId}),
         headers: { "Content-Type": "application/json" },
       });
       const data = await request.json();
@@ -482,6 +486,17 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                     </div>
                   </Box>
                 </div>
+                <div>
+                  <Typography>Doctor Email</Typography>
+                  <div className="grid grid-cols-1 md:grid-cols-2">
+                      <TextField label="Subject" variant="outlined" fullWidth />
+                      <TextField label="Title" variant="outlined" fullWidth />
+                  </div>
+                      <Typography variant="h6">Content</Typography>
+                      <TextField variant="outlined" fullWidth multiline rows={4}/>
+                      <CustomButton size="small">Send</CustomButton>
+                </div>
+                <CustomButton size="small">Message</CustomButton>
               </Card>
             </Box>
             <Box sx={{ marginTop: 2, textAlign: "center" }}>
@@ -551,6 +566,17 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                       </Typography>
                     </div>
                   </Box>
+                  <div>
+                  <Typography>Patient Email</Typography>
+                  <div className="grid grid-cols-1 md:grid-cols-2">
+                      <TextField label="Subject" variant="outlined" fullWidth />
+                      <TextField label="Title" variant="outlined" fullWidth />
+                  </div>
+                      <Typography variant="h6">Content</Typography>
+                      <TextField variant="outlined" fullWidth multiline rows={4}/>
+                      <CustomButton size="small">Send</CustomButton>
+                </div>
+                <CustomButton size="small">Message</CustomButton>
                 </div>
               </Card>
             </Box>

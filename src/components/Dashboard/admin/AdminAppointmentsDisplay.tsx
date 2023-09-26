@@ -7,6 +7,7 @@ import {
   CompletedAppointmentLineChart,
   CompletedAppointmentsBarChart,
 } from "../charts/AppointmentPerMonthCharts";
+import { useCurrentUser } from "@/hooks/customHooks";
 
 type DoctorProfile = {
   doctor: Doctor;
@@ -24,6 +25,7 @@ export type AppointmentDetail = {
   doctor: DoctorProfile;
   patient: PatientProfile;
   appointment: Appointment;
+  roomId:string
 };
 
 interface CompletedAppointmentDataPoint {
@@ -40,6 +42,8 @@ const AdminAppointmentsDisplay: React.FC = () => {
   const [appointments, setAppointments] = useState<AppointmentDetail[] | null>(
     null,
   );
+
+  const currentUser = useCurrentUser()
   const [isLoading, setIsLoading] = useState(true);
 
   const appointmentPerMonthData: CompletedAppointmentDataPoint[] = [
@@ -104,7 +108,7 @@ const AdminAppointmentsDisplay: React.FC = () => {
   const handleRefetch = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/appointments", { cache: "no-cache" });
+      const response = await fetch(`/api/appointments/admins/${currentUser?.userId}`, { cache: "no-cache" });
       const data = await response.json();
       console.log(data);
       setAppointments(data.appointments);
@@ -150,7 +154,7 @@ const AdminAppointmentsDisplay: React.FC = () => {
           <CompletedAppointmentsBarChart {...chartsData} />
         </Card>
         <Card variant="outlined">
-          <CompareAppointmentBarCharts {...chartsData} />
+          <CompareAppointmentBarCharts  totalData={chartsData.totalData} />
         </Card>
         <Card variant="outlined">
           <CompletedAppointmentLineChart {...chartsData} />

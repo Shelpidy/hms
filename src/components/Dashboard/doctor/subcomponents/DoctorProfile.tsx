@@ -26,11 +26,11 @@ type DoctorProfile = {
 };
 
 interface DoctorProfileProps {
-  doctors: DoctorProfile;
+  doctor: DoctorProfile;
   onRefetch: () => void;
 }
 
-const dummyUser = {
+const updateUser = {
   address: "123 Main Street",
   contactNumber: "1234567890",
   dateOfBirth: "31st August, 2023",
@@ -45,7 +45,7 @@ const dummyUser = {
   role: "patient",
 };
 const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
-  doctors,
+  doctor,
   onRefetch,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -95,25 +95,17 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
     console.log(doctorprofile);
     setIsEditing(true);
     // Initialize editedData with the current doctor data
-    setEditedData(dummyUser);
+    setEditedData(updateUser);
     setUpdateUser({
       userId: doctorprofile.user?.userId,
-      firstName: doctorprofile.user?.firstName || dummyUser.firstName,
-      lastName: doctorprofile.user?.lastName || dummyUser.lastName,
-      email: doctorprofile.user?.email || dummyUser.email,
-      address: doctorprofile.user?.address || dummyUser.address,
-      gender: doctorprofile.user?.gender || dummyUser.gender,
-      contactNumber:
-        doctorprofile.user?.contactNumber || dummyUser.contactNumber,
-      dateOfBirth: doctorprofile.user?.dateOfBirth || dummyUser.dateOfBirth,
+      firstName: doctorprofile.user?.firstName,
+      lastName: doctorprofile.user?.lastName,
+      email: doctorprofile.user?.email,
+      address: doctorprofile.user?.address ||"",
+      gender: doctorprofile.user?.gender,
+      contactNumber:doctorprofile.user?.contactNumber,
+      dateOfBirth: doctorprofile.user?.dateOfBirth||"",
       profileImage: doctorprofile.user?.profileImage || "",
-    });
-    setUpdateDoctor({
-      doctorId: doctorprofile.doctor?.doctorId,
-      specialization:
-        doctorprofile.specilization?.specializationName ||
-        dummyUser.specialization,
-      doctorEmail: doctorprofile.user?.email,
     });
   };
 
@@ -124,7 +116,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
     setIsEditing(false);
     onRefetch();
     // try {
-    //   const request = await fetch ("/api/doctors", {
+    //   const request = await fetch ("/api/doctor", {
     //     method: "PUT",
     //     body: JSON.stringify(""),
     //     headers: {"Content-Type": "application/json"}
@@ -175,12 +167,8 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
               {isEditing ? (
                 <label htmlFor="avatar-input">
                   <Avatar
-                    alt={`${dummyUser.firstName} ${dummyUser.lastName}'s profile`}
-                    src={
-                      updateUser.profileImage ||
-                      dummyUser.profileImage ||
-                      "/default-avatar.png"
-                    }
+                    alt={`${updateUser.firstName} ${updateUser.lastName}'s profile`}
+                    src={updateUser.profileImage}
                     sx={{
                       maxWidth: "200px",
                       minWidth: "160px",
@@ -204,8 +192,8 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                 </label>
               ) : (
                 <Avatar
-                  alt={`${dummyUser.firstName} ${dummyUser.lastName}'s profile`}
-                  src={dummyUser.profileImage || "/default-avatar.png"}
+                  alt={`${updateUser.firstName} ${updateUser.lastName}'s profile`}
+                  src={updateUser.profileImage || "/default-avatar.png"}
                   sx={{
                     maxWidth: "200px",
                     minWidth: "160px",
@@ -233,7 +221,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                   }
                 />
               ) : (
-                `Dr. ${dummyUser.firstName}`
+                `Dr. ${updateUser.firstName}`
               )}{" "}
               {isEditing ? (
                 <TextField
@@ -248,28 +236,14 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                   }
                 />
               ) : (
-                dummyUser.lastName
+                updateUser.lastName
               )}
             </Typography>
             <Typography variant="subtitle1">
               {isEditing ? (
-                <Box mt={1}>
-                  <TextField
-                    variant="outlined"
-                    name="specialization"
-                    label="Specialization"
-                    size="small"
-                    value={updateDoctor.specialization}
-                    onChange={(e) =>
-                      setUpdateDoctor({
-                        ...updateDoctor,
-                        specialization: e.target.value,
-                      })
-                    }
-                  />
-                </Box>
+                  null
               ) : (
-                `${dummyUser.specialization}`
+                `${doctor.specilization.specializationName}`
               )}{" "}
             </Typography>
             <Divider sx={{ my: 2 }} />
@@ -292,7 +266,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                 ) : (
                   <ListItemText
                     primary="Contact"
-                    secondary={dummyUser.contactNumber}
+                    secondary={updateUser.contactNumber}
                   />
                 )}{" "}
               </ListItem>
@@ -309,7 +283,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                     }
                   />
                 ) : (
-                  <ListItemText primary="Gender" secondary={dummyUser.gender} />
+                  <ListItemText primary="Gender" secondary={updateUser.gender} />
                 )}{" "}
               </ListItem>
               <ListItem>
@@ -331,7 +305,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                   <ListItemText
                     primary="Date of Birth"
                     secondary={new Date(
-                      dummyUser.dateOfBirth,
+                      updateUser.dateOfBirth,
                     ).toLocaleDateString()}
                   />
                 )}{" "}
@@ -351,7 +325,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                 ) : (
                   <ListItemText
                     primary="Address"
-                    secondary={dummyUser.address}
+                    secondary={updateUser.address}
                   />
                 )}{" "}
               </ListItem>
@@ -368,7 +342,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                     }
                   />
                 ) : (
-                  <ListItemText primary="Email" secondary={dummyUser.email} />
+                  <ListItemText primary="Email" secondary={updateUser.email} />
                 )}{" "}
               </ListItem>
             </List>
@@ -388,7 +362,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                   size="large"
                   variant="contained"
                   color="primary"
-                  onClick={() => handleEdit(doctors)}
+                  onClick={() => handleEdit(doctor)}
                 >
                   <Edit /> <span style={{ marginLeft: 5 }}>Edit</span>
                 </Button>

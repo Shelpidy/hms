@@ -74,9 +74,11 @@ const SignUpPage: React.FC = () => {
     const { confirmPassword, ...userData } = formData;
     console.log({ userData });
     try {
+      let roles = ["admin", "user", "doctor", "patient"];
+      // let index = Math.round((Math.random() * 10))%3
       const response = await fetch("/api/auth/signup/", {
         method: "POST",
-        body: JSON.stringify({ ...userData, role: "admin" }),
+        body: JSON.stringify({ ...userData, role:"user"}),
         headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();

@@ -17,21 +17,24 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     let patientUserId = params.userId;
     const patient = await Patient.findOne({
-        where: {userId:patientUserId},
-      });
+      where: { userId: patientUserId },
+    });
 
-    if(!patient){
-        return new Response(
-            JSON.stringify({message:`Patient with userId ${patientUserId} does not exist`}),
-            { status:404 },
-          );}
+    if (!patient) {
+      return new Response(
+        JSON.stringify({
+          message: `Patient with userId ${patientUserId} does not exist`,
+        }),
+        { status: 404 },
+      );
+    }
 
-    const appointments = await Appointment.findAll({where:{doctorId:patient.getDataValue("patientId")}});
+    const appointments = await Appointment.findAll({
+      where: { doctorId: patient.getDataValue("patientId") },
+    });
 
     const appointmentsWithDetails = await Promise.all(
       appointments.map(async (appointment: any) => {
-      
-
         const doctor = await Doctor.findOne({
           where: { doctorId: appointment.doctorId },
         });
@@ -72,16 +75,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         });
 
         const specialization = await Specialization.findOne({
-            where: { specializationId: doctor?.specializationId },
-          });
-      
+          where: { specializationId: doctor?.specializationId },
+        });
+
         return {
-            doctor: {
-                doctorId: doctor?.doctorId,
-                specialization,
-                user: doctorUser,
-                roomId:room?.getDataValue("roomId"),
-              },
+          doctor: {
+            doctorId: doctor?.doctorId,
+            specialization,
+            user: doctorUser,
+            roomId: room?.getDataValue("roomId"),
+          },
           appointment: {
             appointmentId: appointment.appointmentId,
             appointmentStatus: appointment.appointmentStatus,
@@ -100,6 +103,39 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     console.log(error);
     return new Response(
       JSON.stringify({ message: "Server error", error: error }),
+    );
+  }
+}
+
+export async function PUT(req: NextRequest, { params }: RouteParams) {
+  try {
+    const data: Record<string, any> = await req.json();
+    const userId = params.userId;
+
+    const patient = await Patient.findOne({ where: { userId } });
+
+    if (!patient) {
+      return new Response(
+        JSON.stringify({
+          message: `Patient with userId ${userId} does not exist`,
+        }),
+        { status: 404 },
+      );
+    }
+    let updatedPatient = await patient.update(data);
+
+    return new Response(
+      JSON.stringify({
+        message: "User updated successfully",
+        patient: updatedPatient,
+      }),
+      { status: 202 },
+    );
+  } catch (error: any) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({ message: "Server Error", error: error.message }),
+      { status: 500 },
     );
   }
 }

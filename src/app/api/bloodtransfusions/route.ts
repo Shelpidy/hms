@@ -10,7 +10,7 @@ export async function GET(req: Request) {
     const bloodTransfusionsDetails = await Promise.all(
       bloodTransfusions.map(async (transfusion) => {
         const donor = await Donor.findOne({
-          where: { donorId: transfusion.donorId },
+          where: { donorId: transfusion.getDataValue("donorId") },
           attributes: [
             "firstName",
             "lastName",
@@ -23,22 +23,22 @@ export async function GET(req: Request) {
           ],
         });
 
-        const recipientAll = await Requirer.findOne({
-          where: { requirerId: transfusion.recipientId },
+        const requirer = await Requirer.findOne({
+          where: { requirerId: transfusion.getDataValue("recipientId") },
         });
-        const { userId } = recipientAll?.dataValues;
+        const { userId } = requirer?.dataValues;
         const user = await User.findOne({
           where: { userId: userId },
         });
 
         const bloodGroup = await BloodGroup.findOne({
-          where: { bloodGroupId: transfusion.bloodGroupId },
+          where: { bloodGroupId: transfusion.getDataValue("bloodGroupId") },
         });
 
         return {
           transfusion,
           donor,
-          requirer: { user, recipientAll },
+          requirer: { user, requirer },
           bloodGroup,
         };
       }),
@@ -60,29 +60,25 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
     const donorEmail = data.donorEmail as string;
-    const transfusionDateStr = data.transfusionDate as string;
     const requirerId = data.requirerId as string;
 
+    const bloodGroup = await BloodGroup.findOne({
+      where: { groupName: data.groupName },
+    });
     const donor = await Donor.findOne({ where: { email: donorEmail } });
-    if (!donor) {
-      return new Response(
-        JSON.stringify({ message: "Donor is not found, put a valid email" }),
-        { status: 404 },
-      );
-    }
-
-    const { donorId, bloodGroupId } = donor?.dataValues;
-    const transfusionDate = new Date(transfusionDateStr);
-
-    const bldtransfusion = await BloodTransfusion.create({
-      donorId,
-      transfusionDate,
-      bloodGroupId,
+    const { groupName, donorEmail: de, ...transfusionData } = data;
+    const bloodTransfusion = await BloodTransfusion.create({
+      donorId: donor?.getDataValue("donorId") || null,
       recipientId: requirerId,
+      bloodGroupId: bloodGroup?.getDataValue("bloodGroupId"),
+      ...transfusionData,
     });
 
     return new Response(
-      JSON.stringify({ message: "blood transfusion created", bldtransfusion }),
+      JSON.stringify({
+        message: "blood transfusion created",
+        bloodTransfusion,
+      }),
       { status: 201 },
     );
   } catch (error: any) {
@@ -90,76 +86,6 @@ export async function POST(req: Request) {
     return new Response(
       JSON.stringify({ message: "server error", error: error.message }),
       { status: 400 },
-    );
-  }
-}
-
-export async function PUT(req: Request) {
-  try {
-    const data = await req.json();
-    const requirerId = data.requirerId as string;
-    const transfusionId = data.transfusionId as string;
-    const donorEmail = data.donorEmail as string;
-    const transfusionDateStr = data.transfusionDate as string;
-
-    const donor = await Donor.findOne({ where: { email: donorEmail } });
-    if (!donor) {
-      return new Response(
-        JSON.stringify({ message: "Donor is not found, put a valid email" }),
-        { status: 404 },
-      );
-    }
-
-    const { donorId, bloodGroupId } = donor?.dataValues;
-    const transfusionDate = new Date(transfusionDateStr);
-
-    const bldtransfusion = await BloodTransfusion.update(
-      {
-        donorId,
-        transfusionDate,
-        bloodGroupId,
-        recipientId: requirerId,
-      },
-      { where: { transfusionId } },
-    );
-
-    return new Response(
-      JSON.stringify({ message: "updated successfully", bldtransfusion }),
-      { status: 202 },
-    );
-  } catch (error: any) {
-    console.log(error);
-    return new Response(
-      JSON.stringify({ message: "server error", error: error.message }),
-      { status: 500 },
-    );
-  }
-}
-
-export async function DELETE(req: Request) {
-  try {
-    const url = new URL(req.url);
-    const id = url.searchParams.get("transfusionId");
-
-    if (!id) {
-      return new Response(JSON.stringify({ message: "missing Parameters" }), {
-        status: 404,
-      });
-    }
-
-    const tranfusion = await BloodTransfusion.findOne({
-      where: { transfusionId: id },
-    });
-
-    await tranfusion?.destroy();
-    return new Response(JSON.stringify({ message: "deleted successfully" }), {
-      status: 203,
-    });
-  } catch (error: any) {
-    console.log(error);
-    return new Response(
-      JSON.stringify({ message: "server error", error: error.message }),
-      { status: 500 },
     );
   }
 }

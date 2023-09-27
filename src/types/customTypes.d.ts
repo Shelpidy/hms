@@ -10,7 +10,7 @@ declare interface User {
   address?: string;
   password: string;
   email: string;
-  role: "patient" | "doctor" | "admin"|"user";
+  role: "patient" | "doctor" | "admin" | "user";
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -46,6 +46,7 @@ declare interface Appointment {
 declare interface BloodGroup {
   bloodGroupId: string;
   groupName: string;
+  volume: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -56,6 +57,7 @@ declare interface BloodTransfusion {
   recipientId: string;
   transfusionDate: Date;
   bloodGroupId: string;
+  volume: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -120,3 +122,9 @@ declare interface Action {
   type: string;
   payload: any;
 }
+ declare type CurrentUser = {
+   userId: string | number;
+   displayName: string;
+   profilePicture: string;
+   role: "doctor" | "patient" | "admin" | "other";
+ };

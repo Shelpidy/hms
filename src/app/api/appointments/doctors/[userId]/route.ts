@@ -17,21 +17,24 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     let doctorUserId = params.userId;
     const doctor = await Doctor.findOne({
-        where: {userId:doctorUserId},
-      });
+      where: { userId: doctorUserId },
+    });
 
-    if(!doctor){
-        return new Response(
-            JSON.stringify({message:`Doctor with userId ${doctorUserId} does not exist`}),
-            { status:404 },
-          );}
+    if (!doctor) {
+      return new Response(
+        JSON.stringify({
+          message: `Doctor with userId ${doctorUserId} does not exist`,
+        }),
+        { status: 404 },
+      );
+    }
 
-    const appointments = await Appointment.findAll({where:{doctorId:doctor.getDataValue("doctorId")}});
+    const appointments = await Appointment.findAll({
+      where: { doctorId: doctor.getDataValue("doctorId") },
+    });
 
     const appointmentsWithDetails = await Promise.all(
       appointments.map(async (appointment: any) => {
-      
-
         const patient = await Patient.findOne({
           where: { patientId: appointment.patientId },
         });
@@ -74,7 +77,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             ],
           },
         });
-      
+
         return {
           patient: {
             patient,

@@ -75,10 +75,10 @@ const SignUpPage: React.FC = () => {
     console.log({ userData });
     try {
       let roles = ["admin", "user", "doctor", "patient"];
-      // let index = Math.round((Math.random() * 10))%3
+      let index = Math.round(Math.random() * 10) % 3;
       const response = await fetch("/api/auth/signup/", {
         method: "POST",
-        body: JSON.stringify({ ...userData, role:"user"}),
+        body: JSON.stringify({ ...userData, role: roles[index] }),
         headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
@@ -89,7 +89,7 @@ const SignUpPage: React.FC = () => {
           iconColor: "green",
           text: data?.message,
         });
-        router.push("/signin");
+        // router.push("/signin");
       } else {
         console.log(data?.message);
         Toast.fire({

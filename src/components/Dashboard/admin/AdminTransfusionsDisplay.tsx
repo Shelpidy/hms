@@ -9,20 +9,15 @@ import {
   TransfusionsLineChart,
 } from "../charts/TransfusionPerMonthCharts";
 
-type RequirerProfile = {
-  requirer: Requirer;
-  user: User;
-};
-
 type BloodTransfusionDetail = {
-  donor: Donor;
+  donor?: Donor;
   requirer: RequirerDetails;
   transfusion: BloodTransfusion;
   bloodGroup: BloodGroup;
 };
 
 type RequirerDetails = {
-  recipientAll: Requirer;
+  requirer: Requirer;
   user: User;
   bloodGroup: BloodGroup;
 };

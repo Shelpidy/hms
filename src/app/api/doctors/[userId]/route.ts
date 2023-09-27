@@ -62,3 +62,39 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     );
   }
 }
+
+type Params = {
+  params: { userId: string };
+};
+
+export async function PUT(req: NextRequest, { params }: Params) {
+  try {
+    const data: Record<string, any> = await req.json();
+    const userId = params.userId;
+    const doctor = await Doctor.findOne({ where: { userId } });
+
+    if (!doctor) {
+      return new Response(
+        JSON.stringify({
+          message: `Doctor with userId ${userId} does not exist`,
+        }),
+        { status: 404 },
+      );
+    }
+    let updatedDoctor = await doctor.update(data);
+
+    return new Response(
+      JSON.stringify({
+        message: "Doctor updated successfully",
+        doctor: updatedDoctor,
+      }),
+      { status: 202 },
+    );
+  } catch (error: any) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({ message: "Server Error", error: error.message }),
+      { status: 500 },
+    );
+  }
+}

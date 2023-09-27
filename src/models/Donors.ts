@@ -1,20 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../database/connection";
 
-class Donor extends Model {
-  public donorId!: string;
-  public firstName!: string;
-  public middleName?: string;
-  public lastName!: string;
-  public gender!: "male" | "female" | "other";
-  public dateOfBirth?: Date;
-  public address!: string;
-  public contactNumber!: string;
-  public email!: string;
-  public bloodGroupId?: string;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-}
+class Donor extends Model {}
 
 Donor.init(
   {
@@ -53,6 +40,9 @@ Donor.init(
     email: {
       type: DataTypes.STRING(50),
       allowNull: false,
+    },
+    volume: {
+      type: DataTypes.INTEGER,
     },
     bloodGroupId: {
       type: DataTypes.UUID,

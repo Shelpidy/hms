@@ -10,6 +10,7 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       donorId: {
+        allowNull: true,
         type: Sequelize.UUID,
         references: {
           model: "Donors",
@@ -17,6 +18,9 @@ module.exports = {
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
+      },
+      volumne: {
+        type: Sequelize.INTEGER,
       },
       recipientId: {
         type: Sequelize.UUID,

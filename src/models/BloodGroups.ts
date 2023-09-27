@@ -14,15 +14,7 @@ interface BloodGroupCreationAttributes
     "bloodGroupId" | "createdAt" | "updatedAt"
   > {}
 
-class BloodGroup
-  extends Model<BloodGroupAttributes, BloodGroupCreationAttributes>
-  implements BloodGroupAttributes
-{
-  public bloodGroupId!: string;
-  public groupName!: string;
-  public createdAt?: Date;
-  public updatedAt?: Date;
-}
+class BloodGroup extends Model {}
 
 BloodGroup.init(
   {
@@ -35,6 +27,9 @@ BloodGroup.init(
     groupName: {
       allowNull: false,
       type: DataTypes.STRING(10),
+    },
+    volume: {
+      type: DataTypes.INTEGER,
     },
     createdAt: {
       type: DataTypes.DATE,

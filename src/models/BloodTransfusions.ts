@@ -1,15 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../database/connection";
 
-class BloodTransfusion extends Model {
-  public transfusionId!: number;
-  public donorId?: number;
-  public recipientId?: number;
-  public transfusionDate!: Date;
-  public bloodGroupId?: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-}
+class BloodTransfusion extends Model {}
 
 BloodTransfusion.init(
   {
@@ -20,6 +12,7 @@ BloodTransfusion.init(
       defaultValue: DataTypes.UUIDV4,
     },
     donorId: {
+      allowNull: true,
       type: DataTypes.UUID,
       references: {
         model: "Donors",
@@ -27,6 +20,9 @@ BloodTransfusion.init(
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
+    },
+    volumne: {
+      type: DataTypes.INTEGER,
     },
     recipientId: {
       type: DataTypes.UUID,

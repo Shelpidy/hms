@@ -69,7 +69,9 @@ export const CompletedAppointmentsBarChart: React.FC<Props> = ({ data }) => {
   );
 };
 
-export const CompareAppointmentBarCharts: React.FC<Pick<Props,"totalData">> = ({ totalData }) => {
+export const CompareAppointmentBarCharts: React.FC<
+  Pick<Props, "totalData">
+> = ({ totalData }) => {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart

@@ -25,7 +25,7 @@ export type AppointmentDetail = {
   doctor: DoctorProfile;
   patient: PatientProfile;
   appointment: Appointment;
-  roomId:string
+  roomId: string;
 };
 
 interface CompletedAppointmentDataPoint {
@@ -43,8 +43,7 @@ const AdminAppointmentsDisplay: React.FC = () => {
     null,
   );
 
-  const currentUser = useCurrentUser()
-  const [isLoading, setIsLoading] = useState(true);
+  const currentUser = useCurrentUser();
 
   const appointmentPerMonthData: CompletedAppointmentDataPoint[] = [
     {
@@ -106,17 +105,21 @@ const AdminAppointmentsDisplay: React.FC = () => {
     totalData: totalAppointmentData,
   };
   const handleRefetch = async () => {
-    setIsLoading(true);
     try {
-      const response = await fetch(`/api/appointments/admins/${currentUser?.userId}`, { cache: "no-cache" });
+      const response = await fetch(
+        `/api/appointments/admins/${currentUser?.userId}`,
+        { cache: "no-cache" },
+      );
       const data = await response.json();
       console.log(data);
-      setAppointments(data.appointments);
+      if(response.status === 200){
+        setAppointments(data.appointments);}
+      else{
+        console.log(data.message)
+      }
     } catch (error) {
       console.error("Error fetching appointments:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   useEffect(() => {
@@ -154,7 +157,7 @@ const AdminAppointmentsDisplay: React.FC = () => {
           <CompletedAppointmentsBarChart {...chartsData} />
         </Card>
         <Card variant="outlined">
-          <CompareAppointmentBarCharts  totalData={chartsData.totalData} />
+          <CompareAppointmentBarCharts totalData={chartsData.totalData} />
         </Card>
         <Card variant="outlined">
           <CompletedAppointmentLineChart {...chartsData} />

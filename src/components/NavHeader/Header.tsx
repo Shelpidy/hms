@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React,{useEffect} from "react";
 import {
   AppBar,
   Toolbar,
@@ -38,13 +38,16 @@ function Header({ setThemeMode }: HeaderProps) {
   const router = useRouter();
   const phoneView = useMediaQuery(theme.breakpoints.down("md"));
   const tabView = useMediaQuery(theme.breakpoints.down("lg"));
-  const currentUser = useCurrentUser();
-  const [cookies,setCookie,removeCookie] = useCookies(["token"])
+  const _currentUser = useCurrentUser();
+  const [currentUser,setCurrentUser] = React.useState<CurrentUser | null>(_currentUser);
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
-  const handleSignOut =()=>{
-       removeCookie("token")
-       router.refresh()
-  }
+  const handleSignOut = () => {
+    removeCookie("token");
+    console.log("Logged Out")
+    setCurrentUser(null)
+    router.push("/")
+  };
 
   return (
     <AppBar
@@ -140,9 +143,7 @@ function Header({ setThemeMode }: HeaderProps) {
                     fontWeight: "bold",
                   }}
                 >
-                  <CustomButton onClick={handleSignOut}>
-                    SignOut
-                  </CustomButton>
+                  <CustomButton onClick={handleSignOut}>SignOut</CustomButton>
                 </li>
               )}
               {!currentUser && (

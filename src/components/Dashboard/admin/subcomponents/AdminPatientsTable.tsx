@@ -21,12 +21,14 @@ import {
   MenuItem,
   SelectChangeEvent,
   Modal,
+  Avatar,
   Typography,
 } from "@mui/material";
 import { Delete, Edit, Add, Search } from "@mui/icons-material";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
+import moment from "moment";
 
 type PatientProfile = {
   patient: Patient;
@@ -305,10 +307,11 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Patient</TableCell>
-              <TableCell>BloodGroup</TableCell>
-              <TableCell>Date Added</TableCell>
-              <TableCell>Actions</TableCell>
+            <TableCell sx={{fontWeight:"bold"}}>Patient</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}>Name</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}>BloodGroup</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}>Date Added</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}>Actions</TableCell>
             </TableRow>
           </TableHead>
 
@@ -321,7 +324,10 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
               )
               .map((patient, index) => (
                 <TableRow key={index}>
-                  <TableCell>{patient?.user?.email}</TableCell>
+                 <TableCell>
+                    <Avatar sx={{width:"25px",height:"25px"}} alt={patient.user.firstName} src={patient.user.profileImage}/>
+                  </TableCell>
+                  <TableCell>{patient.user.firstName + " "+ patient.user.middleName +" "+patient.user.lastName}</TableCell>
                   <TableCell>{patient?.bloodGroup?.groupName}</TableCell>
                   <TableCell>{patient?.patient.createdAt.toString()}</TableCell>
                   <TableCell>
@@ -341,11 +347,10 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
               ))}
           </TableBody>
         </Table>
-        <Modal
+        <Dialog
           open={expand}
           onClose={() => setExpand(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+          sx={{minWidth:"400px"}}
         >
           <Box sx={style}>
             <Box
@@ -371,7 +376,9 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
                   marginTop: 2,
                 }}
               >
-                <img
+                <Avatar alt={selectedPatient?.user.firstName} sx={{width:"200px",height:"200px"}} src={selectedPatient?.user.profileImage} />
+
+                {/* <img
                   alt="Profile"
                   style={{
                     width: "28%", // Adjust the width as needed
@@ -381,11 +388,12 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
                     objectFit: "cover",
                   }}
                   src={dummyUser.profileImage} // Use user's profile image
-                />
+                /> */}
                 <div>
                   <Typography variant="h6">
                     <strong>Patient Name:</strong>{" "}
                     {selectedPatient?.user.firstName}{" "}
+                    {selectedPatient?.user.middleName}{" "}
                     {selectedPatient?.user.lastName}
                   </Typography>
                   <Typography variant="h6">
@@ -417,12 +425,12 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
               </Box>
             </Box>
           </Box>
-        </Modal>
+        </Dialog>
         <Box>
           <Dialog
             open={open}
             onClose={() => setOpen(false)}
-            sx={{ maxWidth: "lg" }}
+            sx={{ maxWidth: "lg",minWidth:"400px" }}
           >
             <DialogTitle>Add Patient</DialogTitle>
             <DialogContent>

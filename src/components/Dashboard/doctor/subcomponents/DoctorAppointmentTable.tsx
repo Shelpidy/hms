@@ -22,6 +22,8 @@ import {
   DialogActions,
   SelectChangeEvent,
   InputAdornment,
+  Avatar,
+  Typography,
   TextField, // Add TextField component for search
 } from "@mui/material";
 import { CancelOutlined, Delete, Edit, Search } from "@mui/icons-material";
@@ -87,10 +89,13 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({appointm
   };
 
   // Function to mark an appointment as completed
-  const handleMarkCompleted = (appointmentIndex: number) => {
-    const updatedCompletedAppointments = [...completedAppointments];
-    updatedCompletedAppointments.push(appointmentIndex);
-    setCompletedAppointments(updatedCompletedAppointments);
+  const handleMarkCompleted = async(appointmentId:string) => {
+      try{
+          let response = await fetch("/api/appointments/",{method:"PUT",headers:{
+            "Content-Type":"application/json"}})
+      }catch(err){
+            console.log(err)
+      }
   };
 
   // Function to handle opening the delete confirmation dialog
@@ -113,7 +118,7 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({appointm
       console.log(`Deleted appointment at index: ${appointmentToDelete}`);
       setDeleteDialogOpen(false);
     }
-  };
+  }; 
 
   // Function to handle searching appointments
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,10 +160,10 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({appointm
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Patient</TableCell>
-              <TableCell>Appointment Date</TableCell>
-              <TableCell>Appointment Status</TableCell>
-              <TableCell>Actions</TableCell>
+               <TableCell sx={{fontWeight:"bold"}}>Patient</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}>Appointment Date</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}>Appointment Status</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -176,14 +181,15 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({appointm
                       "&:hover": { backgroundColor: "#f4f4f4" },
                     }}
                   >
-                    <TableCell>{appointment.patient.user.firstName}</TableCell>
+                    <TableCell><Avatar sx={{width:"25px",height:"25px"}} alt={appointment.patient.user.firstName} src={appointment.patient.user.profileImage}></Avatar><Typography>{appointment.patient.user.firstName}</Typography></TableCell>
+        
                     <TableCell>{moment(appointment.appointment.appointmentDate).fromNow()}</TableCell>
                     <TableCell>
                       {
                         isCancelled ? <CancelOutlined/> :
                         <Checkbox
                           checked={isCompleted}
-                          onChange={()=> handleMarkCompleted(index)}
+                          onChange={()=> handleMarkCompleted(appointment.appointment.appointmentId)}
                           color="primary"
                         />
                       }

@@ -21,6 +21,7 @@ import {
   MenuItem,
   SelectChangeEvent,
   Modal,
+  Avatar,
   Card,
   Typography,
 } from "@mui/material";
@@ -55,7 +56,7 @@ type AppointmentDetail = {
   doctor: DoctorProfile;
   patient: PatientProfile;
   appointment: Appointment;
-  roomId:string
+  roomId: string;
 };
 
 interface AdminAppointmentsTableProps {
@@ -116,8 +117,8 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
     useState<AppointmentDetail | null>(null);
   const [selectedUpdateAppointment, setSelectedUpdateAppointment] =
     useState<AppointmentDetail | null>(null);
-  
-  const currentUser = useCurrentUser()
+
+  const currentUser = useCurrentUser();
   const [searchQuery, setSearchQuery] = useState("");
   const [newAppointment, setNewAppointment] = useState<
     Omit<
@@ -214,10 +215,11 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
   async function handleUpdate() {
     // Logic to update the appointment
     console.log(updateAppointment);
+    const {appointmentId,...newUpdateAppointment} = updateAppointment
     try {
-      const request = await fetch("/api/appointments", {
+      const request = await fetch(`/api/appointments/${appointmentId}`, {
         method: "PUT",
-        body: JSON.stringify(updateAppointment),
+        body: JSON.stringify(newUpdateAppointment),
         headers: { "Content-Type": "application/json" },
       });
       const data = await request.json();
@@ -248,7 +250,10 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
       // Logic to add a new appointment
       const request = await fetch("/api/appointments", {
         method: "POST",
-        body: JSON.stringify({...newAppointment,userId:currentUser?.userId}),
+        body: JSON.stringify({
+          ...newAppointment,
+          userId: currentUser?.userId,
+        }),
         headers: { "Content-Type": "application/json" },
       });
       const data = await request.json();
@@ -356,7 +361,9 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
           <TableHead>
             <TableRow>
               <TableCell>Doctor</TableCell>
+              <TableCell>Doctor Name</TableCell>
               <TableCell>Patient</TableCell>
+              <TableCell>Patient Name</TableCell>
               <TableCell>Appointment Date</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
@@ -373,8 +380,14 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
               )
               .map((appointment, index) => (
                 <TableRow key={index}>
-                  <TableCell>{appointment.doctor.user.email}</TableCell>
-                  <TableCell>{appointment.patient.user.email}</TableCell>
+                   <TableCell>
+                    <Avatar sx={{width:"25px",height:"25px"}} alt={appointment.doctor.user.firstName} src={appointment.doctor.user.profileImage}/>
+                  </TableCell>
+                  <TableCell>{appointment.doctor.user.firstName + " "+ appointment.doctor.user.middleName +" "+appointment.doctor.user.lastName}</TableCell>
+                  <TableCell>
+                    <Avatar sx={{width:"25px",height:"25px"}} alt={appointment.patient.user.firstName} src={appointment.patient.user.profileImage}/>
+                  </TableCell>
+                    <TableCell>{appointment.patient.user.firstName + " "+ appointment.patient.user.middleName +" "+appointment.patient.user.lastName}</TableCell>
                   <TableCell>
                     {appointment.appointment.appointmentDate.toString()}
                   </TableCell>
@@ -400,11 +413,10 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
         {/* <Button variant="contained" startIcon={<Add />} onClick={handleOpen}>
         Add New Appointment
       </Button> */}
-        <Modal
+        <Dialog
           open={expand}
           onClose={() => setExpand(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+          sx={{minWidth:"400px"}}
         >
           <Box sx={style}>
             <Box
@@ -439,7 +451,9 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                       marginTop: 2,
                     }}
                   >
-                    <img
+                    <Avatar sx={{width:"200px",height:"200px"}} alt={selectedAppointment?.doctor.user.firstName} src={selectedAppointment?.doctor.user.profileImage}/>
+
+                    {/* <img
                       alt="Profile"
                       style={{
                         width: "28%", // Adjust the width as needed
@@ -449,11 +463,12 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                         objectFit: "cover",
                       }}
                       src={dummyUser.profileImage} // Use user's profile image
-                    />
+                    /> */}
                     <div>
                       <Typography variant="h6">
                         <strong>Doctor Name:</strong>{" "}
                         {selectedAppointment?.doctor.user.firstName}{" "}
+                        {selectedAppointment?.doctor.user.middleName}{" "}
                         {selectedAppointment?.doctor.user.lastName}
                       </Typography>
                       <Typography variant="h6">
@@ -489,12 +504,12 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                 <div>
                   <Typography>Doctor Email</Typography>
                   <div className="grid grid-cols-1 md:grid-cols-2">
-                      <TextField label="Subject" variant="outlined" fullWidth />
-                      <TextField label="Title" variant="outlined" fullWidth />
+                    <TextField label="Subject" variant="outlined" fullWidth />
+                    <TextField label="Title" variant="outlined" fullWidth />
                   </div>
-                      <Typography variant="h6">Content</Typography>
-                      <TextField variant="outlined" fullWidth multiline rows={4}/>
-                      <CustomButton size="small">Send</CustomButton>
+                  <Typography variant="h6">Content</Typography>
+                  <TextField variant="outlined" fullWidth multiline rows={4} />
+                  <CustomButton size="small">Send</CustomButton>
                 </div>
                 <CustomButton size="small">Message</CustomButton>
               </Card>
@@ -518,8 +533,10 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                       alignItems: "center",
                       marginTop: 2,
                     }}
-                  >
-                    <img
+                  >  
+                    <Avatar sx={{width:"200px",height:"200px"}} alt={selectedAppointment?.patient.user.firstName} src={selectedAppointment?.patient.user.profileImage}/>
+
+                    {/* <img
                       alt="Profile"
                       style={{
                         width: "28%", // Adjust the width as needed
@@ -529,11 +546,12 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                         objectFit: "cover",
                       }}
                       src={dummyUser.profileImage} // Use user's profile image
-                    />
+                    /> */}
                     <div>
                       <Typography variant="h6">
                         <strong>Patient Name:</strong>{" "}
                         {selectedAppointment?.patient.user.firstName}{" "}
+                        {selectedAppointment?.patient.user.middleName}{" "}
                         {selectedAppointment?.patient.user.lastName}
                       </Typography>
                       <Typography variant="body1">
@@ -567,16 +585,21 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                     </div>
                   </Box>
                   <div>
-                  <Typography>Patient Email</Typography>
-                  <div className="grid grid-cols-1 md:grid-cols-2">
+                    <Typography>Patient Email</Typography>
+                    <div className="grid grid-cols-1 md:grid-cols-2">
                       <TextField label="Subject" variant="outlined" fullWidth />
                       <TextField label="Title" variant="outlined" fullWidth />
+                    </div>
+                    <Typography variant="h6">Content</Typography>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      multiline
+                      rows={4}
+                    />
+                    <CustomButton size="small">Send</CustomButton>
                   </div>
-                      <Typography variant="h6">Content</Typography>
-                      <TextField variant="outlined" fullWidth multiline rows={4}/>
-                      <CustomButton size="small">Send</CustomButton>
-                </div>
-                <CustomButton size="small">Message</CustomButton>
+                  <CustomButton size="small">Message</CustomButton>
                 </div>
               </Card>
             </Box>
@@ -613,12 +636,12 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
               </Card>
             </Box>
           </Box>
-        </Modal>
+        </Dialog>
         <Box>
           <Dialog
             open={open}
             onClose={() => setOpen(false)}
-            sx={{ maxWidth: "lg" }}
+            sx={{ maxWidth: "lg",minWidth:"400px" }}
           >
             <DialogTitle>Add Appointment</DialogTitle>
             <DialogContent>

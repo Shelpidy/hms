@@ -39,6 +39,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(50),
       },
+      volume: {
+        type: Sequelize.INTEGER,
+      },
       bloodGroupId: {
         type: Sequelize.UUID,
         references: {

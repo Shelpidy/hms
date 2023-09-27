@@ -101,10 +101,10 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
       firstName: doctorprofile.user?.firstName,
       lastName: doctorprofile.user?.lastName,
       email: doctorprofile.user?.email,
-      address: doctorprofile.user?.address ||"",
+      address: doctorprofile.user?.address || "",
       gender: doctorprofile.user?.gender,
-      contactNumber:doctorprofile.user?.contactNumber,
-      dateOfBirth: doctorprofile.user?.dateOfBirth||"",
+      contactNumber: doctorprofile.user?.contactNumber,
+      dateOfBirth: doctorprofile.user?.dateOfBirth || "",
       profileImage: doctorprofile.user?.profileImage || "",
     });
   };
@@ -240,11 +240,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
               )}
             </Typography>
             <Typography variant="subtitle1">
-              {isEditing ? (
-                  null
-              ) : (
-                `${doctor.specilization.specializationName}`
-              )}{" "}
+              {isEditing ? null : `${doctor.specilization.specializationName}`}{" "}
             </Typography>
             <Divider sx={{ my: 2 }} />
             <List>
@@ -283,7 +279,10 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                     }
                   />
                 ) : (
-                  <ListItemText primary="Gender" secondary={updateUser.gender} />
+                  <ListItemText
+                    primary="Gender"
+                    secondary={updateUser.gender}
+                  />
                 )}{" "}
               </ListItem>
               <ListItem>

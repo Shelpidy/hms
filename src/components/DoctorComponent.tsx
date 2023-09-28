@@ -4,7 +4,14 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { IconButton, useMediaQuery, useTheme, Link, Box } from "@mui/material";
+import {
+  IconButton,
+  useMediaQuery,
+  useTheme,
+  Link,
+  Box,
+  Divider,
+} from "@mui/material";
 import {
   FacebookOutlined,
   Twitter,
@@ -173,11 +180,12 @@ function DoctorsComponent() {
         alignItems: "center",
       }}
     >
-      <Box>
+      <Box sx={{ marginTop: 4, marginBottom: 1 }}>
         <Typography variant="h4" color="primary">
           Meet Our Doctors
         </Typography>
       </Box>
+      <Divider sx={{ width: "80%" }} />
       <div className="py-5 px-2 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {Doctors.map((item: DoctorProps, index: number) => {
           return <DoctorComponent key={item.id} {...item} />;

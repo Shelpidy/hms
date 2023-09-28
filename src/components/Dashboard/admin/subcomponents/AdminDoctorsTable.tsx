@@ -19,13 +19,13 @@ import {
   InputLabel,
   Modal,
   Typography,
-  Avatar
+  Avatar,
 } from "@mui/material";
 import { Delete, Edit, Add, Search } from "@mui/icons-material";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
-import moment from "moment"
+import moment from "moment";
 
 type DoctorProfile = {
   doctor: Doctor;
@@ -284,11 +284,11 @@ const AdminDoctorsTable: React.FC<AdminDoctorTableProps> = ({
         <Table>
           <TableHead>
             <TableRow>
-            <TableCell sx={{fontWeight:"bold"}}>Doctor</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Name</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Specialization</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Date Added</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Doctor</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Specialization</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Date Added</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
 
@@ -303,15 +303,26 @@ const AdminDoctorsTable: React.FC<AdminDoctorTableProps> = ({
               )
               .map((doctor, index) => (
                 <TableRow key={index}>
-              
                   <TableCell>
-                    <Avatar sx={{width:"25px",height:"25px"}} alt={doctor.user.firstName} src={doctor.user.profileImage}/>
+                    <Avatar
+                      sx={{ width: "25px", height: "25px" }}
+                      alt={doctor.user.firstName}
+                      src={doctor.user.profileImage}
+                    />
                   </TableCell>
-                  <TableCell>{doctor.user.firstName + " "+ doctor.user.middleName +" "+doctor.user.lastName}</TableCell>
+                  <TableCell>
+                    {doctor.user.firstName +
+                      " " +
+                      doctor.user.middleName +
+                      " " +
+                      doctor.user.lastName}
+                  </TableCell>
                   <TableCell>
                     {doctor?.specialization?.specializationName}
                   </TableCell>
-                  <TableCell>{moment(doctor?.doctor?.createdAt).fromNow()}</TableCell>
+                  <TableCell>
+                    {moment(doctor?.doctor?.createdAt).fromNow()}
+                  </TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleExpand(doctor)}>
                       <ExpandCircleDownIcon />
@@ -359,7 +370,11 @@ const AdminDoctorsTable: React.FC<AdminDoctorTableProps> = ({
                   marginTop: 2,
                 }}
               >
-                <Avatar alt={selectedDoctor?.user.firstName} sx={{width:"200px",height:"200px"}} src={selectedDoctor?.user.profileImage} />
+                <Avatar
+                  alt={selectedDoctor?.user.firstName}
+                  sx={{ width: "200px", height: "200px" }}
+                  src={selectedDoctor?.user.profileImage}
+                />
                 {/* <img
                   alt="Profile"
                   style={{
@@ -408,7 +423,7 @@ const AdminDoctorsTable: React.FC<AdminDoctorTableProps> = ({
           <Dialog
             open={open}
             onClose={() => setOpen(false)}
-            sx={{ maxWidth: "lg",minWidth:"400px"}}
+            sx={{ maxWidth: "lg", minWidth: "400px" }}
           >
             <DialogTitle>Add Doctor</DialogTitle>
             <DialogContent>

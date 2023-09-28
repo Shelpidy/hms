@@ -4,7 +4,14 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { IconButton, useMediaQuery, useTheme, Link, Box } from "@mui/material";
+import {
+  IconButton,
+  useMediaQuery,
+  useTheme,
+  Link,
+  Box,
+  Divider,
+} from "@mui/material";
 import {
   FacebookOutlined,
   Twitter,
@@ -151,11 +158,12 @@ const DonorsComponent = () => {
         alignItems: "center",
       }}
     >
-      <Box>
+      <Box sx={{ marginTop: 4, marginBottom: 1 }}>
         <Typography variant="h4" color="primary">
-          Donors
+          Blood Donors
         </Typography>
       </Box>
+      <Divider sx={{ width: "80%" }} />
       <div className="py-5 px-2 grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {Donors.map((item: DonorProps, index: number) => {
           return <DonorComponent key={item.id} {...item} />;

@@ -307,11 +307,11 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
         <Table>
           <TableHead>
             <TableRow>
-            <TableCell sx={{fontWeight:"bold"}}>Patient</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Name</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>BloodGroup</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Date Added</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Patient</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>BloodGroup</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Date Added</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
 
@@ -324,10 +324,20 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
               )
               .map((patient, index) => (
                 <TableRow key={index}>
-                 <TableCell>
-                    <Avatar sx={{width:"25px",height:"25px"}} alt={patient.user.firstName} src={patient.user.profileImage}/>
+                  <TableCell>
+                    <Avatar
+                      sx={{ width: "25px", height: "25px" }}
+                      alt={patient.user.firstName}
+                      src={patient.user.profileImage}
+                    />
                   </TableCell>
-                  <TableCell>{patient.user.firstName + " "+ patient.user.middleName +" "+patient.user.lastName}</TableCell>
+                  <TableCell>
+                    {patient.user.firstName +
+                      " " +
+                      patient.user.middleName +
+                      " " +
+                      patient.user.lastName}
+                  </TableCell>
                   <TableCell>{patient?.bloodGroup?.groupName}</TableCell>
                   <TableCell>{patient?.patient.createdAt.toString()}</TableCell>
                   <TableCell>
@@ -350,7 +360,7 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
         <Dialog
           open={expand}
           onClose={() => setExpand(false)}
-          sx={{minWidth:"400px"}}
+          sx={{ minWidth: "400px" }}
         >
           <Box sx={style}>
             <Box
@@ -376,7 +386,11 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
                   marginTop: 2,
                 }}
               >
-                <Avatar alt={selectedPatient?.user.firstName} sx={{width:"200px",height:"200px"}} src={selectedPatient?.user.profileImage} />
+                <Avatar
+                  alt={selectedPatient?.user.firstName}
+                  sx={{ width: "200px", height: "200px" }}
+                  src={selectedPatient?.user.profileImage}
+                />
 
                 {/* <img
                   alt="Profile"
@@ -430,7 +444,7 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
           <Dialog
             open={open}
             onClose={() => setOpen(false)}
-            sx={{ maxWidth: "lg",minWidth:"400px" }}
+            sx={{ maxWidth: "lg", minWidth: "400px" }}
           >
             <DialogTitle>Add Patient</DialogTitle>
             <DialogContent>

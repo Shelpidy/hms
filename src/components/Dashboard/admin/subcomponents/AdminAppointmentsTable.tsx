@@ -215,7 +215,7 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
   async function handleUpdate() {
     // Logic to update the appointment
     console.log(updateAppointment);
-    const {appointmentId,...newUpdateAppointment} = updateAppointment
+    const { appointmentId, ...newUpdateAppointment } = updateAppointment;
     try {
       const request = await fetch(`/api/appointments/${appointmentId}`, {
         method: "PUT",
@@ -380,14 +380,34 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
               )
               .map((appointment, index) => (
                 <TableRow key={index}>
-                   <TableCell>
-                    <Avatar sx={{width:"25px",height:"25px"}} alt={appointment.doctor.user.firstName} src={appointment.doctor.user.profileImage}/>
-                  </TableCell>
-                  <TableCell>{appointment.doctor.user.firstName + " "+ appointment.doctor.user.middleName +" "+appointment.doctor.user.lastName}</TableCell>
                   <TableCell>
-                    <Avatar sx={{width:"25px",height:"25px"}} alt={appointment.patient.user.firstName} src={appointment.patient.user.profileImage}/>
+                    <Avatar
+                      sx={{ width: "25px", height: "25px" }}
+                      alt={appointment.doctor.user.firstName}
+                      src={appointment.doctor.user.profileImage}
+                    />
                   </TableCell>
-                    <TableCell>{appointment.patient.user.firstName + " "+ appointment.patient.user.middleName +" "+appointment.patient.user.lastName}</TableCell>
+                  <TableCell>
+                    {appointment.doctor.user.firstName +
+                      " " +
+                      appointment.doctor.user.middleName +
+                      " " +
+                      appointment.doctor.user.lastName}
+                  </TableCell>
+                  <TableCell>
+                    <Avatar
+                      sx={{ width: "25px", height: "25px" }}
+                      alt={appointment.patient.user.firstName}
+                      src={appointment.patient.user.profileImage}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {appointment.patient.user.firstName +
+                      " " +
+                      appointment.patient.user.middleName +
+                      " " +
+                      appointment.patient.user.lastName}
+                  </TableCell>
                   <TableCell>
                     {appointment.appointment.appointmentDate.toString()}
                   </TableCell>
@@ -416,7 +436,7 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
         <Dialog
           open={expand}
           onClose={() => setExpand(false)}
-          sx={{minWidth:"400px"}}
+          sx={{ minWidth: "400px" }}
         >
           <Box sx={style}>
             <Box
@@ -451,7 +471,11 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                       marginTop: 2,
                     }}
                   >
-                    <Avatar sx={{width:"200px",height:"200px"}} alt={selectedAppointment?.doctor.user.firstName} src={selectedAppointment?.doctor.user.profileImage}/>
+                    <Avatar
+                      sx={{ width: "200px", height: "200px" }}
+                      alt={selectedAppointment?.doctor.user.firstName}
+                      src={selectedAppointment?.doctor.user.profileImage}
+                    />
 
                     {/* <img
                       alt="Profile"
@@ -533,8 +557,12 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
                       alignItems: "center",
                       marginTop: 2,
                     }}
-                  >  
-                    <Avatar sx={{width:"200px",height:"200px"}} alt={selectedAppointment?.patient.user.firstName} src={selectedAppointment?.patient.user.profileImage}/>
+                  >
+                    <Avatar
+                      sx={{ width: "200px", height: "200px" }}
+                      alt={selectedAppointment?.patient.user.firstName}
+                      src={selectedAppointment?.patient.user.profileImage}
+                    />
 
                     {/* <img
                       alt="Profile"
@@ -641,7 +669,7 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
           <Dialog
             open={open}
             onClose={() => setOpen(false)}
-            sx={{ maxWidth: "lg",minWidth:"400px" }}
+            sx={{ maxWidth: "lg", minWidth: "400px" }}
           >
             <DialogTitle>Add Appointment</DialogTitle>
             <DialogContent>

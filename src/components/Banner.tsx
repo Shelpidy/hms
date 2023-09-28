@@ -72,7 +72,7 @@ function Banner() {
           className="text-2xl font-bold font-poppinsMedium md:text-5xl"
           style={{ color: mytheme.palette.primary.light }}
         >
-          AL IMRAN CLINIC AND NURSING TRAINING INSTITUTON
+          ZAINAB SEAMLESS HELATH AND MEDICAL SERVICES
         </motion.h1>
         <motion.p
           variants={bannerTextVariant}

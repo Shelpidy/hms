@@ -1,5 +1,5 @@
 "use client";
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -27,6 +27,8 @@ import {
 import { useRouter } from "next/navigation";
 import CustomButton from "../CustomButton";
 import { useCookies } from "react-cookie";
+import ZHLogo from "../Logo/Logo";
+import ZHFilledSmallLogo from "../Logo/FillLogoSmall";
 
 type HeaderProps = {
   setThemeMode: () => void;
@@ -39,14 +41,16 @@ function Header({ setThemeMode }: HeaderProps) {
   const phoneView = useMediaQuery(theme.breakpoints.down("md"));
   const tabView = useMediaQuery(theme.breakpoints.down("lg"));
   const _currentUser = useCurrentUser();
-  const [currentUser,setCurrentUser] = React.useState<CurrentUser | null>(_currentUser);
+  const [currentUser, setCurrentUser] = React.useState<CurrentUser | null>(
+    _currentUser,
+  );
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   const handleSignOut = () => {
     removeCookie("token");
-    console.log("Logged Out")
-    setCurrentUser(null)
-    router.push("/")
+    console.log("Logged Out");
+    setCurrentUser(null);
+    router.push("/");
   };
 
   return (
@@ -56,9 +60,7 @@ function Header({ setThemeMode }: HeaderProps) {
       sx={{ background: theme.palette.primary.main }}
     >
       <Toolbar className="flex flex-row justify-between bg-transparent">
-        <div className="w-20 h-5 relative">
-          <Image priority fill src="../../vercel.svg" alt="Logo" />
-        </div>
+          <ZHLogo fill={theme.palette.primary.light} width={56} height={41} />
         {!tabView && (
           <>
             <ul className="flex flex-row items-center justify-evenly gap-10">

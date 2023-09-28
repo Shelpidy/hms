@@ -10,6 +10,7 @@ import {
   GitHub,
 } from "@mui/icons-material";
 import Link from "next/link";
+import ZHLogo from "./Logo/Logo";
 
 function Footer() {
   const theme = useTheme();
@@ -19,13 +20,7 @@ function Footer() {
       className="p-6 shadow-lg w-100 bottom-0 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4"
     >
       <Box className="m-4 flex gap-4 flex-col mx-5 items-start justify-start">
-        <Typography
-          color="primary.light"
-          sx={{ fontFamily: "Inter", fontWeight: "bolder" }}
-          variant="h5"
-        >
-          School Name
-        </Typography>
+        <ZHLogo fill={theme.palette.primary.light} width={56} height={41}/>
         {/* <Typography variant='h4' className='text-gray-400 font-semibold font-poppinsMedium'>SchoolAll</Typography> */}
         <p className="my-1" style={{ color: theme.palette.primary.light }}>
           <span>&#169; Copywrite 2023</span>
@@ -65,39 +60,26 @@ function Footer() {
 
         <li className=" transition duration-300 ease-in-out">
           <Link
-            href="/dashboard"
+            href="/signup"
             style={{
               color: theme.palette.primary.light,
               borderColor: theme.palette.primary.light,
               fontWeight: "bold",
             }}
           >
-            Dashboard
-          </Link>
-        </li>
-
-        <li className=" transition duration-300 ease-in-out">
-          <Link
-            href="/products"
-            style={{
-              color: theme.palette.primary.light,
-              borderColor: theme.palette.primary.light,
-              fontWeight: "bold",
-            }}
-          >
-            Products
+            Sign Up
           </Link>
         </li>
         <li className=" transition duration-300 ease-in-out">
           <Link
-            href="/blogs"
+            href="/signin"
             style={{
               color: theme.palette.primary.light,
               borderColor: theme.palette.primary.light,
               fontWeight: "bold",
             }}
           >
-            Blog
+            Sign In
           </Link>
         </li>
       </ul>
@@ -148,13 +130,13 @@ function Footer() {
           SERVICES
         </Typography>
         <li style={{ color: theme.palette.primary.light, fontWeight: "bold" }}>
-          Online Payment Services
+          Blood Donation and Transfusion
         </li>
         <li style={{ color: theme.palette.primary.light, fontWeight: "bold" }}>
-          Software Development
+          Doctor and Patient Appointment
         </li>
         <li style={{ color: theme.palette.primary.light, fontWeight: "bold" }}>
-          School Management Services
+          Medical Analytics
         </li>
       </ul>
       <Box className="flex m-4 text-gray-400">

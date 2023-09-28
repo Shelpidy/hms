@@ -16,7 +16,7 @@ function ContactUs() {
         width: "95vw",
       }}
     >
-      <Box sx={{ marginBottom: 1 }}>
+      <Box sx={{ marginTop: 4, marginBottom: 1 }}>
         <Typography variant="h4" color="primary">
           Contact Us
         </Typography>

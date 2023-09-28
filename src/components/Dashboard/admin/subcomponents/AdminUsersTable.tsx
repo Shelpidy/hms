@@ -22,7 +22,7 @@ import {
   SelectChangeEvent,
   Modal,
   Typography,
-  Avatar
+  Avatar,
 } from "@mui/material";
 import { Delete, Edit, Add, Search } from "@mui/icons-material";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
@@ -107,12 +107,12 @@ const AdminUsersTable: React.FC<AdminUserTableProps> = ({ users }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{fontWeight:"bold"}}>User</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Name</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Address</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Role</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Date Added</TableCell>
-              <TableCell sx={{fontWeight:"bold"}}>Action</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>User</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Address</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Role</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Date Added</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -125,9 +125,19 @@ const AdminUsersTable: React.FC<AdminUserTableProps> = ({ users }) => {
               .map((user, index) => (
                 <TableRow key={index}>
                   <TableCell>
-                    <Avatar sx={{width:"25px",height:"25px"}} alt={user.firstName} src={user.profileImage}/>
+                    <Avatar
+                      sx={{ width: "25px", height: "25px" }}
+                      alt={user.firstName}
+                      src={user.profileImage}
+                    />
                   </TableCell>
-                  <TableCell>{user.firstName + " "+ user.middleName +" "+user.lastName}</TableCell>
+                  <TableCell>
+                    {user.firstName +
+                      " " +
+                      user.middleName +
+                      " " +
+                      user.lastName}
+                  </TableCell>
                   <TableCell>{user.address}</TableCell>
                   <TableCell>{user.role}</TableCell>
                   <TableCell>{moment(user.createdAt).fromNow()}</TableCell>
@@ -141,10 +151,10 @@ const AdminUsersTable: React.FC<AdminUserTableProps> = ({ users }) => {
           </TableBody>
         </Table>
         <Dialog
-            open={expand}
-            onClose={() => setExpand(false)}
-            sx={{ maxWidth: "lg",minWidth:"400px" }}
-          >
+          open={expand}
+          onClose={() => setExpand(false)}
+          sx={{ maxWidth: "lg", minWidth: "400px" }}
+        >
           <Box sx={style}>
             <Box
               sx={{
@@ -169,9 +179,11 @@ const AdminUsersTable: React.FC<AdminUserTableProps> = ({ users }) => {
                   marginTop: 2,
                 }}
               >
-                <Avatar alt={selectedUser?.firstName} src={selectedUser?.profileImage || dummyUser.profileImage} sx={{width:"200px",height:"25px"}} >
-
-                </Avatar>
+                <Avatar
+                  alt={selectedUser?.firstName}
+                  src={selectedUser?.profileImage || dummyUser.profileImage}
+                  sx={{ width: "200px", height: "25px" }}
+                ></Avatar>
                 {/* <img
                   alt="Profile"
                   style={{

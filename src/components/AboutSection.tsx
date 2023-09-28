@@ -78,7 +78,7 @@ function AboutSection({
           <Box className="px-4">
             {activeTab === 2 && (
               <Box>
-                <Typography fontFamily="Poppins-Light">
+                <Typography fontFamily="PoppinsLight">
                   At SchoolAll, our vision is to revolutionize the education
                   industry through digital transformation. We strive to be a
                   leading provider of innovative and customized technology
@@ -103,7 +103,7 @@ function AboutSection({
             )}
             {activeTab === 1 && (
               <Box>
-                <Typography fontFamily="Poppins-Light">
+                <Typography fontFamily="PoppinsLight">
                   At SchoolAll, our mission is to empower academic institutions
                   with the tools and technology needed to keep pace with the
                   rapidly evolving landscape of education. We believe that
@@ -122,7 +122,7 @@ function AboutSection({
             )}
             {activeTab === 0 && (
               <Box>
-                <Typography fontFamily="Poppins-Light">
+                <Typography fontFamily="PoppinsLight">
                   Our mission is to bridge this gap by building custom software
                   solutions tailored to the unique needs of each school. Unlike
                   other vendors who offer one-size-fits-all, off-the-shelf

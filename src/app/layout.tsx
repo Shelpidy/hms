@@ -4,7 +4,7 @@ import "primeicons/primeicons.css";
 import "primereact/primereact.all";
 import "react-chat-elements/dist/main.css";
 
-import { Inter, Poppins } from "next/font/google";
+// import { Inter, Poppins } from "next/font/google";
 import { CssBaseline, createTheme, useMediaQuery } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { useEffect, useMemo, useReducer, useState } from "react";
@@ -39,9 +39,9 @@ export default function RootLayout({
           mode: prefersDarkMode || themeMode === "dark" ? "dark" : "light",
           primary: {
             main:
-              prefersDarkMode || themeMode === "dark" ? "#ffb3b5" : "#a83542",
+              prefersDarkMode || themeMode === "dark" ? "#f49d37" : "#140f2d",
             light:
-              prefersDarkMode || themeMode === "light" ? "#ffb3b5" : "#a83542",
+              prefersDarkMode || themeMode === "light" ? "#f49d37" : "#140f2d",
           },
           secondary: {
             main:
@@ -49,7 +49,7 @@ export default function RootLayout({
           },
         },
         typography: {
-          fontFamily: ["Poppins-Medium", "Poppins-Light", "Inter"].join(","),
+          fontFamily: ["PoppinsMedium", "PoppinsLight", "Inter"].join(","),
         },
       }),
     [prefersDarkMode, themeMode],

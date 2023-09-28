@@ -11,12 +11,15 @@ import {
   Radio,
   RadioGroup,
   Divider,
+  Card,
+  useTheme,
 } from "@mui/material";
 
 import Link from "next/link";
 import CustomButton from "@/components/CustomButton";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import ZHLogo from "@/components/Logo/Logo";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -30,7 +33,6 @@ export const metadata = {
   title: "SLMS | Register",
   description: "Digital Learning Platform",
 };
-import { handleFormSubmitGeneral } from "@/utils/data";
 
 const SignUpPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -53,6 +55,7 @@ const SignUpPage: React.FC = () => {
   const [emailVerification, setEmailVerification] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const theme = useTheme();
 
   const { ...dataWithoutRole } = formData;
   const isSubmitButtonDisabled = Object.values(dataWithoutRole).some(
@@ -159,15 +162,64 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <Container className="my-20" maxWidth="sm">
-      <Box mt={8}>
-        <Typography variant="h5" align="center" gutterBottom>
-          Sign Up
-        </Typography>
+    <Container
+      sx={{
+        display: "flex",
+        width: "100vw",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: "12vh",
+      }}
+    >
+      <Card sx={{ padding: "25px", maxWidth: "800px", marginBottom: "15px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          mb="10px"
+        >
+             <ZHLogo fill="#f49d37" width={56} height={41} />
+        </Box>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
             <TextField
               required
+              fullWidth
+              size="small"
+              label="First Name"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              size="small"
+              required
+              fullWidth
+              label="Last Name"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
+            <TextField
+              required
+              size="small"
+              fullWidth
+              label="Middle Name"
+              name="middleName"
+              value={formData.middleName}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 2 }}>
+            <TextField
+              required
+              size="small"
               fullWidth
               label="Email"
               name="email"
@@ -190,8 +242,9 @@ const SignUpPage: React.FC = () => {
               ) : null}
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 2 }}>
             <TextField
+              size="small"
               required
               fullWidth
               label="Password"
@@ -216,9 +269,10 @@ const SignUpPage: React.FC = () => {
               ) : null}
             </Box>
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: 2 }}>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 2 }}>
             <TextField
               required
+              size="small"
               fullWidth
               label="Confirm Password"
               name="confirmPassword"
@@ -243,36 +297,7 @@ const SignUpPage: React.FC = () => {
           <Grid item xs={12} sm={6} sx={{ marginTop: 2 }}>
             <TextField
               required
-              fullWidth
-              label="First Name"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} sx={{ marginTop: 2 }}>
-            <TextField
-              required
-              fullWidth
-              label="Last Name"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={12} sx={{ marginTop: 2 }}>
-            <TextField
-              required
-              fullWidth
-              label="Middle Name"
-              name="middleName"
-              value={formData.middleName}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={12} sx={{ marginTop: 2 }}>
-            <TextField
-              required
+              size="small"
               fullWidth
               type="file"
               label="User-Image"
@@ -282,9 +307,10 @@ const SignUpPage: React.FC = () => {
               onChange={handleInputChange}
             />
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: 2 }}>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 2 }}>
             <TextField
               required
+              size="small"
               fullWidth
               label="Phone Number"
               name="contactNumber"
@@ -307,10 +333,11 @@ const SignUpPage: React.FC = () => {
               ) : null}
             </Box>
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: 2 }}>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
             <TextField
               required
               fullWidth
+              size="small"
               label="Date of Birth"
               name="dateOfBirth"
               type="date"
@@ -318,9 +345,10 @@ const SignUpPage: React.FC = () => {
               onChange={handleInputChange}
             />
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: 2 }}>
+          <Grid item xs={12} sm={6} sx={{ marginTop: 3 }}>
             <TextField
               required
+              size="small"
               fullWidth
               label="Address"
               name="address"
@@ -364,7 +392,7 @@ const SignUpPage: React.FC = () => {
             </Link>
           </Typography>
         </Box>
-      </Box>
+      </Card>
     </Container>
   );
 };

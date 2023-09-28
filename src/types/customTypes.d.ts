@@ -122,9 +122,9 @@ declare interface Action {
   type: string;
   payload: any;
 }
- declare type CurrentUser = {
-   userId: string | number;
-   displayName: string;
-   profilePicture: string;
-   role: "doctor" | "patient" | "admin" | "other";
- };
+declare type CurrentUser = {
+  userId: string | number;
+  displayName: string;
+  profilePicture: string;
+  role: "doctor" | "patient" | "admin" | "other";
+};

@@ -34,10 +34,11 @@ const AdminUsersDisplay: React.FC = () => {
           justifyContent: "center",
           flexDirection: "row",
           alignItems: "center",
+          gap: "5px",
         }}
       >
-        <CircularProgress color="primary" size="large" />
-        <Typography sx={{ fontWeight: "bold", color: "grey" }}>
+        <CircularProgress color="primary" size={30} />
+        <Typography sx={{ fontWeight: "bold", color: "primary.main" }}>
           LOADING...
         </Typography>
       </Box>

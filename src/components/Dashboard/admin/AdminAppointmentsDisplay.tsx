@@ -1,5 +1,11 @@
 "use client";
-import { Box, CircularProgress, Typography, Card } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Typography,
+  Card,
+  useTheme,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import AdminAppointmentsTable from "./subcomponents/AdminAppointmentsTable";
 import {
@@ -44,6 +50,7 @@ const AdminAppointmentsDisplay: React.FC = () => {
   );
 
   const currentUser = useCurrentUser();
+  const theme = useTheme();
 
   const appointmentPerMonthData: CompletedAppointmentDataPoint[] = [
     {
@@ -112,14 +119,14 @@ const AdminAppointmentsDisplay: React.FC = () => {
       );
       const data = await response.json();
       console.log(data);
-      if(response.status === 200){
-        setAppointments(data.appointments);}
-      else{
-        console.log(data.message)
+      if (response.status === 200) {
+        setAppointments(data.appointments);
+      } else {
+        console.log(data.message);
       }
     } catch (error) {
       console.error("Error fetching appointments:", error);
-    } 
+    }
   };
 
   useEffect(() => {
@@ -136,10 +143,11 @@ const AdminAppointmentsDisplay: React.FC = () => {
           justifyContent: "center",
           flexDirection: "row",
           alignItems: "center",
+          gap: "5px",
         }}
       >
-        <CircularProgress color="primary" size="large" />
-        <Typography sx={{ fontWeight: "bold", color: "grey" }}>
+        <CircularProgress color="primary" size={30} />
+        <Typography sx={{ fontWeight: "bold", color: "primary.main" }}>
           LOADING...
         </Typography>
       </Box>

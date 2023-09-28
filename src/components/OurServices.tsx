@@ -6,6 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import AOS from "aos";
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import "aos/dist/aos.css";
 
 type ServiceProps = {
@@ -45,19 +46,19 @@ function ServicesSection() {
     {
       id: 1,
       imageUrl: "/hospital/public.gif",
-      title: "Public Health 1 & 2",
+      title: "Doctor Appointment Service",
       description: `Step into the realm of community well-being and disease prevention. Our Public Health Certificate equips you with the knowledge to assess health challenges, design effective interventions, and advocate for healthier societies. Dive into epidemiology, health policies, and health promotion strategies, positioning yourself as a force for positive change.`,
     },
     {
       id: 2,
       imageUrl: "/hospital/reproductive.gif",
-      title: "Reproductive Health",
+      title: "Blood Donation & Transfusion",
       description: `Empower yourself with the ability to promote informed reproductive choices. The Reproductive Health Diploma delves into topics of family planning, sexual education, and maternal health. Become a champion of reproductive rights, contributing to the advancement of comprehensive healthcare for all.`,
     },
     {
       id: 3,
       imageUrl: "/hospital/clinic.gif",
-      title: "Clinical Health",
+      title: "Medical Analytics",
       description: `Embark on a transformative journey into the heart of patient care. Our Clinical Healthcare Diploma not only imparts medical knowledge but also nurtures the virtues of compassion and empathy. From medical ethics to diagnostic skills, this program prepares you to excel in the dynamic world of healthcare.`,
     },
   ];
@@ -70,9 +71,12 @@ function ServicesSection() {
         alignItems: "center",
       }}
     >
-      <Typography variant="h4" color="primary">
-        Services
-      </Typography>
+      <Box sx={{ marginTop: 4, marginBottom: 1 }}>
+        <Typography variant="h4" color="primary">
+          Our Services
+        </Typography>
+      </Box>
+      <Divider sx={{ width: "80%" }} />
 
       <div className="pt-5 px-2 grid grid-cols-1 gap-4 md:grid-cols-3">
         {Services.map((item: ServiceProps, index: number) => {

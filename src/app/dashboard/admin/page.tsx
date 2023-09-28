@@ -36,30 +36,25 @@ export default function AdminDashboard() {
     <main className="min-h-screen grid grid-cols-dashboard">
       <div
         className="py-[10vh] relative"
-        style={{ backgroundColor: "#f6f6f6", height: "100vh" }}
+        style={{ backgroundColor: theme.palette.primary.main, height: "100vh" }}
       >
-        <Sidebar
-          collapsed={sideBarCollapsed}
-          className="h-screen w-40 sticky top-0"
-        >
+        <Sidebar collapsed={sideBarCollapsed} className="w-40 sticky top-0">
           <Menu
             style={{
               backgroundColor: theme.palette.primary.main,
-              height: "100vh",
+              height: "90vh",
               zIndex: 0,
             }}
             menuItemStyles={{
               button: ({ level, active, disabled }) => {
                 // only apply styles on first level elements of the tree
-                if (level === 0)
-                  return {
-                    color: disabled ? "#f6f6f6" : "white",
-                    backgroundColor: active
-                      ? theme.palette.primary.contrastText
-                      : theme.palette.primary.main,
-                    borderRadius: "5px",
-                    margin: "5px",
-                  };
+
+                return {
+                  color: disabled ? "#f6f6f6" : theme.palette.primary.light,
+                  backgroundColor: active ? "red" : theme.palette.primary.main,
+                  borderRadius: "5px",
+                  margin: "5px",
+                };
               },
             }}
           >
@@ -67,7 +62,7 @@ export default function AdminDashboard() {
               sx={{ marginLeft: "20px" }}
               onClick={() => setSideBarCollapse(!sideBarCollapsed)}
             >
-              <MenuOutlined />
+              <MenuOutlined sx={{ color: theme.palette.primary.light }} />
             </IconButton>
             <MenuItem style={{ fontWeight: "bold" }} icon={<GroupAdd />}>
               <Typography sx={{ fontWeight: "bold" }} variant="h6">
@@ -75,33 +70,42 @@ export default function AdminDashboard() {
               </Typography>
             </MenuItem>
             <MenuItem
+              color={theme.palette.primary.light}
               icon={<Groups />}
               onClick={() => setActivePage("profile")}
             >
               Profile
             </MenuItem>
-            <MenuItem icon={<Groups />} onClick={() => setActivePage("users")}>
+            <MenuItem
+              color={theme.palette.primary.light}
+              icon={<Groups />}
+              onClick={() => setActivePage("users")}
+            >
               Users
             </MenuItem>
             <MenuItem
+              color={theme.palette.primary.light}
               icon={<GroupAdd />}
               onClick={() => setActivePage("doctors")}
             >
               Doctors
             </MenuItem>
             <MenuItem
+              color={theme.palette.primary.light}
               icon={<GroupAdd />}
               onClick={() => setActivePage("patients")}
             >
               Patients
             </MenuItem>
             <MenuItem
+              color={theme.palette.primary.light}
               icon={<GroupAdd />}
               onClick={() => setActivePage("transfusions")}
             >
               Transfusions
             </MenuItem>
             <MenuItem
+              color={theme.palette.primary.light}
               icon={<GroupAdd />}
               onClick={() => setActivePage("appointments")}
             >
@@ -114,6 +118,7 @@ export default function AdminDashboard() {
               Donors
             </MenuItem>
             <MenuItem
+              color={theme.palette.primary.light}
               icon={<GroupAdd />}
               onClick={() => setActivePage("requirers")}
             >

@@ -8,12 +8,15 @@ import {
   Typography,
   Grid,
   Divider,
+  Card,
+  useTheme,
 } from "@mui/material";
 import Link from "next/link";
 import CustomButton from "@/components/CustomButton";
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import ZHLogo from "@/components/Logo/Logo";
 const Toast = Swal.mixin({
   toast: true,
   position: "center",
@@ -34,6 +37,7 @@ const SignInPage: React.FC = () => {
   });
   const [cookie, setCookie] = useCookies(["token"]);
   const [loading, setLoading] = useState<boolean>(false);
+  const theme = useTheme();
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,12 +94,36 @@ const SignInPage: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm" className="my-20">
-      <Box sx={{ mt: 8 }}>
-        <Typography variant="h5" align="center" gutterBottom>
-          Sign In
-        </Typography>
+    <Container
+      sx={{
+        display: "flex",
+        width: "100vw",
+        height: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Card
+        sx={{
+          maxWidth: "400px",
+          padding: "25px",
+          minHeight: "45vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          mb="10px"
+        >
+          <ZHLogo fill="#f49d37" width={56} height={41} />
+        </Box>
         <TextField
+          size="small"
           required
           fullWidth
           label="Email"
@@ -105,6 +133,7 @@ const SignInPage: React.FC = () => {
           sx={{ mb: 2 }}
         />
         <TextField
+          size="small"
           required
           fullWidth
           label="Password"
@@ -114,8 +143,10 @@ const SignInPage: React.FC = () => {
           onChange={handleInputChange}
           sx={{ mb: 2 }}
         />
-        <CustomButton onClick={handleFormSubmit}>Sign In</CustomButton>
-      </Box>
+        <CustomButton size="medium" onClick={handleFormSubmit}>
+          Sign In
+        </CustomButton>
+      </Card>
     </Container>
   );
 };

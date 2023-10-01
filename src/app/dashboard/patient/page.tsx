@@ -12,6 +12,9 @@ import { IconButton, Typography, useTheme, Box } from "@mui/material";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import React, { useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import PatientProfileDisplay from "@/components/Dashboard/patient/PatientProfileDisplay";
+import BloodRequirementDisplay from "@/components/Dashboard/patient/BloodRequirementForm";
+import PatientAppointmentDisplay from "@/components/Dashboard/patient/PatientAppointmentDisplay";
 
 // export const metadata = {
 //   title: "SLMS | Dashboard",
@@ -33,32 +36,30 @@ export default function PatientDashboard() {
           collapsed={sideBarCollapsed}
           className="h-screen w-40 sticky top-0"
         >
-          <Menu
-            style={{
+         <Menu
+             style={{
               backgroundColor: theme.palette.primary.main,
-              height: "100vh",
+              height: "90vh",
               zIndex: 0,
             }}
             menuItemStyles={{
               button: ({ level, active, disabled }) => {
                 // only apply styles on first level elements of the tree
-                if (level === 0)
-                  return {
-                    color: disabled ? "#f6f6f6" : "white",
-                    backgroundColor: active
-                      ? theme.palette.primary.light
-                      : undefined,
-                    borderRadius: "5px",
-                    margin: "5px",
-                  };
+
+                return {
+                  color: disabled ? "#f6f6f6" : theme.palette.primary.light,
+                  backgroundColor: active ? "red" : theme.palette.primary.main,
+                  borderRadius: "5px",
+                  margin: "5px",
+                };
               },
             }}
           >
-            <IconButton
+          <IconButton
               sx={{ marginLeft: "20px" }}
               onClick={() => setSideBarCollapse(!sideBarCollapsed)}
             >
-              <MenuOutlined />
+              <MenuOutlined sx={{ color: theme.palette.primary.light }} />
             </IconButton>
             <MenuItem style={{ fontWeight: "bold" }} icon={<GroupAdd />}>
               <Typography sx={{ fontWeight: "bold" }} variant="h6">
@@ -80,19 +81,15 @@ export default function PatientDashboard() {
             <MenuItem icon={<Add />} onClick={() => setActivePage("requirers")}>
               Requirers
             </MenuItem>
-            <MenuItem icon={<Add />} onClick={() => setActivePage("blood")}>
-              Blood Banks
-            </MenuItem>
           </Menu>
         </Sidebar>
       </div>
       <div className="m-10 h-screen overflow-y-scroll hide-scrollbar">
-        {activePage === "profile" && <Box>DashboardAdminProfileDisplay</Box>}
+        {activePage === "profile" && <PatientProfileDisplay/> }
         {activePage === "appointments" && (
-          <Box>DashboardDoctorAppointmentDisplay</Box>
+          <PatientAppointmentDisplay/>
         )}
-        {activePage === "requirers" && <Box>DashboardUserRequirerDisplay</Box>}
-        {activePage === "blood" && <Box>DashboardBloodBankDisplay</Box>}
+        {activePage === "requirers" && <BloodRequirementDisplay />}
       </div>
     </main>
   );

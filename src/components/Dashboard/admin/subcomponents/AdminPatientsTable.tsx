@@ -29,6 +29,7 @@ import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
 import moment from "moment";
+import { LoadingButton } from "@mui/lab";
 
 type PatientProfile = {
   patient: Patient;
@@ -60,14 +61,13 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "80%",
-  maxWidth: 400,
+  maxWidth: "500px",
   maxHeight: "88vh",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-  overflow: "auto",
+
 };
 
 const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
@@ -77,6 +77,7 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
   const [open, setOpen] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [expand, setExpand] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<PatientProfile | null>(
     null,
   );
@@ -145,7 +146,7 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
     try {
       // Logic to delete the appointment
       console.log(patientId);
-      const request = await fetch(`/api/patients?patientId=${patientId}`, {
+      const request = await fetch(`/api/patients/patientId=${patientId}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
@@ -203,6 +204,7 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
 
   async function handleAdd() {
     try {
+      setLoading(true)
       console.log("New Appointment", newPatient);
       // Logic to add a new appointment
       const request = await fetch("/api/patients", {
@@ -225,9 +227,11 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
           text: data?.message,
         });
       }
+      setLoading(false)
       onRefetch();
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
     // Update the appointments state after adding
     handleClose();
@@ -360,7 +364,7 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
         <Dialog
           open={expand}
           onClose={() => setExpand(false)}
-          sx={{ minWidth: "400px" }}
+        
         >
           <Box sx={style}>
             <Box
@@ -444,11 +448,11 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
           <Dialog
             open={open}
             onClose={() => setOpen(false)}
-            sx={{ maxWidth: "lg", minWidth: "400px" }}
+            sx={{ maxWidth: "lg",alignItems:"center",justifyContent:"center" }}
           >
             <DialogTitle>Add Patient</DialogTitle>
-            <DialogContent>
-              <InputLabel>Patient Email</InputLabel>
+            <DialogContent sx={{minWidth:"500px"}}>
+              <InputLabel>User Email</InputLabel>
               <TextField
                 fullWidth
                 name="patientEmail"
@@ -483,9 +487,9 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleAdd} color="primary">
-                Add
-              </Button>
+              <LoadingButton loading={loading} disabled={loading} onClick={handleAdd}>
+                  Add
+              </LoadingButton>
             </DialogActions>
           </Dialog>
         </Box>

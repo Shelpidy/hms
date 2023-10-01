@@ -42,7 +42,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const data = await req.formData();
+    const data = await req.json();
     const username = data.get("username") as string;
     const email = data.get("email") as string;
 
@@ -65,69 +65,6 @@ export async function POST(req: Request) {
       JSON.stringify({
         message: "something went wrong in the POST request",
         errror: error.message,
-      }),
-      { status: 500 },
-    );
-  }
-}
-
-//// need to create the logic for the put
-export async function PUT(req: Request) {
-  try {
-    const url = new URL(req.url);
-    const id = url.searchParams.get("id");
-    if (!id) {
-      return new Response(JSON.stringify({ message: "missing parameters" }), {
-        status: 404,
-      });
-    }
-    const data = await req.formData();
-    const username = data.get("username") as string;
-    const updatedAdmin = await Admin.update(
-      {
-        username,
-      },
-      { where: { adminId: id } },
-    );
-
-    return new Response(
-      JSON.stringify({ message: "admin updated successfully", updatedAdmin }),
-      { status: 202 },
-    );
-  } catch (error) {
-    console.log(error);
-    return new Response(
-      JSON.stringify({ message: "something went wrong in the POST request" }),
-      { status: 500 },
-    );
-  }
-}
-
-export async function DELETE(req: Request) {
-  try {
-    const url = new URL(req.url);
-    const id = url.searchParams.get("id");
-    if (!id) {
-      return new Response(JSON.stringify({ message: "Missing parameter id" }), {
-        status: 404,
-      });
-    }
-    const admin = await Admin.findOne({ where: { adminId: id } });
-    if (!admin) {
-      return new Response(JSON.stringify({ message: "missing admin" }), {
-        status: 404,
-      });
-    }
-    await admin.destroy();
-    return new Response(JSON.stringify({ message: "admin deleted" }), {
-      status: 203,
-    });
-  } catch (error: any) {
-    console.log(error);
-    return new Response(
-      JSON.stringify({
-        message: "something went wrong in the DELETE request",
-        error: error.message,
       }),
       { status: 500 },
     );

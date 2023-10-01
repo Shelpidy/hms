@@ -97,11 +97,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  minWidth: "70vw",
+  minWidth: "60vw",
   maxHeight: "88vh",
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   overflow: "auto",
 };
@@ -669,10 +666,10 @@ const AdminAppointmentsTable: React.FC<AdminAppointmentsTableProps> = ({
           <Dialog
             open={open}
             onClose={() => setOpen(false)}
-            sx={{ maxWidth: "lg", minWidth: "400px" }}
+            sx={{ maxWidth: "lg"}}
           >
             <DialogTitle>Add Appointment</DialogTitle>
-            <DialogContent>
+            <DialogContent sx={{minWidth:"500px"}}>
               <InputLabel>Doctor Email</InputLabel>
               <TextField
                 fullWidth

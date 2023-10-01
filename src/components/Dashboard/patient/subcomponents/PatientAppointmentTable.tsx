@@ -47,14 +47,14 @@ const style = {
   overflow: "auto",
 };
 
-type PatientProfile = {
-  patient: Patient;
-  user: User;
-  bloodGroup: BloodGroup;
-};
+type DoctorProfile = {
+    doctor: Doctor;
+    user: User;
+    specialization: Specialization;
+  };
 
 type AppointmentDetail = {
-  patient: PatientProfile;
+  doctor: DoctorProfile;
   appointment: Appointment;
   roomId: string;
 };
@@ -64,7 +64,7 @@ type DoctorAppointmentTableProps = {
   refresh: () => void;
 };
 
-const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
+const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
   appointments,
   refresh,
 }) => {
@@ -155,18 +155,6 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
   return (
     <Box>
       <Box sx={{ marginBottom: 2 }}>
-        <FormControl variant="outlined" sx={{ marginRight: 2 }}>
-          <Select
-            value={filter}
-            onChange={handleFilterChange}
-            size="small"
-            sx={{ minWidth: 120 }}
-          >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="completed">Completed</MenuItem>
-            <MenuItem value="pending">Pending</MenuItem>
-          </Select>
-        </FormControl>
         <TextField
           label="Search"
           variant="outlined"
@@ -184,10 +172,10 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
         />
       </Box>
       <TableContainer component={Paper}>
-        <Table sx={{minWidth:"60vw"}}>
+        <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Patient</TableCell>
+              <TableCell sx={{ fontWeight: "bold" }}>Doctor</TableCell>
               <TableCell sx={{ fontWeight: "bold" }}>
                 Appointment Date
               </TableCell>
@@ -218,11 +206,11 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
                   <TableCell>
                     <Avatar
                       sx={{ width: "25px", height: "25px" }}
-                      alt={appointment.patient.user.firstName}
-                      src={appointment.patient.user.profileImage}
+                      alt={appointment.doctor.user.firstName}
+                      src={appointment.doctor.user.profileImage}
                     ></Avatar>
                     <Typography>
-                      {appointment.patient.user.firstName}
+                      {appointment.doctor.user.firstName}
                     </Typography>
                   </TableCell>
 
@@ -275,33 +263,46 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
               <CloseIcon color="primary" />
             </IconButton>
           </Box>
-          <Box sx={{ marginTop: 2, textAlign: "center" }}>
-            <Card
-              variant="outlined"
+          <Box sx={style}>
+            <Box
               sx={{
-                padding: 2,
-                marginBottom: 2,
-                boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.4)",
+                display: "flex",
+                justifyContent: "flex-end",
+                marginTop: -5,
+                marginRight: -5,
               }}
             >
-              <div>
-                <Typography variant="h5">Patients Details</Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                    marginTop: 2,
-                  }}
-                >
-                  <Avatar
-                    sx={{ width: "200px", height: "200px" }}
-                    alt={selectedAppointment?.patient.user.firstName}
-                    src={selectedAppointment?.patient.user.profileImage}
-                  />
+              <IconButton onClick={() => setExpand(false)}>
+                <CloseIcon color="primary" />
+              </IconButton>
+            </Box>
+            <Box sx={{ marginTop: -1, textAlign: "center" }}>
+              <Card
+                variant="outlined"
+                sx={{
+                  padding: 2,
+                  marginBottom: 2,
+                  boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.4)",
+                }}
+              >
+                <div>
+                  <Typography variant="h5">Doctor Details</Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-evenly",
+                      alignItems: "center",
+                      marginTop: 2,
+                    }}
+                  >
+                    <Avatar
+                      sx={{ width: "200px", height: "200px" }}
+                      alt={selectedAppointment?.doctor.user.firstName}
+                      src={selectedAppointment?.doctor.user.profileImage}
+                    />
 
-                  {/* <img
+                    {/* <img
                       alt="Profile"
                       style={{
                         width: "28%", // Adjust the width as needed
@@ -312,56 +313,79 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
                       }}
                       src={dummyUser.profileImage} // Use user's profile image
                     /> */}
-                  <div>
-                    <Typography variant="h6">
-                      <strong>Patient Name:</strong>{" "}
-                      {selectedAppointment?.patient.user.firstName}{" "}
-                      {selectedAppointment?.patient.user.middleName}{" "}
-                      {selectedAppointment?.patient.user.lastName}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Diagnosis:</strong>{" "}
-                      {selectedAppointment?.patient.patient.diagnosis}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>BloodGroup:</strong>{" "}
-                      {selectedAppointment?.patient.bloodGroup?.groupName}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Email:</strong>{" "}
-                      {selectedAppointment?.patient.user.email}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Contact Number:</strong>{" "}
-                      {selectedAppointment?.patient.user?.contactNumber}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Gender:</strong>{" "}
-                      {selectedAppointment?.patient.user.gender}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Address:</strong>{" "}
-                      {selectedAppointment?.patient.user?.address}
-                    </Typography>
-                    <Typography variant="body1">
-                      <strong>Birth Date:</strong>{" "}
-                      {selectedAppointment?.patient.user.dateOfBirth}
-                    </Typography>
-                  </div>
-                </Box>
-                <div>
-                  <Typography>Patient Email</Typography>
-                  <div className="grid grid-cols-1 md:grid-cols-2">
-                    <TextField label="Subject" variant="outlined" fullWidth />
-                    <TextField label="Title" variant="outlined" fullWidth />
-                  </div>
-                  <Typography variant="h6">Content</Typography>
-                  <TextField variant="outlined" fullWidth multiline rows={4} />
-                  <CustomButton size="small">Send</CustomButton>
+                    <div>
+                      <Typography variant="h6">
+                        <strong>Doctor Name:</strong>{" "}
+                        {selectedAppointment?.doctor.user.firstName}{" "}
+                        {selectedAppointment?.doctor.user.middleName}{" "}
+                        {selectedAppointment?.doctor.user.lastName}
+                      </Typography>
+                      <Typography variant="h6">
+                        <strong>Specialization:</strong>{" "}
+                        {
+                          selectedAppointment?.doctor.specialization
+                            ?.specializationName
+                        }
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Email:</strong>{" "}
+                        {selectedAppointment?.doctor.user.email}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Contact Number:</strong>{" "}
+                        {selectedAppointment?.doctor.user.contactNumber}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Gender:</strong>{" "}
+                        {selectedAppointment?.doctor.user.gender}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Address:</strong>{" "}
+                        {selectedAppointment?.doctor.user.address}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Birth Date:</strong>{" "}
+                        {selectedAppointment?.doctor.user.dateOfBirth}
+                      </Typography>
+                    </div>
+                  </Box>
                 </div>
                 <CustomButton size="small">Message</CustomButton>
-              </div>
-            </Card>
+              </Card>
+            </Box>
+           
+            <Box sx={{ marginTop: 3, textAlign: "center" }}>
+              <Card
+                variant="outlined"
+                sx={{
+                  padding: 2,
+                  marginBottom: 2,
+                  boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.4)",
+                }}
+              >
+                <div>
+                  <Typography variant="h5">Appointment Details</Typography>
+                  <div style={{ marginTop: 5 }}>
+                    <Typography variant="body1">
+                      <strong>Appointment Date</strong>:{" "}
+                      {selectedAppointment?.appointment.appointmentDate.toString()}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Appointment Status</strong>:{" "}
+                      {selectedAppointment?.appointment.appointmentStatus}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Note</strong>:{" "}
+                      {selectedAppointment?.appointment.note}
+                    </Typography>
+                    <Typography variant="body1">
+                      <strong>Reason</strong>:{" "}
+                      {selectedAppointment?.appointment.reason}
+                    </Typography>
+                  </div>
+                </div>
+              </Card>
+            </Box>
           </Box>
           <Box sx={{ marginTop: 3, textAlign: "center" }}>
             <Card
@@ -422,4 +446,4 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
   );
 };
 
-export default DoctorAppointmentTable;
+export default PatientAppointmentTable;

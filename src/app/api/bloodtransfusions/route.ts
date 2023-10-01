@@ -74,6 +74,8 @@ export async function POST(req: Request) {
       ...transfusionData,
     });
 
+    await bloodGroup?.decrement("volume",{by:Number(data.volume || donor?.getDataValue("volume"))})
+
     return new Response(
       JSON.stringify({
         message: "blood transfusion created",

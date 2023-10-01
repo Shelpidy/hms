@@ -153,7 +153,7 @@ const AdminUsersTable: React.FC<AdminUserTableProps> = ({ users }) => {
         <Dialog
           open={expand}
           onClose={() => setExpand(false)}
-          sx={{ maxWidth: "lg", minWidth: "400px" }}
+          sx={{ maxWidth: "lg", minWidth: "400px",padding:"5px" }}
         >
           <Box sx={style}>
             <Box
@@ -182,7 +182,7 @@ const AdminUsersTable: React.FC<AdminUserTableProps> = ({ users }) => {
                 <Avatar
                   alt={selectedUser?.firstName}
                   src={selectedUser?.profileImage || dummyUser.profileImage}
-                  sx={{ width: "200px", height: "25px" }}
+                  sx={{ width: "200px", height: "200px" }}
                 ></Avatar>
                 {/* <img
                   alt="Profile"

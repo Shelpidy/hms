@@ -55,3 +55,65 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     );
   }
 }
+
+//// need to create the logic for the put
+export async function PUT(req: Request,{params}:RouteParams) {
+  try {
+    const id = params.userId
+    if (!id) {
+      return new Response(JSON.stringify({ message: "missing parameters" }), {
+        status: 404,
+      });
+    }
+    const data = await req.formData();
+    const username = data.get("username") as string;
+    const updatedAdmin = await Admin.update(
+      {
+        username,
+      },
+      { where: { adminId: id } },
+    );
+
+    return new Response(
+      JSON.stringify({ message: "admin updated successfully", updatedAdmin }),
+      { status: 202 },
+    );
+  } catch (error) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({ message: "something went wrong in the POST request" }),
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(req: Request,{params}:RouteParams) {
+  try {
+    const id = params.userId
+    if (!id) {
+      return new Response(JSON.stringify({ message: "Missing parameter id" }), {
+        status: 404,
+      });
+    }
+    const admin = await Admin.findOne({ where: { adminId: id } });
+    if (!admin) {
+      return new Response(JSON.stringify({ message: "missing admin" }), {
+        status: 404,
+      });
+    }
+    await admin.destroy();
+    return new Response(JSON.stringify({ message: "admin deleted" }), {
+      status: 203,
+    });
+  } catch (error: any) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({
+        message: "something went wrong in the DELETE request",
+        error: error.message,
+      }),
+      { status: 500 },
+    );
+  }
+}
+

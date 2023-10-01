@@ -59,7 +59,7 @@ function Header({ setThemeMode }: HeaderProps) {
       position="fixed"
       sx={{ background: theme.palette.primary.main }}
     >
-      <Toolbar className="flex flex-row justify-between bg-transparent">
+      <Toolbar className="flex flex-row justify-between px-5 bg-transparent">
           <ZHLogo fill={theme.palette.primary.light} width={56} height={41} />
         {!tabView && (
           <>
@@ -173,7 +173,7 @@ function Header({ setThemeMode }: HeaderProps) {
               <Link href="/notification">
                 <Badge badgeContent={10}>
                   {/* <ShoppingCartCheckoutOutlined htmlColor='white'/> */}
-                  <NotificationsNoneOutlined htmlColor="white" />
+                  <NotificationsNoneOutlined  sx={{ color: theme.palette.primary.light }} />
                 </Badge>
               </Link>
 

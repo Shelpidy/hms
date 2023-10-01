@@ -47,20 +47,21 @@ const DoctorProfileDisplay: React.FC = () => {
   if (!doctorProfile) {
     return (
       <Box
-        sx={{
-          height: "95vh",
-          minWidth: "100%",
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress color="primary" size="large" />
-        <Typography sx={{ fontWeight: "bold", color: "grey" }}>
-          LOADING...
-        </Typography>
-      </Box>
+      sx={{
+        height: "95vh",
+        minWidth: "100%",
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: "5px",
+      }}
+    >
+      <CircularProgress color="primary" size={30} />
+      <Typography sx={{ fontWeight: "bold", color: "primary.main" }}>
+        LOADING...
+      </Typography>
+    </Box>
     );
   }
   return (

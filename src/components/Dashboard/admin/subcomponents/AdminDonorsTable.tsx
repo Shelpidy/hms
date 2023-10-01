@@ -15,6 +15,7 @@ import {
   InputLabel,
   Modal,
   Typography,
+  Avatar
 } from "@mui/material";
 import { Delete, Edit, Add, Search } from "@mui/icons-material";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
@@ -107,10 +108,11 @@ const AdminDonorsTable: React.FC<AdminDonorTableProps> = ({
         <Table sx={{ minWidth: "65vw" }}>
           <TableHead>
             <TableRow>
-              <TableCell>Donors</TableCell>
-              <TableCell>Address</TableCell>
-              <TableCell>Date Added</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell sx={{fontWeight:"bold"}} color="primary.main">Donors</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}  color="primary.main">Name</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}  color="primary.main">Address</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}  color="primary.main">Date Added</TableCell>
+              <TableCell sx={{fontWeight:"bold"}}  color="primary.main">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -122,7 +124,19 @@ const AdminDonorsTable: React.FC<AdminDonorTableProps> = ({
               )
               .map((donor, index) => (
                 <TableRow key={index}>
-                  <TableCell>{donor?.donor.email}</TableCell>
+                   <TableCell>
+                    <Avatar
+                      sx={{ width: "25px", height: "25px" }}
+                      alt={donor.donor.firstName}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {donor.donor.firstName +
+                      " " +
+                      donor.donor.middleName +
+                      " " +
+                      donor.donor.lastName}
+                  </TableCell>
                   <TableCell>{donor?.donor.address}</TableCell>
                   <TableCell>{donor?.donor.createdAt?.toString()}</TableCell>
                   <TableCell>

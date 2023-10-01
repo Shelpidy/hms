@@ -2,12 +2,18 @@ import jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 
+// MAIL_PORT = 465
+// MAIL_HOST = smtp.mail.yahoo.com
+// MAIL_USER = teax.sl@yahoo.com
+// MAIL_PASS = amhg ycxx unqf plrf
+
+
 // Create a transporter using SMTP transport
 const transporter = nodemailer.createTransport({
-  service: "your-email-service-provider", // e.g., 'Gmail', 'Outlook', etc.
+  service: "smtp.mail.yahoo.com", // e.g., 'Gmail', 'Outlook', etc.
   auth: {
-    user: "your-email@gmail.com", // your email address
-    pass: "your-email-password", // your email password
+    user: "teax.sl@yahoo.com", // your email address
+    pass: "amhg ycxx unqf plrf", // your email password
   },
 });
 

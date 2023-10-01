@@ -350,7 +350,6 @@ const DoctorProfileDetails : React.FC<DoctorProfileProps> = ({ doctors, onRefetc
                 </Box>
           </Box>
         </Paper>
-
         </Box>
     )
 }

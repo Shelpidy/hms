@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
     const patientemail = data.patientEmail as string;
     const reason = data.reason as string;
     const adminUserId = data.userId as string;
+    console.log(adminUserId)
     const note = data.note as string;
     const appointmentDate = data.appointmentDate as string;
 
@@ -27,10 +28,11 @@ export async function POST(req: NextRequest) {
       const doctorUserId = doctorfromUser.userId;
       const patientUserId = patientfromUser.userId;
 
+      console.log(adminUserId,doctorUserId,patientUserId)
       const rooms = await Room.bulkCreate([
-        { userOneId: adminUserId, userTwo: doctorUserId },
-        { userOneId: adminUserId, userTwo: patientUserId },
-        { userOneId: doctorUserId, userTwo: patientUserId },
+        { userOneId: adminUserId, userTwoId: doctorUserId },
+        { userOneId: adminUserId, userTwoId: patientUserId },
+        { userOneId: doctorUserId, userTwoId: patientUserId },
       ]);
 
       const doctor = await Doctor.findOne({ where: { userId: doctorUserId } });

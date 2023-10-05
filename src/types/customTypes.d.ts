@@ -67,8 +67,9 @@ declare interface Donor {
   firstName: string;
   middleName?: string;
   lastName: string;
+  profileImage?: string;
   gender: "male" | "female" | "other";
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   address: string;
   contactNumber: string;
   email: string;
@@ -91,6 +92,7 @@ declare interface Notification {
 declare interface Patient {
   patientId: string;
   userId: string;
+  bloodGroupName: string;
   diagnosis: string;
   bloodGroupId: string;
   createdAt: Date;
@@ -126,5 +128,5 @@ declare type CurrentUser = {
   userId: string | number;
   displayName: string;
   profilePicture: string;
-  role: "doctor" | "patient" | "admin" | "other";
+  role: "doctor" | "patient" | "admin" | "other" | "user";
 };

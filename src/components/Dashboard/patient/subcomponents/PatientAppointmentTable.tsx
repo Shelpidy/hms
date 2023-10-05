@@ -41,8 +41,6 @@ const style = {
   minWidth: "70vw",
   maxHeight: "88vh",
   bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   overflow: "auto",
 };
@@ -172,7 +170,7 @@ const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
         />
       </Box>
       <TableContainer component={Paper}>
-        <Table>
+        <Table sx={{minWidth:"70vw"}}>
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Doctor</TableCell>
@@ -186,7 +184,7 @@ const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {Appointments.map((appointment, index) => {
+            {appointments.map((appointment, index) => {
               // Filter based on selected status and search text
               const isCompleted =
                 appointment.appointment.appointmentStatus === "completed";
@@ -218,27 +216,15 @@ const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
                     {moment(appointment.appointment.appointmentDate).fromNow()}
                   </TableCell>
                   <TableCell>
-                    {isCancelled ? (
-                      <CancelOutlined />
-                    ) : (
-                      <Checkbox
-                        checked={isCompleted}
-                        onChange={() =>
-                          handleMarkCompleted(
-                            appointment.appointment.appointmentId,
-                          )
-                        }
-                        color="primary"
-                      />
-                    )}
+                    {appointment.appointment.appointmentStatus}
                   </TableCell>
                   <TableCell>
-                    <CustomButton
-                      onClick={() => handleSelectAppointment}
+                    <Button
+                      onClick={() => handleSelectAppointment(appointment)}
                       size="small"
                     >
                       more
-                    </CustomButton>
+                    </Button>
                   </TableCell>
                 </TableRow>
               );
@@ -250,7 +236,8 @@ const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
         open={expand}
         onClose={() => setExpand(false)}
       >
-        <Box sx={style}>
+        <DialogContent sx={{maWidth: "400px"}}>
+        
           <Box
             sx={{
               display: "flex",
@@ -272,17 +259,17 @@ const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
                 marginRight: -5,
               }}
             >
-              <IconButton onClick={() => setExpand(false)}>
+              <Button onClick={() => setExpand(false)}>
                 <CloseIcon color="primary" />
-              </IconButton>
+              </Button>
             </Box>
             <Box sx={{ marginTop: -1, textAlign: "center" }}>
-              <Card
+              <Paper
                 variant="outlined"
                 sx={{
                   padding: 2,
                   marginBottom: 2,
-                  boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.4)",
+                  
                 }}
               >
                 <div>
@@ -296,23 +283,13 @@ const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
                       marginTop: 2,
                     }}
                   >
+                    <Box sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <Avatar
                       sx={{ width: "200px", height: "200px" }}
                       alt={selectedAppointment?.doctor.user.firstName}
                       src={selectedAppointment?.doctor.user.profileImage}
                     />
-
-                    {/* <img
-                      alt="Profile"
-                      style={{
-                        width: "28%", // Adjust the width as needed
-                        height: "auto", // Auto height to maintain aspect ratio
-                        maxWidth: "75%",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
-                      src={dummyUser.profileImage} // Use user's profile image
-                    /> */}
+                    </Box>
                     <div>
                       <Typography variant="h6">
                         <strong>Doctor Name:</strong>{" "}
@@ -350,17 +327,17 @@ const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
                     </div>
                   </Box>
                 </div>
-                <CustomButton size="small">Message</CustomButton>
-              </Card>
+                <Button variant="contained" color="primary" size="small">Message</Button>
+              </Paper>
             </Box>
            
             <Box sx={{ marginTop: 3, textAlign: "center" }}>
-              <Card
+              <Paper
                 variant="outlined"
                 sx={{
                   padding: 2,
                   marginBottom: 2,
-                  boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.4)",
+                  
                 }}
               >
                 <div>
@@ -368,7 +345,7 @@ const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
                   <div style={{ marginTop: 5 }}>
                     <Typography variant="body1">
                       <strong>Appointment Date</strong>:{" "}
-                      {selectedAppointment?.appointment.appointmentDate.toString()}
+                      {selectedAppointment?.appointment.appointmentDate.toString().split("T")[0]}
                     </Typography>
                     <Typography variant="body1">
                       <strong>Appointment Status</strong>:{" "}
@@ -384,64 +361,14 @@ const  PatientAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
                     </Typography>
                   </div>
                 </div>
-              </Card>
+              </Paper>
             </Box>
           </Box>
-          <Box sx={{ marginTop: 3, textAlign: "center" }}>
-            <Card
-              variant="outlined"
-              sx={{
-                padding: 2,
-                marginBottom: 2,
-                boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.4)",
-              }}
-            >
-              <div>
-                <Typography variant="h5">Appointment Details</Typography>
-                <div style={{ marginTop: 5 }}>
-                  <Typography variant="body1">
-                    <strong>Appointment Date</strong>:{" "}
-                    {selectedAppointment?.appointment.appointmentDate.toString()}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Appointment Status</strong>:{" "}
-                    {selectedAppointment?.appointment.appointmentStatus}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Note</strong>:{" "}
-                    {selectedAppointment?.appointment.note}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Reason</strong>:{" "}
-                    {selectedAppointment?.appointment.reason}
-                  </Typography>
-                </div>
-              </div>
-            </Card>
-          </Box>
-        </Box>
-      </Dialog>
-      <Dialog
-        open={deleteDialogOpen}
-        onClose={handleCloseDeleteDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Delete Appointment?"}
-        </DialogTitle>
-        <DialogContent>
-          <p>Are you sure you want to delete this appointment?</p>
+          
+       
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteAppointment} color="primary" autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
       </Dialog>
+     
     </Box>
   );
 };

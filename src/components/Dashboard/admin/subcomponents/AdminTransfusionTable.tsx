@@ -434,11 +434,9 @@ const AdminTransfionsTable: React.FC<AdminBloodTransfusionTableProps> = ({
             ))}
           </TableBody>
         </Table>
-        <Modal
+        <Dialog
           open={expand}
           onClose={() => setExpand(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
             <Box
@@ -474,7 +472,12 @@ const AdminTransfionsTable: React.FC<AdminBloodTransfusionTableProps> = ({
                       marginTop: 2,
                     }}
                   >
-                    <img
+                     <Avatar
+                      alt={selectedTransfusion?.requirer.user.firstName}
+                      src={selectedTransfusion?.requirer.user.profileImage || dummyUser.profileImage}
+                      sx={{ width: "200px", height: "200px" }}
+                    ></Avatar>
+                    {/* <img
                       alt="Profile"
                       style={{
                         width: "28%", // Adjust the width as needed
@@ -484,10 +487,10 @@ const AdminTransfionsTable: React.FC<AdminBloodTransfusionTableProps> = ({
                         objectFit: "cover",
                       }}
                       src={dummyUser.profileImage} // Use user's profile image
-                    />
+                    /> */}
                     <div>
                       <Typography variant="h6">
-                        <strong>Donor Name:</strong>{" "}
+                        <strong>Requirer Name:</strong>{" "}
                         {selectedTransfusion?.requirer.user.firstName}{" "}
                         {selectedTransfusion?.requirer.user.lastName}
                       </Typography>
@@ -542,7 +545,7 @@ const AdminTransfionsTable: React.FC<AdminBloodTransfusionTableProps> = ({
                         marginTop: 2,
                       }}
                     >
-                      <img
+                      {/* <img
                         alt="Profile"
                         style={{
                           width: "28%", // Adjust the width as needed
@@ -552,7 +555,12 @@ const AdminTransfionsTable: React.FC<AdminBloodTransfusionTableProps> = ({
                           objectFit: "cover",
                         }}
                         src={dummyUser.profileImage} // Use user's profile image
-                      />
+                      /> */}
+                      <Avatar
+                        alt={selectedTransfusion?.requirer.user.firstName}
+                        src={selectedTransfusion?.requirer.user.profileImage || dummyUser.profileImage}
+                        sx={{ width: "200px", height: "200px" }}
+                      ></Avatar>
                       <div>
                         <Typography variant="h6">
                           <strong>Donor Name:</strong>{" "}
@@ -590,7 +598,7 @@ const AdminTransfionsTable: React.FC<AdminBloodTransfusionTableProps> = ({
               </Box>
             )}
           </Box>
-        </Modal>
+        </Dialog>
         <Box>
           <Dialog
             open={open}
@@ -598,7 +606,7 @@ const AdminTransfionsTable: React.FC<AdminBloodTransfusionTableProps> = ({
             sx={{ maxWidth: "lg" }}
           >
             <DialogTitle>Add Transfusion</DialogTitle>
-            <DialogContent>
+            <DialogContent sx={{minWidth: "500px"}}>
               <Card
                 variant="outlined"
                 sx={{

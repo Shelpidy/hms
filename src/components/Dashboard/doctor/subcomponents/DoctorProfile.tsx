@@ -15,6 +15,7 @@ import {
   TextField,
   IconButton,
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import { PhotoCamera, Edit, SaveAlt } from "@mui/icons-material";
 import { useState } from "react";
 import Swal from "sweetalert2";
@@ -22,7 +23,7 @@ import Swal from "sweetalert2";
 type DoctorProfile = {
   doctor: Doctor;
   user: User;
-  specilization: Specialization;
+  specialization: Specialization;
 };
 
 interface DoctorProfileProps {
@@ -50,6 +51,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const [updateDoctor, setUpdateDoctor] = useState<{
     doctorEmail: string;
@@ -96,6 +98,11 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
     setIsEditing(true);
     // Initialize editedData with the current doctor data
     setEditedData(updateUser);
+    setUpdateDoctor({
+      doctorEmail: doctorprofile?.user?.email,
+      specialization: doctorprofile?.specialization?.specializationName,
+      doctorId: doctorprofile?.doctor?.doctorId,
+    })
     setUpdateUser({
       userId: doctorprofile.user?.userId,
       firstName: doctorprofile.user?.firstName,
@@ -110,36 +117,54 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
   };
 
   ///// performs the put request//////
-  async function handleUpdate() {
+  async function handleUpdate(userId: string) {
     // Logic to update the appointment
     console.log(updateUser, updateDoctor);
-    setIsEditing(false);
-    onRefetch();
-    // try {
-    //   const request = await fetch ("/api/doctor", {
-    //     method: "PUT",
-    //     body: JSON.stringify(""),
-    //     headers: {"Content-Type": "application/json"}
-    //   })
-    //   const data = await request.json()
-    //   if (request.status === 202) {
-    //     Toast.fire({
-    //       icon: "success",
-    //       iconColor: "green",
-    //       text: data?.message
-    //     })
-    //   }
-    //   else{
-    //     Toast.fire({
-    //       icon: "error",
-    //       iconColor: "red",
-    //       text: data?.message
-    //     })
-    //   }
-    //   onRefetch()
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      setLoading(true)
+      const request1 = await fetch (`/api/doctors/${userId}`, {
+        method: "PUT",
+        body: JSON.stringify(updateDoctor),
+        headers: {"Content-Type": "application/json"}
+      })
+      const request2 = await fetch (`/api/users/${userId}`, {
+        method: "PUT",
+        body: JSON.stringify(updateUser),
+        headers: {"Content-Type": "application/json"}
+      })
+      const [response1, response2] = await Promise.all([request1, request2])
+
+      const data1 = await response1.json()
+      const data2 = await response2.json()
+
+      if (response1.status === 202 && response2.status === 202) {
+        Toast.fire({
+          icon: "success",
+          iconColor: "green",
+          text: `${data1?.message} ${data2?.message}`,
+        })
+      }
+      else{
+        Toast.fire({
+          icon: "error",
+          iconColor: "red",
+          text: `${data1?.message} ${data2?.message}`,
+        })
+      }
+    
+    } catch (error:any) {
+      console.log(error.message);
+      Toast.fire({
+        icon: "error",
+        iconColor: "red",
+        text: "An error occurred while updating.",
+      });
+      
+    }finally{
+        setLoading(false)
+        onRefetch()
+        setIsEditing(false);
+    }
     // Update the appointments state after updating
   }
 
@@ -192,8 +217,8 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                 </label>
               ) : (
                 <Avatar
-                  alt={`${updateUser.firstName} ${updateUser.lastName}'s profile`}
-                  src={updateUser.profileImage || "/default-avatar.png"}
+                  alt={`${doctor.user.firstName} ${doctor.user.lastName}'s profile`}
+                  src={doctor.user.profileImage || "/default-avatar.png"}
                   sx={{
                     maxWidth: "200px",
                     minWidth: "160px",
@@ -214,6 +239,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                   name="firstName"
                   variant="outlined"
                   label="First Name"
+                  sx={{marginLeft: 2,}}
                   size="small"
                   value={updateUser.firstName}
                   onChange={(e) =>
@@ -221,7 +247,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                   }
                 />
               ) : (
-                `Dr. ${updateUser.firstName}`
+                `Dr. ${doctor?.user.firstName}`
               )}{" "}
               {isEditing ? (
                 <TextField
@@ -229,18 +255,34 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                   name="lastName"
                   label="Last Name"
                   size="small"
-                  sx={{ marginTop: { xs: 1, sm: 1, md: 0, lg: 0 } }}
+                  sx={{ marginTop: { xs: 1, sm: 1, md: 0, lg: 0 }, marginLeft: {xs:2} }}
                   value={updateUser.lastName}
                   onChange={(e) =>
                     setUpdateUser({ ...updateUser, lastName: e.target.value })
                   }
                 />
               ) : (
-                updateUser.lastName
+                doctor?.user.lastName
               )}
             </Typography>
             <Typography variant="subtitle1">
-              {isEditing ? null : `${doctor.specilization.specializationName}`}{" "}
+              {isEditing ? (
+                <TextField
+                    variant="outlined"
+                    name="specialization"
+                    label="Specialization"
+                    sx={{marginTop: 2, marginLeft: 2,}}
+                    size="small"
+                    value={updateDoctor.specialization}
+                    onChange={(e) =>
+                      setUpdateDoctor({
+                        ...updateDoctor,
+                        specialization: e.target.value,
+                      })
+                    }
+                  />
+              ) 
+              : `${doctor?.specialization?.specializationName}`}{" "}
             </Typography>
             <Divider sx={{ my: 2 }} />
             <List>
@@ -262,7 +304,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                 ) : (
                   <ListItemText
                     primary="Contact"
-                    secondary={updateUser.contactNumber}
+                    secondary={doctor?.user?.contactNumber}
                   />
                 )}{" "}
               </ListItem>
@@ -281,7 +323,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                 ) : (
                   <ListItemText
                     primary="Gender"
-                    secondary={updateUser.gender}
+                    secondary={doctor?.user?.gender}
                   />
                 )}{" "}
               </ListItem>
@@ -304,7 +346,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                   <ListItemText
                     primary="Date of Birth"
                     secondary={new Date(
-                      updateUser.dateOfBirth,
+                      doctor?.user?.dateOfBirth ?? "",
                     ).toLocaleDateString()}
                   />
                 )}{" "}
@@ -324,7 +366,7 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                 ) : (
                   <ListItemText
                     primary="Address"
-                    secondary={updateUser.address}
+                    secondary={doctor?.user?.address}
                   />
                 )}{" "}
               </ListItem>
@@ -341,21 +383,23 @@ const DoctorProfileDetails: React.FC<DoctorProfileProps> = ({
                     }
                   />
                 ) : (
-                  <ListItemText primary="Email" secondary={updateUser.email} />
+                  <ListItemText primary="Email" secondary={doctor?.user?.email} />
                 )}{" "}
               </ListItem>
             </List>
             <Box sx={{ display: "flex", justifyContent: "flex-start", mt: 2 }}>
               {isEditing ? (
-                <Button
+                <LoadingButton
                   size="large"
                   variant="contained"
+                  loading={loading}
+                  disabled={loading}
                   color="primary"
-                  onClick={handleUpdate}
+                  onClick={() => handleUpdate(doctor.user.userId)}
                 >
                   <SaveAlt />
                   <span style={{ marginLeft: 5 }}>Save</span>
-                </Button>
+                </LoadingButton>
               ) : (
                 <Button
                   size="large"

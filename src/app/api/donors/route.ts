@@ -37,8 +37,8 @@ export async function POST(req: NextRequest) {
     const bloodGrp = await BloodGroup.findOne({where:{
       groupName: data.bloodGroupName,
     }});
-    const  bloodGroupId  = bloodGrp?.getDataValue("bloodGroupId");
-
+     const  { bloodGroupId }  = bloodGrp?.dataValues;
+  
     const donor = await Donor.create({
       ...data,
       bloodGroupId,

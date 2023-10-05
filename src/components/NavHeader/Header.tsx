@@ -187,7 +187,7 @@ function Header({ setThemeMode }: HeaderProps) {
                   <LightModeSharp />
                 )}
               </IconButton>
-              {currentUser && currentUser.role && (
+              {currentUser && currentUser.role && currentUser?.role !== "user" && (
                 <Link href={`/dashboard/${currentUser.role}/`}>
                   <Avatar
                     src={currentUser.profilePicture}

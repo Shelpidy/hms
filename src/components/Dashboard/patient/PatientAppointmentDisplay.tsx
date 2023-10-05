@@ -29,7 +29,7 @@ const PatientAppointmentDisplay: React.FC = () => {
   const handleRefetch = async () => {
     try {
       const response = await fetch(
-        `/api/appointments/patients/${currentUser?.userId}`,
+        `/api/appointments/patients/${currentUser?.userId || "bbb48da8-495a-42b5-b806-b3796fc2f843"}`,
         { cache: "no-cache" },
       );
       const data = await response.json();

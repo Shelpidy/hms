@@ -54,7 +54,71 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     console.log(error);
     return new NextResponse(
       JSON.stringify({
-        message: "Something went wrong in the get all patients",
+        message: "Something went wrong in the patients routes",
+      }),
+      {
+        status: 500,
+      },
+    );
+  }
+}
+
+export async function PUT(req: NextRequest, { params }: RouteParams) {
+  try {
+
+    const { userId } = params;
+    
+    const data = await req.json();
+    const email = data.patientEmail as string;
+    const patientId = data.patientId as string;
+    const diagnosis = data.diagnosis as string;
+    const bloodGrp = data.bloodGroup as string;
+
+    const patient = await Patient.findOne({ where: { userId } });
+    if (!patient) {
+      return new Response(JSON.stringify({ message: "Patient not found" }), {
+        status: 404,
+      });
+    }
+    const { bloodGroupId,}  = patient.dataValues;
+    const bloodGrpTable = await BloodGroup.findOne({
+      where: { bloodGroupId },
+    });
+    // if(!bloodGrpTable) {
+    //     return new Response(JSON.stringify({message: "BloodGroup not found"}))
+    // }
+    await BloodGroup.update(
+      {
+        groupName: bloodGrp,
+        bloodGroupId,
+      },
+      { where: { bloodGroupId: bloodGroupId } },
+    );
+
+    await patient.update(
+      {
+        patientId,
+        userId,
+        diagnosis,
+        bloodGroupId,
+      },
+      { where: { patientId } },
+    );
+
+    // const updatedPatient = await Patient.findOne({ where: { patientId: patientId } });
+
+    return new Response(
+      JSON.stringify({ message: "User updated successfully" }),
+      {
+        status: 202,
+      },
+    );
+  } catch (error: any) {
+    console.log(error);
+    return new Response(
+      JSON.stringify({
+        message: "Something went wrong in PUT",
+        error: error.message,
       }),
       {
         status: 500,

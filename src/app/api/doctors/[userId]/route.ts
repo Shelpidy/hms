@@ -70,6 +70,7 @@ type Params = {
 export async function PUT(req: NextRequest, { params }: Params) {
   try {
     const data: Record<string, any> = await req.json();
+    const newSpecialization = data.specialization as string;
     const userId = params.userId;
     const doctor = await Doctor.findOne({ where: { userId } });
 
@@ -81,12 +82,15 @@ export async function PUT(req: NextRequest, { params }: Params) {
         { status: 404 },
       );
     }
-    let updatedDoctor = await doctor.update(data);
+    const { specializationId } = doctor.dataValues
+    const updatedSpecialization = await Specialization.update({specializationName : newSpecialization}, {where: {specializationId} });
+    let updatedDoctor = ""
 
     return new Response(
       JSON.stringify({
         message: "Doctor updated successfully",
         doctor: updatedDoctor,
+        specialization: updatedSpecialization
       }),
       { status: 202 },
     );

@@ -17,6 +17,8 @@ import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import ZHLogo from "@/components/Logo/Logo";
+import { LoadingButton } from "@mui/lab";
+import { LocalDiningSharp } from "@mui/icons-material";
 const Toast = Swal.mixin({
   toast: true,
   position: "center",
@@ -143,9 +145,15 @@ const SignInPage: React.FC = () => {
           onChange={handleInputChange}
           sx={{ mb: 2 }}
         />
-        <CustomButton size="medium" onClick={handleFormSubmit}>
+        <LoadingButton 
+         variant="contained"
+         loading={loading}
+         disabled={loading}
+         color="primary" 
+         size="medium" 
+         onClick={handleFormSubmit}>
           Sign In
-        </CustomButton>
+        </LoadingButton>
       </Card>
     </Container>
   );

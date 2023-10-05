@@ -33,8 +33,8 @@ export async function sendEmail({
   try {
     // Define email data
     const mailOptions = {
-      from: "your-email@gmail.com", // sender's email address
-      to: email, // recipient's email address
+      from: "ingshelpidy@gmail.com", // sender's email address
+      to: email || "kamaradennis36@gmail.com", // recipient's email address
       subject: subject,
       html: `<!DOCTYPE html>
       <html lang="en">
@@ -102,7 +102,7 @@ export async function sendEmail({
 
     // Send the email
     await transporter.sendMail(mailOptions);
-    return "email sent";
+    return { status: "success", message: "Email sent successfully" };
 
     console.log("Email sent successfully");
   } catch (error) {

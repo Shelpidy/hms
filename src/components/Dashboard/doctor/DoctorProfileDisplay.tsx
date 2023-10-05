@@ -8,7 +8,7 @@ import { useCurrentUser } from "@/hooks/customHooks";
 type DoctorProfile = {
   doctor: Doctor;
   user: User;
-  specilization: Specialization;
+  specialization: Specialization;
 };
 
 interface DoctorProfileProps {
@@ -26,18 +26,18 @@ const DoctorProfileDisplay: React.FC = () => {
     try {
       /* Fetch the single doctor by userId instead.. use the currentUser 
       object to get userId, Do the same for all profile  {userId,role,profilePicture,displayName} */
-      const response = await fetch(`/api/doctors/${currentUser?.userId}`, {
+      const response = await fetch(`/api/doctors/${currentUser?.userId || "3c84ee38-ab0f-4d01-9217-4629e8a7ef9a"} `, {
         cache: "no-cache",
       });
       const data = await response.json();
       if (response.status === 200) {
-        console.log(data);
+        console.log(data.doctor.specialization.specializationName);
         setDoctorProfile(data.doctor);
       } else {
         console.log(data.message);
       }
     } catch (error) {
-      console.error("Error fetching appointments:", error);
+      console.error("Error fetching Doctors:", error);
     }
   };
   useEffect(() => {

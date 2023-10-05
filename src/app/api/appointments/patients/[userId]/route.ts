@@ -30,7 +30,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     const appointments = await Appointment.findAll({
-      where: { doctorId: patient.getDataValue("patientId") },
+      where: { patientId: patient.patientId },
     });
 
     const appointmentsWithDetails = await Promise.all(

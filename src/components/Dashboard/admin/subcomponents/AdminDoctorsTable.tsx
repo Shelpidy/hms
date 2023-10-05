@@ -62,6 +62,7 @@ const style = {
   width: "80%",
   maxWidth: "500px",
   maxHeight: "88vh",
+  bgcolor: "background.paper",
   p: 4,
   overflow: "auto",
 };
@@ -363,8 +364,8 @@ const AdminDoctorsTable: React.FC<AdminDoctorTableProps> = ({
                 <CloseIcon color="primary" />
               </IconButton>
             </Box>
-            <Box sx={{ marginTop: -1, textAlign: "center" }}>
-              <Typography variant="h5">Doctor Details</Typography>
+            <Box sx={{ marginTop: -4, textAlign: "center" }}>
+              <DialogTitle mb={-5}>Doctor Details</DialogTitle>
               <Box
                 sx={{
                   display: "flex",
@@ -374,22 +375,14 @@ const AdminDoctorsTable: React.FC<AdminDoctorTableProps> = ({
                   marginTop: 2,
                 }}
               >
+                <DialogContent sx={{minWidth: "500px"}}>
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center",}}>  
                 <Avatar
                   alt={selectedDoctor?.user.firstName}
                   sx={{ width: "200px", height: "200px" }}
                   src={selectedDoctor?.user.profileImage}
                 />
-                {/* <img
-                  alt="Profile"
-                  style={{
-                    width: "28%", // Adjust the width as needed
-                    height: "auto", // Auto height to maintain aspect ratio
-                    maxWidth: "75%",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                  }}
-                  src={dummyUser.profileImage} // Use user's profile image
-                /> */}
+                </Box>
                 <div>
                   <Typography variant="h6">
                     <strong>Doctor Name:</strong>{" "}
@@ -419,6 +412,7 @@ const AdminDoctorsTable: React.FC<AdminDoctorTableProps> = ({
                     {selectedDoctor?.user?.dateOfBirth?.toString()}
                   </Typography>
                 </div>
+                </DialogContent>
               </Box>
             </Box>
           </Box>

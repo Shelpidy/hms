@@ -41,8 +41,6 @@ const style = {
   minWidth: "70vw",
   maxHeight: "88vh",
   bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   overflow: "auto",
 };
@@ -184,7 +182,7 @@ const DoctorAppointmentTable: React.FC<DoctorAppointmentTableProps> = ({
         />
       </Box>
       <TableContainer component={Paper}>
-        <Table sx={{minWidth:"60vw"}}>
+        <Table sx={{minWidth:"70vw"}}>
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: "bold" }}>Patient</TableCell>

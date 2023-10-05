@@ -2,7 +2,8 @@
 
 import { useCurrentUser } from "@/hooks/customHooks";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AdminProfileDetails from "./subcomponents/AdminProfile";
 
 type AdminProfile = {
   admin: Admin;
@@ -11,9 +12,55 @@ type AdminProfile = {
 
 const AdminProfileDisplay: React.FC = () => {
   const [adminProfile, setAdminProfile] = useState<AdminProfile | null>();
+  const [adminProfiles, setAdminProfiles] = useState<AdminProfile[] | null>();
   const currentUser = useCurrentUser();
 
-  if (!adminProfile) {
+  const handleRefetch = async () => {
+    try {
+      console.log(currentUser)
+      /* Fetch the single admin by userId instead.. use the currentUser 
+      object to get userId, Do the same for all profile  {userId,role,profilePicture,displayName} */
+      const response = await fetch(`/api/admins/${currentUser?.userId || "dcc3d3a5-f1bc-49c6-bd73-f4bf7747482d"}`, {
+        cache: "no-cache",
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        console.log(data.admin);
+        setAdminProfile(data.admin);
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    }
+  };
+  useEffect(() => {
+    handleRefetch();
+  }, []);
+
+  const handleRefetchProfiles = async () => {
+    try {
+      /* Fetch the single admin by userId instead.. use the currentUser 
+      object to get userId, Do the same for all profile  {userId,role,profilePicture,displayName} */
+      const response = await fetch(`/api/admins/`, {
+        cache: "no-cache",
+      });
+      const data = await response.json();
+      if (response.status === 200) {
+        console.log(data.admins);
+        setAdminProfiles(data.admins);
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    }
+  };
+  useEffect(() => {
+    handleRefetchProfiles();
+  }, [])
+
+  if (!adminProfile || !adminProfiles) {
     return (
       <Box
         sx={{
@@ -33,7 +80,12 @@ const AdminProfileDisplay: React.FC = () => {
       </Box>
     );
   }
-  return <Box>AdminProfile</Box>;
+  
+  return (
+    <Box>
+      <AdminProfileDetails admins={adminProfiles} onRefetchAdmins={handleRefetchProfiles} admin={adminProfile} onRefetch={handleRefetch} />
+    </Box>
+  )
 };
 
 export default AdminProfileDisplay;

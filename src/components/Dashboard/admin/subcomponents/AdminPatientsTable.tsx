@@ -61,11 +61,9 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  maxWidth: "500px",
+  minWidth: "500px",
   maxHeight: "88vh",
   bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
 
 };
@@ -379,15 +377,15 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
                 <CloseIcon color="primary" />
               </IconButton>
             </Box>
-            <Box sx={{ marginTop: -1, textAlign: "center" }}>
-              <Typography variant="h5">Patient Details</Typography>
+            <Box sx={{ marginTop: -4, textAlign: "center" }}>
+              <DialogTitle>Patient Details</DialogTitle>
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
-                  marginTop: 2,
+                 marginBottom: 0
                 }}
               >
                 <Avatar
@@ -395,18 +393,6 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
                   sx={{ width: "200px", height: "200px" }}
                   src={selectedPatient?.user.profileImage}
                 />
-
-                {/* <img
-                  alt="Profile"
-                  style={{
-                    width: "28%", // Adjust the width as needed
-                    height: "auto", // Auto height to maintain aspect ratio
-                    maxWidth: "75%",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                  }}
-                  src={dummyUser.profileImage} // Use user's profile image
-                /> */}
                 <div>
                   <Typography variant="h6">
                     <strong>Patient Name:</strong>{" "}
@@ -499,7 +485,7 @@ const AdminPatientsTable: React.FC<AdminPatientTableProps> = ({
           sx={{ maxWidth: "md" }}
         >
           <DialogTitle>Update Patient</DialogTitle>
-          <DialogContent>
+          <DialogContent sx={{minWidth: "500px"}}>
             <InputLabel>Patient Email</InputLabel>
             <TextField
               fullWidth

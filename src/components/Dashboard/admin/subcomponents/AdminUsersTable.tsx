@@ -57,8 +57,6 @@ const style = {
   maxWidth: 400,
   maxHeight: "88vh",
   bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   overflow: "auto",
 };
@@ -169,7 +167,7 @@ const AdminUsersTable: React.FC<AdminUserTableProps> = ({ users }) => {
               </IconButton>
             </Box>
             <Box sx={{ marginTop: -1, textAlign: "center" }}>
-              <Typography variant="h5">Patient Details</Typography>
+              <Typography variant="h5">User Details</Typography>
               <Box
                 sx={{
                   display: "flex",

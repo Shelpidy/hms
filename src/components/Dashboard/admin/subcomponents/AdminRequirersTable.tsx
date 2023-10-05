@@ -62,8 +62,6 @@ const style = {
   maxWidth: 400,
   maxHeight: "88vh",
   bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   overflow: "auto",
 };
@@ -275,11 +273,9 @@ const AdminRequirersTable: React.FC<AdminRequirerTableProps> = ({
           </TableBody>
         </Table>
 
-        <Modal
+        <Dialog
           open={expand}
           onClose={() => setExpand(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
             <Box
@@ -347,7 +343,7 @@ const AdminRequirersTable: React.FC<AdminRequirerTableProps> = ({
               </Box>
             </Box>
           </Box>
-        </Modal>
+        </Dialog>
         <Box>
           <Dialog
             open={open}
@@ -355,7 +351,7 @@ const AdminRequirersTable: React.FC<AdminRequirerTableProps> = ({
             sx={{ maxWidth: "lg" }}
           >
             <DialogTitle>Add Requirer</DialogTitle>
-            <DialogContent>
+            <DialogContent sx={{minWidth: "500px"}}>
               <InputLabel>Email</InputLabel>
               <TextField
                 fullWidth

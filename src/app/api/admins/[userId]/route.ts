@@ -10,6 +10,7 @@ type RouteParams = {
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
     const { userId } = params;
+    // will have to change the Model to Admin so take note
     const admin = await Admin.findOne({ where: { userId } });
 
     if (!admin) {
@@ -65,14 +66,15 @@ export async function PUT(req: Request,{params}:RouteParams) {
         status: 404,
       });
     }
-    const data = await req.formData();
-    const username = data.get("username") as string;
+    const data = await req.json();
+    const username = data.username as string;
     const updatedAdmin = await Admin.update(
       {
         username,
       },
       { where: { adminId: id } },
     );
+
 
     return new Response(
       JSON.stringify({ message: "admin updated successfully", updatedAdmin }),
@@ -81,7 +83,7 @@ export async function PUT(req: Request,{params}:RouteParams) {
   } catch (error) {
     console.log(error);
     return new Response(
-      JSON.stringify({ message: "something went wrong in the POST request" }),
+      JSON.stringify({ message: "something went wrong in the PUT request" }),
       { status: 500 },
     );
   }

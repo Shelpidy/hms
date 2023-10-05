@@ -25,7 +25,7 @@ interface BloodGroupDataPoint {
 
 const AdminDonorsDisplay: React.FC = () => {
   const [donors, setDonors] = useState<DonorDetail[] | null>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const donationPerMonthData: BloodDonationDataPoint[] = [
     {

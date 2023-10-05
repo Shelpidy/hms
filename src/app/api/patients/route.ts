@@ -72,7 +72,7 @@ export async function POST(req: Request) {
     const existingPatient = await Patient.findOne({
       where: { userId: user.userId },
     });
-    await user.update({role:"doctor"})
+    await user.update({role:"patient"})
   
     if (existingPatient) {
       return new Response(
@@ -95,7 +95,8 @@ export async function POST(req: Request) {
       diagnosis,
       bloodGroupId,
     });
-
+   await Patient.update({role: 'patient'}, {where: {userId: user.userId}})
+   
     return new Response(
       JSON.stringify({ message: "New patient added successfully", newPatient }),
       {

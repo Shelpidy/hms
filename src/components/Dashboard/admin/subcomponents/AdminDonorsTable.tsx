@@ -8,12 +8,19 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  SelectChangeEvent,
   Paper,
   TextField,
   InputAdornment,
   IconButton,
   InputLabel,
+  Select,
+  MenuItem,
   Modal,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Typography,
   Avatar
 } from "@mui/material";
@@ -21,6 +28,8 @@ import { Delete, Edit, Add, Search } from "@mui/icons-material";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 import CloseIcon from "@mui/icons-material/Close";
 import Swal from "sweetalert2";
+import { LoadingButton } from "@mui/lab";
+import moment from "moment";
 
 type DonorProfile = {
   donor: Donor;
@@ -55,8 +64,6 @@ const style = {
   maxWidth: "70vw",
   maxHeight: "88vh",
   bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
   p: 4,
   overflow: "auto",
 };
@@ -68,6 +75,86 @@ const AdminDonorsTable: React.FC<AdminDonorTableProps> = ({
   const [expand, setExpand] = useState(false);
   const [selectedDonor, setSelectedDonor] = useState<DonorProfile | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [newDonor, setNewDonor] = useState<{
+    donorId: string;
+    firstName: string;
+    lastName: string;
+    middleName: string;
+    email: string;
+    volume: number;
+    address: string;
+    gender: string;
+    bloodGroupName: string;
+    contactNumber: string;
+    dateOfBirth: string;
+    profileImage: string;
+  }>({
+    donorId: "",
+    firstName: "",
+    lastName: "",
+    middleName: "",
+    email: "",
+    bloodGroupName: "",
+    volume: 0,	
+    address:  "",
+    gender:  "",
+    contactNumber: "",
+    dateOfBirth: "",
+    profileImage: "",
+  });
+
+  const [updateDonor, setUpdateDonor] = useState<{
+    donorId: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    middleName: string;
+    address: string;
+    volume: number;
+    bloodGroupName: string;
+    gender: string;
+    contactNumber: string;
+    dateOfBirth: string;
+    profileImage: string;
+  }>({
+    donorId:  "",
+    firstName: "",
+    lastName: "",
+    bloodGroupName: "",
+    middleName: "",
+    email:  "",
+    address:  "",
+    volume: 0,
+    gender:  "",
+    contactNumber: "",
+    dateOfBirth: "",
+    profileImage:"",
+  });
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "center",
+    timer: 3000,
+    timerProgressBar: true,
+    showConfirmButton: false,
+  });
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedDonor(null);
+  };
+
+  const handleUpdateClose = () => {
+    setOpenUpdate(false);
+  };
 
   const handleExpand = (donors: DonorProfile) => {
     console.log(donors);
@@ -75,6 +162,164 @@ const AdminDonorsTable: React.FC<AdminDonorTableProps> = ({
     setExpand(true);
   };
 
+  const handleEdit = (donor: DonorProfile) => {
+    console.log(donor.donor);
+    setOpenUpdate(true)
+    setSelectedDonor(donor);
+    
+    setUpdateDonor({
+      donorId: donor.donor.donorId,
+      firstName: donor.donor.firstName || "",
+      lastName: donor.donor.lastName || "",
+      middleName: donor?.donor?.middleName || "",
+      dateOfBirth: donor?.donor?.dateOfBirth || "",
+      email : donor?.donor?.email || "",
+      address : donor?.donor.address || "",
+      gender : donor?.donor?.gender || "",
+      contactNumber : donor?.donor.contactNumber,
+      bloodGroupName: donor?.bloodGroup?.groupName || "",
+      volume : donor?.bloodGroup?.volume || 0,
+      profileImage: donor?.donor.profileImage || "",
+
+    });
+    setOpenUpdate(true);
+  };
+  const handleSelectInputChange = (event: SelectChangeEvent<any>) => {
+    const { name, value } = event.target;
+    setNewDonor((prevDonor) => ({
+      ...prevDonor,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectUpdateInputChange = (event: SelectChangeEvent<any>) => {
+    const { name, value } = event.target;
+    setUpdateDonor((prevDonor) => ({
+      ...prevDonor,
+      [name]: value,
+    }));
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setNewDonor((prevDonor) => ({
+      ...prevDonor,
+      [name]: value,
+    }));
+  };
+
+  const handleUpdateInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { name, value } = event.target;
+    setUpdateDonor((prevDonor) => ({
+      ...prevDonor,
+      [name]: value,
+    }));
+  };
+
+  async function handleDelete(donorId: string) {
+    console.log(donorId);
+    try {
+      setLoading(true)
+      // Logic to delete the appointment
+      console.log(donorId);
+      const request = await fetch(`/api/donors/${donorId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await request.json();
+      if (request.status === 203) {
+        Toast.fire({
+          icon: "success",
+          iconColor: "green",
+          text: data?.message,
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          iconColor: "red",
+          text: data?.message,
+        });
+      }
+      setLoading(false)
+      onRefetch();
+      // Update the appointments state after deletion
+    } catch (error) {
+      console.log(error);
+      setLoading(false)
+    }
+  }
+
+  async function handleUpdate() {
+    // Logic to update the appointment
+    console.log(updateDonor);
+    try {
+      setLoading(true)
+      const request = await fetch("/api/donors", {
+        method: "PUT",
+        body: JSON.stringify(updateDonor),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await request.json();
+      if (request.status === 202) {
+        Toast.fire({
+          icon: "success",
+          iconColor: "green",
+          text: data?.message,
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          iconColor: "red",
+          text: data?.message,
+        });
+      }
+      setLoading(false)
+      onRefetch();
+    } catch (error) {
+      console.log(error);
+      setLoading(false)
+    }
+    // Update the appointments state after updating
+    handleUpdateClose();
+  }
+
+  async function handleAdd() {
+    try {
+      setLoading(true)
+      console.log("New Appointment", newDonor);
+      // Logic to add a new appointment
+      const request = await fetch("/api/donors", {
+        method: "POST",
+        body: JSON.stringify(newDonor),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await request.json();
+      if (request.status === 201) {
+        console.log(JSON.stringify(data));
+        Toast.fire({
+          icon: "success",
+          iconColor: "green",
+          text: data?.message,
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          iconColor: "red",
+          text: data?.message,
+        });
+      }
+      setLoading(false)
+      onRefetch();
+    } catch (error) {
+      console.log(error);
+      setLoading(false)
+    }
+    // Update the appointments state after adding
+    handleClose();
+    
+  }
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
@@ -103,6 +348,14 @@ const AdminDonorsTable: React.FC<AdminDonorTableProps> = ({
             ),
           }}
         />
+        <Button
+          size="small"
+          variant="contained"
+          startIcon={<Add />}
+          onClick={handleOpen}
+        >
+          New
+        </Button>
       </Box>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: "65vw" }}>
@@ -138,21 +391,22 @@ const AdminDonorsTable: React.FC<AdminDonorTableProps> = ({
                       donor.donor.lastName}
                   </TableCell>
                   <TableCell>{donor?.donor.address}</TableCell>
-                  <TableCell>{donor?.donor.createdAt?.toString()}</TableCell>
+                  <TableCell>{moment(donor?.donor?.createdAt).fromNow()}</TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleExpand(donor)}>
                       <ExpandCircleDownIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleEdit(donor)}>
+                      <Edit />
                     </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
           </TableBody>
         </Table>
-        <Modal
+        <Dialog
           open={expand}
           onClose={() => setExpand(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
             <Box
@@ -179,17 +433,11 @@ const AdminDonorsTable: React.FC<AdminDonorTableProps> = ({
                   marginTop: 2,
                 }}
               >
-                <img
-                  alt="Profile"
-                  style={{
-                    width: "28%", // Adjust the width as needed
-                    height: "auto", // Auto height to maintain aspect ratio
-                    maxWidth: "75%",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                  }}
-                  src={dummyDonor.profileImage} // Use Donor's profile image
-                />
+                 <Avatar
+                  alt={selectedDonor?.donor.firstName}
+                  src={selectedDonor?.donor.profileImage || dummyDonor.profileImage}
+                  sx={{ width: "200px", height: "200px" }}
+                ></Avatar>
                 <div>
                   <Typography variant="h6">
                     <strong>Donor Name:</strong>{" "}
@@ -221,7 +469,234 @@ const AdminDonorsTable: React.FC<AdminDonorTableProps> = ({
               </Box>
             </Box>
           </Box>
-        </Modal>
+        </Dialog>
+        <Box>
+          <Dialog
+            open={open}
+            onClose={() => setOpen(false)}
+
+            sx={{ maxWidth: "lg",alignItems:"center",justifyContent:"center" }}
+          >
+            <DialogTitle>Add Donor</DialogTitle>
+            <DialogContent sx={{minWidth:"500px"}}>
+              <InputLabel>FirstName</InputLabel>
+              <TextField
+                fullWidth
+                name="firstName"
+                value={newDonor.firstName}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+              <InputLabel>LastName</InputLabel>
+              <TextField
+                fullWidth
+                name="lastName"
+                value={newDonor.lastName}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+              <InputLabel>MiddleName</InputLabel>
+              <TextField
+                fullWidth
+                name="middleName"
+                value={newDonor.middleName}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+              <InputLabel>Email</InputLabel>
+              <TextField
+                fullWidth
+                name="email"
+                value={newDonor.email}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+              <InputLabel>Phone Number</InputLabel>
+              <TextField
+                fullWidth
+                name="contactNumber"
+                value={newDonor.contactNumber}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+              <InputLabel>Address</InputLabel>
+              <TextField
+                fullWidth
+                name="address"
+                value={newDonor.address}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+              <InputLabel>Blood Group</InputLabel>
+              <Select
+                fullWidth
+                name="bloodGroupName"
+                value={newDonor.bloodGroupName}
+                onChange={handleSelectInputChange}
+                margin="dense"
+              >
+                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
+                  (group) => (
+                    <MenuItem key={group} value={group}>
+                      {group}
+                    </MenuItem>
+                  ),
+                )}
+              </Select>
+              <InputLabel>Volume of Blood</InputLabel>
+              <TextField
+                fullWidth
+                type="number"
+                name="volume"
+                value={newDonor.volume}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+              <InputLabel>Gender</InputLabel>
+              <Select
+                fullWidth
+                name="gender"
+                value={newDonor.gender}
+                onChange={handleSelectInputChange}
+                margin="dense"
+              >
+                {["Male", "Female"].map(
+                  (group) => (
+                    <MenuItem key={group} value={group}>
+                      {group}
+                    </MenuItem>
+                  ),
+                )}
+              </Select>
+              <InputLabel>Date of Birth</InputLabel>
+              <TextField
+                fullWidth
+                type="date"
+                name="dateOfBirth"
+                value={newDonor.dateOfBirth}
+                onChange={handleInputChange}
+                margin="normal"
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <LoadingButton onClick={handleAdd} disabled={loading} loading={loading}>Add</LoadingButton>
+            </DialogActions>
+          </Dialog>
+        </Box>
+        <Dialog
+          open={openUpdate}
+          onClose={() => setOpenUpdate(false)}
+          sx={{ maxWidth: "md" }}
+        >
+          <DialogTitle>Update Donor</DialogTitle>
+          <DialogContent sx={{minWidth: "500px"}}>
+          <InputLabel>FirstName</InputLabel>
+              <TextField
+                fullWidth
+                name="firstName"
+                value={updateDonor.firstName}
+                onChange={handleUpdateInputChange}
+                margin="normal"
+              />
+               <InputLabel>LastName</InputLabel>
+              <TextField
+                fullWidth
+                name="lastName"
+                value={updateDonor.lastName}
+                onChange={handleUpdateInputChange}
+                margin="normal"
+              />
+              <InputLabel>MiddleName</InputLabel>
+              <TextField
+                fullWidth
+                name="middleName"
+                value={updateDonor.middleName}
+                onChange={handleUpdateInputChange}
+                margin="normal"
+              />
+              <InputLabel>Email</InputLabel>
+              <TextField
+                fullWidth
+                name="email"
+                value={updateDonor.email}
+                onChange={handleUpdateInputChange}
+                margin="normal"
+              />
+              <InputLabel>Phone Number</InputLabel>
+              <TextField
+                fullWidth
+                name="contactNumber"
+                value={updateDonor.contactNumber}
+                onChange={handleUpdateInputChange}
+                margin="normal"
+              />
+              <InputLabel>Address</InputLabel>
+              <TextField
+                fullWidth
+                name="address"
+                value={updateDonor.address}
+                onChange={handleUpdateInputChange}
+                margin="normal"
+              />
+              <InputLabel>Blood Group</InputLabel>
+              <Select
+                fullWidth
+                name="bloodGroupName"
+                value={updateDonor.bloodGroupName}
+                onChange={handleSelectUpdateInputChange}
+                margin="dense"
+              >
+                {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
+                  (group) => (
+                    <MenuItem key={group} value={group}>
+                      {group}
+                    </MenuItem>
+                  ),
+                )}
+              </Select>
+              <InputLabel>Volume of Blood</InputLabel>
+              <TextField
+                fullWidth
+                type="number"
+                name="volume"
+                value={updateDonor.volume}
+                onChange={handleUpdateInputChange}
+                margin="normal"
+              />
+              <InputLabel>Gender</InputLabel>
+              <Select
+                fullWidth
+                name="gender"
+                value={updateDonor.gender}
+                onChange={handleSelectUpdateInputChange}
+                margin="dense"
+              >
+                {["male", "female"].map(
+                  (group) => (
+                    <MenuItem key={group} value={group}>
+                      {group}
+                    </MenuItem>
+                  ),
+                )}
+              </Select>
+              <InputLabel>Date of Birth</InputLabel>
+              <TextField
+                fullWidth
+                type="date"
+                name="dateOfBirth"
+                value={updateDonor.dateOfBirth.split("T")[0]}
+                onChange={handleUpdateInputChange}
+                margin="normal"
+              />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleUpdateClose}>Cancel</Button>
+            <LoadingButton loading={loading} disabled={loading} onClick={handleUpdate} color="primary">
+              Update
+            </LoadingButton>
+          </DialogActions>
+        </Dialog>
       </TableContainer>
     </Box>
   );

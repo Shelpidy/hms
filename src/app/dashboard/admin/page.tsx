@@ -5,6 +5,7 @@ import {
   Groups,
   MenuOutlined,
   PostAdd,
+  MoreHorizOutlined,
   ShoppingBagOutlined,
   VerifiedUserOutlined,
 } from "@mui/icons-material";
@@ -21,6 +22,7 @@ import AdminBloodTransfusionsDisplay from "@/components/Dashboard/admin/AdminTra
 import AdminAppointmentsDisplay from "@/components/Dashboard/admin/AdminAppointmentsDisplay";
 import AdminDonorsDisplay from "@/components/Dashboard/admin/AdminDonorsDisplay";
 import AdminRequirerDisplay from "@/components/Dashboard/admin/AdminRequirersDisplay";
+import AdminUtilsDisplay from "@/components/Dashboard/admin/AdminUtilsDisplay";
 
 // export const metadata = {
 //   title: "SLMS | Dashboard",
@@ -124,6 +126,14 @@ export default function AdminDashboard() {
             >
               Requirers
             </MenuItem>
+            <MenuItem
+              style={{marginTop: -5}}
+              color={theme.palette.primary.light}
+              icon={<MoreHorizOutlined />}
+              onClick={() => setActivePage("utils")}
+            >
+              Utils
+            </MenuItem>
           </Menu>
         </Sidebar>
       </div>
@@ -136,6 +146,7 @@ export default function AdminDashboard() {
         {activePage === "appointments" && <AdminAppointmentsDisplay />}
         {activePage === "donors" && <AdminDonorsDisplay />}
         {activePage === "requirers" && <AdminRequirerDisplay />}
+        {activePage === "utils" && <AdminUtilsDisplay />}
       </div>
     </main>
   );

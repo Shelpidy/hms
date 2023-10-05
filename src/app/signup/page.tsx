@@ -20,6 +20,7 @@ import CustomButton from "@/components/CustomButton";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import ZHLogo from "@/components/Logo/Logo";
+import { LoadingButton } from "@mui/lab";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -376,13 +377,15 @@ const SignUpPage: React.FC = () => {
           </Grid>
           <Divider className="my-2" />
         </Grid>
-        <CustomButton
+        <LoadingButton
+          color="primary"
+          variant="contained"
           loading={loading}
           disabled={loading}
           onClick={handleFormSubmit}
         >
           Sign Up
-        </CustomButton>
+        </LoadingButton>
 
         <Box className="my-5">
           <Typography className="text-center">
